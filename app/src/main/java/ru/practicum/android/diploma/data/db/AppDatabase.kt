@@ -10,9 +10,9 @@ import ru.practicum.android.diploma.data.db.entity.FavoriteVacancyEntity
     entities = [
         FavoriteVacancyEntity::class
     ],
-        exportSchema = false
+    exportSchema = false
 )
-abstract class AppDatabase : RoomDatabase(){
+abstract class AppDatabase : RoomDatabase() {
 
     abstract fun favoriteVacancyDao(): FavoriteVacancyDao
 }

@@ -5,7 +5,7 @@ import ru.practicum.android.diploma.domain.ResourcesProviderRepository
 
 class ResourcesProviderRepositoryImpl(
     private val context: Context
-) : ResourcesProviderRepository{
+) : ResourcesProviderRepository {
     override fun getString(resId: Int): String {
         return context.getString(resId)
     }
