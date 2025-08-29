@@ -40,6 +40,9 @@ android {
 }
 
 dependencies {
+    implementation(libs.retrofit)
+    implementation(libs.converter)
+
     implementation(libs.androidX.core)
     implementation(libs.androidX.appCompat)
 

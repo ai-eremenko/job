@@ -11,7 +11,11 @@ targetSdk = "33"
 detekt = "1.23.3"
 detektTwitterComposeRules ="0.0.26"
 
+retrofit = "2.9.0"
+
 [libraries]
+converter = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit"}
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit"}
 
 # Detekt
 staticAnalysis-detektPlugin = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
