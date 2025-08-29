@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.domain.useCases
+package ru.practicum.android.diploma.domain.useсases
 
 import ru.practicum.android.diploma.domain.ResourcesProviderRepository
 
