@@ -12,8 +12,13 @@ detekt = "1.23.3"
 detektTwitterComposeRules ="0.0.26"
 
 retrofit = "2.9.0"
+room = "2.7.2"
 
 [libraries]
+android-room = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+android-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+android-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+
 converter = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit"}
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit"}
 
