@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "ru.practicum.android.diploma"
-    compileSdk = 36
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
         applicationId = "ru.practicum.android.diploma"
