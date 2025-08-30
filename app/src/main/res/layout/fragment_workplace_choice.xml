@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.workplace_choice.WorkplaceChoiceFragment">
+    tools:context=".ui.workplacechoice.WorkplaceChoiceFragment">
 
     <TextView
         android:layout_width="match_parent"
