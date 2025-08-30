@@ -11,7 +11,7 @@ targetSdk = "33"
 detekt = "1.23.3"
 detektTwitterComposeRules ="0.0.26"
 
-io = "3.3.0"
+koin = "3.3.0"
 gson = "2.11.0"
 
 [libraries]
@@ -20,7 +20,7 @@ gson = "2.11.0"
 gson = { module = "com.google.code.gson:gson", version.ref = "gson"}
 
 # Koin
-io = { group = "io.insert-koin", name = "koin-android" , version.ref = "io" }
+koin = { group = "io.insert-koin", name = "koin-android" , version.ref = "koin" }
 # Detekt
 staticAnalysis-detektPlugin = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
 staticAnalysis-detektCli = { module = "io.gitlab.arturbosch.detekt:detekt-cli", version.ref = "detekt" }

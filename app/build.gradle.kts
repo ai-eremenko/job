@@ -44,7 +44,7 @@ dependencies {
     implementation(libs.gson)
 
     // Koin
-    implementation(libs.io)
+    implementation(libs.koin)
 
     implementation(libs.androidX.core)
     implementation(libs.androidX.appCompat)
