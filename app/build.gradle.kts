@@ -43,7 +43,7 @@ dependencies {
     // Gson
     implementation(libs.gson)
 
-    //Koin
+    // Koin
     implementation(libs.io)
 
     implementation(libs.androidX.core)
