@@ -37,11 +37,16 @@ class RetrofitClient(
                 response.apply { status = ResponseStatus.SUCCESS }
             } catch (e: HttpException) {
                 when (e.code()) {
-                    404 -> Response().apply { status = ResponseStatus.NOT_FOUND }
-                    500 -> Response().apply { status = ResponseStatus.SERVER_ERROR }
+                    HTTP_NOT_FOUND -> Response().apply { status = ResponseStatus.NOT_FOUND }
+                    HTTP_SERVER_ERROR -> Response().apply { status = ResponseStatus.SERVER_ERROR }
                     else -> Response().apply { status = ResponseStatus.UNKNOWN_ERROR }
                 }
             }
         }
+    }
+
+    companion object {
+        const val HTTP_NOT_FOUND = 404
+        const val HTTP_SERVER_ERROR = 500
     }
 }
