@@ -3,6 +3,7 @@ package ru.practicum.android.diploma.data.network
 import android.content.Context
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import retrofit2.HttpException
 import ru.practicum.android.diploma.BuildConfig
 import ru.practicum.android.diploma.data.NetworkClient
 import ru.practicum.android.diploma.data.dto.AreasResponse
@@ -17,7 +18,7 @@ class RetrofitClient(
 ) : NetworkClient {
 
     override suspend fun doRequest(dto: RequestDto): Response {
-        //добавить проверку на наличие интернета
+        // добавить проверку на наличие интернета
 
         return withContext(Dispatchers.IO) {
             try {
@@ -34,8 +35,12 @@ class RetrofitClient(
                     }
                 }
                 response.apply { status = ResponseStatus.SUCCESS }
-            } catch (e: Exception) {
-                Response().apply { status = ResponseStatus.SERVER_ERROR }
+            } catch (e: HttpException) {
+                when (e.code()) {
+                    404 -> Response().apply { status = ResponseStatus.NOT_FOUND }
+                    500 -> Response().apply { status = ResponseStatus.SERVER_ERROR }
+                    else -> Response().apply { status = ResponseStatus.UNKNOWN_ERROR }
+                }
             }
         }
     }

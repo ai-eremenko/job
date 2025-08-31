@@ -17,5 +17,5 @@ interface VacanciesApi {
         @Header("Authorization") token: String
     ): List<FilterAreaDto>
 
-    //еще запросы
+    // еще запросы
 }
