@@ -1,6 +1,7 @@
 [versions]
 
 java = "VERSION_1_8"
+material = "1.8.0"
 
 # Build constants
 minSdk = "26"
@@ -12,6 +13,8 @@ detekt = "1.23.3"
 detektTwitterComposeRules ="0.0.26"
 
 [libraries]
+
+material-v180 = { module = "com.google.android.material:material", version.ref = "material" }
 
 # Detekt
 staticAnalysis-detektPlugin = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
