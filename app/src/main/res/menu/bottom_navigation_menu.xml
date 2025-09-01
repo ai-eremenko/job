@@ -3,16 +3,16 @@
 
     <item
         android:id="@+id/searchFragment"
-        android:icon="@drawable/ic_text"
+        android:icon="@drawable/main"
         android:title="@string/main" />
 
     <item
         android:id="@+id/favotiteFragment"
-        android:icon="@drawable/ic_image"
+        android:icon="@drawable/ic_favorite"
         android:title="@string/favorite" />
 
     <item
         android:id="@+id/teamFragment"
-        android:icon="@drawable/ic_help"
+        android:icon="@drawable/ic_team"
         android:title="@string/team" />
 </menu>

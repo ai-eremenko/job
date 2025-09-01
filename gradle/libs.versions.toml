@@ -2,6 +2,8 @@
 
 java = "VERSION_1_8"
 material = "1.8.0"
+fragmentKtx = "1.8.9"
+navigationFragmentKtx = "2.9.3"
 
 # Build constants
 minSdk = "26"
@@ -15,6 +17,13 @@ detektTwitterComposeRules ="0.0.26"
 [libraries]
 
 material-v180 = { module = "com.google.android.material:material", version.ref = "material" }
+
+#Navigation
+fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
+navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigationFragmentKtx" }
+navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigationFragmentKtx" }
+
+
 
 # Detekt
 staticAnalysis-detektPlugin = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
