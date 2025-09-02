@@ -16,6 +16,9 @@ detektTwitterComposeRules ="0.0.26"
 retrofit = "3.0.0"
 room = "2.7.2"
 
+koin = "4.1.0"
+gson = "2.13.1"
+
 [libraries]
 # Room
 android-room = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
@@ -26,6 +29,11 @@ android-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "
 retrofit-converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit"}
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit"}
 
+# Gson
+gson = { module = "com.google.code.gson:gson", version.ref = "gson"}
+
+# Koin
+koin = { group = "io.insert-koin", name = "koin-android" , version.ref = "koin" }
 # Detekt
 staticAnalysis-detektPlugin = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
 staticAnalysis-detektCli = { module = "io.gitlab.arturbosch.detekt:detekt-cli", version.ref = "detekt" }
