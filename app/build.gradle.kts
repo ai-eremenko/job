@@ -40,6 +40,12 @@ android {
 }
 
 dependencies {
+    // Gson
+    implementation(libs.gson)
+
+    // Koin
+    implementation(libs.koin)
+
     implementation(libs.androidX.core)
     implementation(libs.androidX.appCompat)
 
