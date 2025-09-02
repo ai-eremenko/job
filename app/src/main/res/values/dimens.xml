@@ -2,4 +2,5 @@
 <resources>
     <dimen name="size_56">56dp</dimen>
     <dimen name="size_8">8dp</dimen>
+    <dimen name="title">22sp</dimen>
 </resources>
