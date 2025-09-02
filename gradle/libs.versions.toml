@@ -11,7 +11,7 @@ targetSdk = "33"
 detekt = "1.23.3"
 detektTwitterComposeRules ="0.0.26"
 
-koin = "3.3.0"
+koin = "4.1.0"
 gson = "2.13.1"
 
 [libraries]
