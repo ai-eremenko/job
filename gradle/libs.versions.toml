@@ -19,6 +19,9 @@ room = "2.7.2"
 koin = "4.1.0"
 gson = "2.13.1"
 
+fragmentKtx = "1.8.9"
+navigationFragmentKtx = "2.9.3"
+
 [libraries]
 # Room
 android-room = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
@@ -42,6 +45,11 @@ staticAnalysis-detektTest = { module = "io.gitlab.arturbosch.detekt:detekt-test"
 staticAnalysis-detektFormatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
 staticAnalysis-detektLibraries = { module = "io.gitlab.arturbosch.detekt:detekt-rules-libraries", version.ref = "detekt" }
 staticAnalysis-detektTwitterComposeRules = { module = "com.twitter.compose.rules:detekt", version.ref = "detektTwitterComposeRules" }
+
+#Navigation
+fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
+navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigationFragmentKtx" }
+navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigationFragmentKtx" }
 
 # AndroidX
 androidX-core = "androidx.core:core-ktx:1.17.0"

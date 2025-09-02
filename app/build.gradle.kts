@@ -69,4 +69,8 @@ dependencies {
     androidTestImplementation(libs.uiTests.junitExt)
     androidTestImplementation(libs.uiTests.espressoCore)
     // endregion
+
+    implementation(libs.navigation.fragment.ktx)
+    implementation(libs.navigation.ui.ktx)
+    implementation(libs.fragment.ktx)
 }
