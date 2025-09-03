@@ -55,8 +55,6 @@ dependencies {
     implementation(libs.gson)
     implementation(libs.koin.android)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
-    implementation(libs.androidx.navigation.ui.ktx)
-    implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.adapterdelegates4.kotlin.dsl)
     implementation(libs.adapterdelegates4.kotlin.dsl.viewbinding)
     implementation(libs.kotlinx.coroutines.android)
@@ -73,8 +71,6 @@ dependencies {
     androidTestImplementation(libs.uiTests.junitExt)
     androidTestImplementation(libs.uiTests.espressoCore)
     // endregion
-
-    implementation(libs.material.v180)
 
     implementation(libs.navigation.fragment.ktx)
     implementation(libs.navigation.ui.ktx)
