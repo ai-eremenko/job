@@ -11,10 +11,8 @@ data class VacancyDto(
     val employment: EmploymentDto,
     val contacts: ContactsDto?,
     val employer: EmployerDto,
-    val area: FilterAreaDto,
     val skills: List<String>?,
     val url: String,
-    val industry: FilterIndustryDto
 )
 
 data class SalaryDto(
@@ -25,35 +23,27 @@ data class SalaryDto(
 
 data class AddressDto(
     val city: String,
-    val street: String,
-    val building: String,
-    val raw: String?
 )
 
 data class ExperienceDto(
-    val id: String,
     val name: String,
 )
 
 data class ScheduleDto(
-    val id: String,
     val name: String,
 )
 
 data class EmploymentDto(
-    val id: String,
     val name: String,
 )
 
 data class ContactsDto(
-    val id: String,
     val name: String,
     val email: String,
     val phones: List<PhoneDto>?
 )
 
 data class EmployerDto(
-    val id: String,
     val name: String,
     val logo: String,
 )
