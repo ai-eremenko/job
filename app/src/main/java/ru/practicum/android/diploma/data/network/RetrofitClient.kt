@@ -11,6 +11,7 @@ import ru.practicum.android.diploma.data.dto.IndustriesResponse
 import ru.practicum.android.diploma.data.dto.RequestDto
 import ru.practicum.android.diploma.data.dto.Response
 import ru.practicum.android.diploma.data.dto.ResponseStatus
+import ru.practicum.android.diploma.data.dto.VacancyResponse
 
 class RetrofitClient(
     private val api: VacanciesApi,
@@ -32,6 +33,14 @@ class RetrofitClient(
                     RequestDto.AreasRequest -> {
                         val areas = api.getAreas(token)
                         AreasResponse(areas)
+                    }
+
+                    is RequestDto.VacancyRequest -> {
+                        val vacancy = api.getVacancyById(
+                            token,
+                            dto.id
+                        )
+                        VacancyResponse(vacancy.result)
                     }
                 }
                 response.apply { status = ResponseStatus.SUCCESS }
