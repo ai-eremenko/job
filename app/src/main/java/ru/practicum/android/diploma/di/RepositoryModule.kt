@@ -7,7 +7,7 @@ import ru.practicum.android.diploma.domain.ResourcesProviderRepository
 
 val repositoryModule = module {
 
-    single <ResourcesProviderRepository> {
+    single<ResourcesProviderRepository> {
         ResourcesProviderRepositoryImpl(androidContext())
     }
 }

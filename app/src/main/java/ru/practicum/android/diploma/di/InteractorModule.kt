@@ -5,7 +5,7 @@ import ru.practicum.android.diploma.domain.usecases.ResourcesProviderUseCase
 
 val interactorModule = module {
 
-    single <ResourcesProviderUseCase> {
+    single<ResourcesProviderUseCase> {
         ResourcesProviderUseCase(get())
     }
 }

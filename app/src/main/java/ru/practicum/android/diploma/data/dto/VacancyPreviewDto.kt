@@ -1,7 +1,4 @@
-package ru.practicum.android.diploma.data.dto.responses
-
-import ru.practicum.android.diploma.data.dto.AddressDto
-import ru.practicum.android.diploma.data.dto.SalaryDto
+package ru.practicum.android.diploma.data.dto
 
 data class VacancyPreviewDto(
     val id: String,

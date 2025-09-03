@@ -1,6 +1,6 @@
 package ru.practicum.android.diploma.data.dto.responses
 
-import ru.practicum.android.diploma.data.dto.VacancyDto
+import ru.practicum.android.diploma.data.dto.VacancyPreviewDto
 
 class VacanciesResponse(
     val found: Int,
