@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.practicum.android.diploma.databinding.VacancyItemBinding
 import ru.practicum.android.diploma.domain.models.VacancyPreview
 
-class VacancyListAdapter (
+class VacancyListAdapter(
     private var vacancyPreview: List<VacancyPreview>,
     private val onVacancyPreviewClick: (VacancyPreview) -> Unit
     ) : RecyclerView.Adapter<VacancyListViewHolder> () {
@@ -26,10 +26,4 @@ class VacancyListAdapter (
         }
 
         override fun getItemCount() = vacancyPreview.size
-
-        @SuppressLint("NotifyDataSetChanged")
-        fun updateVacancyPreview(newVacancyPreview: List<VacancyPreview>) {
-            vacancyPreview = newVacancyPreview
-            notifyDataSetChanged()
-        }
     }

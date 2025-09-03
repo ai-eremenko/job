@@ -10,7 +10,7 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.VacancyItemBinding
 import ru.practicum.android.diploma.domain.models.VacancyPreview
 
-class VacancyListViewHolder (
+class VacancyListViewHolder(
     private val binding: VacancyItemBinding,
     private val onClick: (VacancyPreview) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
@@ -22,18 +22,19 @@ class VacancyListViewHolder (
         binding.name.text = "${model.name}, ${model.addressCity}"
         binding.employerName.text = model.employerName
         binding.salary.text = when {
-            model.salaryFrom.isNullOrEmpty().not() && model.salaryTo.isNullOrEmpty().not() -> "От ${model.salaryFrom} до  ${model.salaryTo}"
+            model.salaryFrom.isNullOrEmpty().not() && model.salaryTo.isNullOrEmpty().not() ->
+                "От ${model.salaryFrom} до  ${model.salaryTo}"
             model.salaryFrom.isNullOrEmpty().not() -> "От ${model.salaryFrom}"
             model.salaryCurrency.isNullOrEmpty().not() -> model.salaryCurrency
             else -> "Зарплата не указана"
         }
-        Glide.with( binding.root)
+        Glide.with(binding.root)
             .load(model.albumCoverUrl)
             .placeholder(R.drawable.placeholder_vacancy_preview)
             .transform(RoundedCorners(itemView.context.toPx(12)))
             .diskCacheStrategy(DiskCacheStrategy.NONE)
             .skipMemoryCache(true)
-            .into( binding.sourceImage)
+            .into(binding.sourceImage)
     }
 
     private fun Context.toPx(dp: Int): Int =
