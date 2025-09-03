@@ -9,6 +9,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.VacancyItemBinding
 import ru.practicum.android.diploma.domain.models.VacancyPreview
+import ru.practicum.android.diploma.util.Dimensions
 
 class VacancyListViewHolder(
     private val binding: VacancyItemBinding,
@@ -31,7 +32,7 @@ class VacancyListViewHolder(
         Glide.with(binding.root)
             .load(model.albumCoverUrl)
             .placeholder(R.drawable.placeholder_vacancy_preview)
-            .transform(RoundedCorners(itemView.context.toPx(12)))
+            .transform(RoundedCorners(itemView.context.toPx(Dimensions.CORNER_RADIUS_12)))
             .diskCacheStrategy(DiskCacheStrategy.NONE)
             .skipMemoryCache(true)
             .into(binding.sourceImage)
