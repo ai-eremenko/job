@@ -10,5 +10,5 @@
     <dimen name="size_12">12dp</dimen>
 
     <dimen name="text_size_16">16sp</dimen>
-    <dimen name="text_size_22">16sp</dimen>
+    <dimen name="text_size_22">22sp</dimen>
 </resources>

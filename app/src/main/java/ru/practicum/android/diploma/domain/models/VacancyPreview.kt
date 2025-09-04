@@ -4,9 +4,7 @@ data class VacancyPreview(
     val id: String,
     val name: String,
     val albumCoverUrl: String?,
-    val salaryCurrency: String?,
-    val salaryFrom: String?,
-    val salaryTo: String?,
+    val salary: String?,
     val addressCity: String?,
     val employerName: String
 )
