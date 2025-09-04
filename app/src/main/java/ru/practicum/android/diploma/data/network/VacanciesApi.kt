@@ -6,8 +6,9 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 import ru.practicum.android.diploma.data.dto.FilterAreaDto
 import ru.practicum.android.diploma.data.dto.FilterIndustryDto
-import ru.practicum.android.diploma.data.dto.responses.VacancyResponse
 import ru.practicum.android.diploma.data.dto.responses.VacanciesResponse
+import ru.practicum.android.diploma.data.dto.responses.VacancyResponse
+
 
 interface VacanciesApi {
 
