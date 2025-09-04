@@ -1,82 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="BottomNavigationStyle" parent="Widget.MaterialComponents.BottomNavigationView">
-        <item name="android:background">@color/white</item>
-        <item name="android:minHeight">66dp</item>
-        <item name="elevation">0dp</item>
-        <item name="itemIconSize">24dp</item>
-        <item name="itemIconTint">@color/bottom_nav_color</item>
-        <item name="itemRippleColor">@android:color/transparent</item>
-        <item name="itemTextAppearanceActive">@font/ys_display_regular</item>
-        <item name="itemTextAppearanceInactive">@font/ys_display_regular</item>
-        <item name="itemTextColor">@color/bottom_nav_color</item>
-        <item name="itemActiveIndicatorStyle">@null</item>
+    <style name="BottomNavBg">
+        <item name="android:background">@color/white_universal</item>
     </style>
 
-    <style name="SearchEditTextStyle" parent="Widget.AppCompat.EditText">
-        <item name="android:background">@null</item>
-        <item name="android:ellipsize">end</item>
-        <item name="android:fontFamily">@font/ys_display_regular</item>
-        <item name="android:hint">@string/hint_enter_your_request</item>
-        <item name="android:imeOptions">actionDone</item>
-        <item name="android:importantForAutofill">no</item>
-        <item name="android:inputType">text</item>
-        <item name="android:maxLength">100</item>
-        <item name="android:maxLines">1</item>
-        <item name="android:singleLine">true</item>
-        <item name="android:textColor">@color/black</item>
-        <item name="android:textColorHint">@color/gray</item>
-        <item name="android:textCursorDrawable">@drawable/search_cursor_color</item>
-        <item name="android:textSize">@dimen/size_text_16</item>
-    </style>
-
-    <style name="SearchCountResultTextStyle" parent="Widget.AppCompat.TextView">
-        <item name="android:fontFamily">@font/ys_display_regular</item>
-        <item name="android:background">@drawable/rounded_corners_search_result</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="android:textSize">@dimen/size_text_16</item>
-        <item name="android:paddingHorizontal">@dimen/margin_12</item>
-        <item name="android:paddingVertical">@dimen/margin_4</item>
-    </style>
-
-    <style name="SearchErrorTextStyle" parent="Widget.AppCompat.TextView">
+    <style name="textMedium">
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="android:textSize">@dimen/text_size_22</item>
         <item name="android:fontFamily">@font/ys_display_medium</item>
-        <item name="android:textColor">@color/black</item>
-        <item name="android:textSize">@dimen/size_text_22</item>
     </style>
 
-    <style name="CenteredProgressBarStyle" parent="Widget.AppCompat.ProgressBar">
-        <item name="android:indeterminateTint">@color/blue</item>
+    <style name="textRegular">
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="android:textSize">@dimen/text_size_16</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
     </style>
 
-
+    <style name="SearchField">
+        <item name="android:background">@drawable/bg_searchfield</item>
+        <item name="android:paddingStart">@dimen/_16dp</item>
+        <item name="android:gravity">center_vertical|start</item>
+        <item name="android:inputType">text|textNoSuggestions</item>
+        <item name="android:imeOptions">actionDone</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:lines">1</item>
+        <item name="android:maxLength">55</item>
+        <item name="android:textColorHint">?attr/hintTextColor</item>
+        <item name="android:textColor">@color/black_universal</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">@dimen/_16sp</item>
+        <item name="android:textCursorDrawable">@drawable/ic_cursor</item>
+    </style>
 
     <style name="ToolbarStyle">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:paddingEnd">@dimen/margin_12</item>
+        <item name="android:layout_height">@dimen/_64dp</item>
+        <item name="titleTextAppearance">@style/ToolbarTitle</item>
+        <item name="buttonGravity">center_vertical</item>
+        <item name="contentInsetStartWithNavigation">@dimen/_12dp</item>
     </style>
 
-    <style name="TitleStyle">
+    <style name="ToolbarTitle">
         <item name="android:fontFamily">@font/ys_display_medium</item>
-        <item name="android:textSize">@dimen/size_text_22</item>
-        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/_22sp</item>
+        <item name="android:fontWeight">@dimen/fontWeight500</item>
+        <item name="android:textColor">?attr/textAppearanceBody1</item>
     </style>
 
-    <style name="VacancyDetailTextStyle">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginStart">@dimen/margin_16</item>
-        <item name="android:textColor">@color/black</item>
-        <item name="android:textSize">@dimen/size_text_16</item>
+    <style name="ProgressBar">
+        <item name="android:layout_width">@dimen/_36dp</item>
+        <item name="android:layout_height">@dimen/_36dp</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:indeterminateTint">?attr/colorPrimary</item>
     </style>
 
-    <style name="VacancyDetailStyle">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginTop">@dimen/margin_16</item>
-        <item name="android:layout_marginHorizontal">@dimen/margin_16</item>
-        <item name="android:orientation">vertical</item>
+    <style name="mediumText_22">
+        <item name="android:textSize">@dimen/_22sp</item>
+        <item name="android:textColor">?attr/textAppearanceBody1</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
     </style>
+
+    <style name="ErrorPlaceholder">
+        <item name="android:textAppearance">@style/mediumText_22</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_marginHorizontal">@dimen/_16dp</item>
+        <item name="android:drawablePadding">@dimen/_16dp</item>
+    </style>
+
+    <style name="SearchStatus">
+        <item name="android:background">@drawable/bg_search_status</item>
+        <item name="android:paddingVertical">@dimen/_4dp</item>
+        <item name="android:paddingHorizontal">@dimen/_12dp</item>
+        <item name="android:layout_marginTop">@dimen/_12dp</item>
+        <item name="android:textColor">@color/white_universal</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">@dimen/_16sp</item>
+    </style>
+
+    <style name="regularText_16">
+        <item name="android:textSize">@dimen/_16sp</item>
+        <item name="android:textColor">?attr/textAppearanceBody1</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+    </style>
+
+    <style name="boldText_32">
+        <item name="android:textSize">@dimen/_32sp</item>
+        <item name="android:textColor">?attr/textAppearanceBody1</item>
+        <item name="android:fontFamily">@font/ys_display_bold</item>
+    </style>
+
+    <style name="mediumText_16">
+        <item name="android:textSize">@dimen/_16sp</item>
+        <item name="android:textColor">?attr/textAppearanceBody1</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+    </style>
+
+
+
+
 
 </resources>
