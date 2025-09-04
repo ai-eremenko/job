@@ -11,11 +11,11 @@ object VacancyMapper {
             found = response.found,
             pages = response.pages,
             page = response.page,
-            items = response.items.map { mapVacancyToDomain(it) }
+            items = response.items.map { mapVacancyPreviewToDomain(it) }
         )
     }
 
-    private fun mapVacancyToDomain(dto: VacancyPreviewDto): VacancyPreview {
+    private fun mapVacancyPreviewToDomain(dto: VacancyPreviewDto): VacancyPreview {
         return VacancyPreview(
             id = dto.id,
             name = dto.name,
@@ -23,7 +23,8 @@ object VacancyMapper {
             salaryFrom = dto.salary?.from?.toString(),
             salaryTo = dto.salary?.to?.toString(),
             addressCity = dto.address?.city,
-            employerName = dto.employer.name
+            employerName = dto.employer.name,
+            employerLogo = dto.employer.logo
         )
     }
 }
