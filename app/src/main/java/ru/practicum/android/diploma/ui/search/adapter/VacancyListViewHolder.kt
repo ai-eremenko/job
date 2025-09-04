@@ -21,9 +21,16 @@ class VacancyListViewHolder(
         }
         binding.name.text = "${model.name}, ${model.addressCity}"
         binding.employerName.text = model.employerName
-        binding.salary.text = model.salary
+        binding.salary.text = when {
+            model.salaryFrom.isNullOrEmpty().not() && model.salaryTo.isNullOrEmpty().not() ->
+                "От ${model.salaryFrom} до  ${model.salaryTo}"
+            model.salaryFrom.isNullOrEmpty().not() -> "От ${model.salaryFrom}"
+            model.salaryCurrency.isNullOrEmpty().not() -> model.salaryCurrency
+            else -> "Зарплата не указана"
+        }
+
         Glide.with(binding.root)
-            .load(model.albumCoverUrl)
+            .load(model.employerLogo)
             .placeholder(R.drawable.placeholder_vacancy_preview)
             .transform(RoundedCorners(itemView.context.toPx(Dimensions.CORNER_RADIUS_12)))
             .diskCacheStrategy(DiskCacheStrategy.NONE)
