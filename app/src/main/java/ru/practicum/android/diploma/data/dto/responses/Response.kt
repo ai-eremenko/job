@@ -10,4 +10,5 @@ enum class ResponseStatus {
 
 open class Response {
     var status: ResponseStatus = ResponseStatus.UNKNOWN_ERROR
+    var errorMessage: String? = null
 }
