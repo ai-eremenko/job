@@ -23,7 +23,8 @@ object VacancyMapper {
             salaryFrom = dto.salary?.from?.toString(),
             salaryTo = dto.salary?.to?.toString(),
             addressCity = dto.address?.city,
-            employerName = dto.employer.name
+            employerName = dto.employer.name,
+            employerLogo = dto.employer.logo
         )
     }
 }
