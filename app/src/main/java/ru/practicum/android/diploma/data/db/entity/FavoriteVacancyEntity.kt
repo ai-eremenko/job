@@ -21,6 +21,8 @@ data class FavoriteVacancyEntity(
     val employer: String,
     val skills: String?,
     val url: String,
+    var isFavorite: Boolean = false
+
 ) {
     constructor() : this(
         id = "",
@@ -34,6 +36,7 @@ data class FavoriteVacancyEntity(
         contacts = null,
         employer = "",
         skills = null,
-        url = ""
+        url = "",
+        isFavorite = false
     )
 }

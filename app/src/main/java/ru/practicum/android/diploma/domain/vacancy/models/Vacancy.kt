@@ -13,6 +13,7 @@ data class Vacancy(
     val employer: Employer,
     val skills: List<String>?,
     val url: String,
+    var isFavorite: Boolean = false
 )
 
 data class Salary(
