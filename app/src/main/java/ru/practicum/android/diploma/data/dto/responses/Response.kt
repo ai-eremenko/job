@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.data.dto
+package ru.practicum.android.diploma.data.dto.responses
 
 enum class ResponseStatus {
     SUCCESS, // Успешный запрос (200)

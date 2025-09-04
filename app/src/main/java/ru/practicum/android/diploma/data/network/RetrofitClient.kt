@@ -6,20 +6,24 @@ import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import ru.practicum.android.diploma.BuildConfig
 import ru.practicum.android.diploma.data.NetworkClient
-import ru.practicum.android.diploma.data.dto.AreasResponse
-import ru.practicum.android.diploma.data.dto.IndustriesResponse
+import ru.practicum.android.diploma.data.dto.responses.AreasResponse
+import ru.practicum.android.diploma.data.dto.responses.IndustriesResponse
 import ru.practicum.android.diploma.data.dto.RequestDto
+import ru.practicum.android.diploma.data.dto.responses.Response
+import ru.practicum.android.diploma.data.dto.responses.ResponseStatus
+import ru.practicum.android.diploma.data.dto.responses.VacanciesResponse
+import ru.practicum.android.diploma.util.NetworkManager
 import ru.practicum.android.diploma.data.dto.Response
 import ru.practicum.android.diploma.data.dto.ResponseStatus
 import ru.practicum.android.diploma.data.dto.VacancyResponse
 
 class RetrofitClient(
     private val api: VacanciesApi,
-    private val context: Context
+    private val networkManager: NetworkManager
 ) : NetworkClient {
 
     override suspend fun doRequest(dto: RequestDto): Response {
-        // добавить проверку на наличие интернета
+        if (!networkManager.isConnected()) Response().apply { status = ResponseStatus.NO_INTERNET }
 
         return withContext(Dispatchers.IO) {
             try {
@@ -33,6 +37,20 @@ class RetrofitClient(
                     RequestDto.AreasRequest -> {
                         val areas = api.getAreas(token)
                         AreasResponse(areas)
+                    }
+
+                    is RequestDto.VacanciesRequest -> {
+                        val vacanciesDto = api.getVacancies(
+                            token,
+                            dto.expression,
+                            dto.page
+                        )
+                        VacanciesResponse(
+                            found = vacanciesDto.found,
+                            pages = vacanciesDto.pages,
+                            page = vacanciesDto.page,
+                            items = vacanciesDto.items
+                        )
                     }
 
                     is RequestDto.VacancyRequest -> {
