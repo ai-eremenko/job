@@ -7,4 +7,7 @@ sealed interface RequestDto {
         val expression: String,
         val page: Int
     ) : RequestDto
+    data class VacancyRequest(
+        val id: String
+    ) : RequestDto
 }
