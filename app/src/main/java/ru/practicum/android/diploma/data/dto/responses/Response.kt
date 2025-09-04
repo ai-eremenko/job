@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.data.dto
+package ru.practicum.android.diploma.data.dto.responses
 
 enum class ResponseStatus {
     SUCCESS, // Успешный запрос (200)
@@ -10,4 +10,5 @@ enum class ResponseStatus {
 
 open class Response {
     var status: ResponseStatus = ResponseStatus.UNKNOWN_ERROR
+    var errorMessage: String? = null
 }
