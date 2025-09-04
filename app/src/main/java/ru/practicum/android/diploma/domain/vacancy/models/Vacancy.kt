@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.domain.vacancy.models
 
+@Suppress("DataClassShouldBeImmutable")
 data class Vacancy(
     val id: String,
     val name: String,
@@ -13,6 +14,7 @@ data class Vacancy(
     val employer: Employer,
     val skills: List<String>?,
     val url: String,
+    var isFavorite: Boolean = false
 )
 
 data class Salary(
