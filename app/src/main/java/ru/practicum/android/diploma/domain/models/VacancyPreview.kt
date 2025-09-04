@@ -8,5 +8,5 @@ data class VacancyPreview(
     val salaryTo: String?,
     val addressCity: String?,
     val employerName: String,
-    val employerLogo: String
+    val employerLogo: String?
 )

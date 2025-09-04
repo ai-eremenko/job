@@ -8,6 +8,7 @@ import ru.practicum.android.diploma.data.dto.responses.AreasResponse
 import ru.practicum.android.diploma.data.dto.responses.IndustriesResponse
 import ru.practicum.android.diploma.data.dto.responses.Response
 import ru.practicum.android.diploma.data.dto.responses.VacanciesResponse
+import ru.practicum.android.diploma.data.dto.responses.VacancyResponse
 import ru.practicum.android.diploma.util.NetworkManager
 import ru.practicum.android.diploma.util.ResponseStatus
 
@@ -40,6 +41,7 @@ class RetrofitClient(
             RequestDto.IndustriesRequest -> handleIndustriesRequest(token)
             RequestDto.AreasRequest -> handleAreasRequest(token)
             is RequestDto.VacanciesRequest -> handleVacanciesRequest(token, dto)
+            is RequestDto.VacancyRequest -> handleVacancyRequest(token, dto)
         }
     }
 
@@ -68,6 +70,17 @@ class RetrofitClient(
             page = vacanciesDto.page,
             items = vacanciesDto.items
         )
+    }
+
+    private suspend fun handleVacancyRequest(
+        token: String,
+        request: RequestDto.VacancyRequest
+    ): Response {
+        val vacancyDto = api.getVacancyById(
+            token,
+            request.id
+        )
+        return VacancyResponse(vacancyDto.result)
     }
 
     private fun handleHttpException(e: HttpException): Response {
