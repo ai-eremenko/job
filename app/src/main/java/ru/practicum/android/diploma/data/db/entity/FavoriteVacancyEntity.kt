@@ -2,9 +2,6 @@ package ru.practicum.android.diploma.data.db.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import ru.practicum.android.diploma.domain.vacancy.models.Contacts
-import ru.practicum.android.diploma.domain.vacancy.models.Employer
-import ru.practicum.android.diploma.domain.vacancy.models.Salary
 
 @Entity(
     tableName = "favorite_vacancies"
