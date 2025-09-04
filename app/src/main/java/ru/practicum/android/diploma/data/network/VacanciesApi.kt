@@ -9,7 +9,6 @@ import ru.practicum.android.diploma.data.dto.FilterIndustryDto
 import ru.practicum.android.diploma.data.dto.responses.VacanciesResponse
 import ru.practicum.android.diploma.data.dto.responses.VacancyResponse
 
-
 interface VacanciesApi {
 
     @GET("/industries")
