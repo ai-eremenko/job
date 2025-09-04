@@ -1,14 +1,13 @@
 package ru.practicum.android.diploma.data.network
 
-import android.content.Context
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import ru.practicum.android.diploma.BuildConfig
 import ru.practicum.android.diploma.data.NetworkClient
+import ru.practicum.android.diploma.data.dto.RequestDto
 import ru.practicum.android.diploma.data.dto.responses.AreasResponse
 import ru.practicum.android.diploma.data.dto.responses.IndustriesResponse
-import ru.practicum.android.diploma.data.dto.RequestDto
 import ru.practicum.android.diploma.data.dto.responses.Response
 import ru.practicum.android.diploma.data.dto.responses.ResponseStatus
 import ru.practicum.android.diploma.data.dto.responses.VacanciesResponse
