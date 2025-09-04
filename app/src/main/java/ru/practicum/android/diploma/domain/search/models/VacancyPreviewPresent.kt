@@ -1,12 +1,10 @@
 package ru.practicum.android.diploma.domain.search.models
 
-data class VacancyPreview(
+data class VacancyPreviewPresent(
     val id: String,
     val name: String,
-    val salaryCurrency: String?,
-    val salaryFrom: String?,
-    val salaryTo: String?,
+    val url: String,
+    val salary: String?,
     val addressCity: String?,
     val employerName: String,
-    val employerLogo: String
 ) : VacanciesResultModel

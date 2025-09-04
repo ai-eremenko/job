@@ -1,8 +1,9 @@
 package ru.practicum.android.diploma.domain.search.models
 
-data class VacanciesSearchResult(
+sealed interface VacanciesResultModel
+data class VacanciesSearchResult<T : VacanciesResultModel>(
     val found: Int,
     val pages: Int,
     val page: Int,
-    val items: List<VacancyPreview>
+    val items: List<T>
 )
