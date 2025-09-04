@@ -11,7 +11,7 @@ val interactorModule = module {
         ResourcesProviderUseCase(get())
     }
 
-    factory <SearchInteractor> {
+    factory<SearchInteractor> {
         SearchInteractorImpl(get(), get())
     }
 }

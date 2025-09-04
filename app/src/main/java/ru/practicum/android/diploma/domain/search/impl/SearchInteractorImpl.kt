@@ -11,7 +11,7 @@ import ru.practicum.android.diploma.util.ResponseStatus
 class SearchInteractorImpl(
     private val repository: SearchRepository,
     private val mapper: VacancyPreviewMapper,
-): SearchInteractor {
+) : SearchInteractor {
 
     override suspend fun searchVacancies(
         expression: String,
@@ -33,6 +33,7 @@ class SearchInteractorImpl(
                     )
                 )
             }
+
             is Resource.Error -> {
                 Resource.Error(result.message ?: ResponseStatus.UNKNOWN_ERROR)
             }

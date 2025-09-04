@@ -12,7 +12,7 @@ import ru.practicum.android.diploma.util.ResponseStatus
 
 class SearchRepositoryImpl(
     private val networkClient: NetworkClient
-): SearchRepository {
+) : SearchRepository {
 
     override suspend fun searchVacancies(
         expression: String,
@@ -30,6 +30,7 @@ class SearchRepositoryImpl(
                     Resource.Error(ResponseStatus.UNKNOWN_ERROR)
                 }
             }
+
             else -> Resource.Error(response.status)
         }
     }
