@@ -16,7 +16,7 @@ class VacancyListAdapter(
             LayoutInflater.from(parent.context),
             parent,
             false
-            )
+        )
         return VacancyListViewHolder(binding, onVacancyPreviewClick)
     }
 
