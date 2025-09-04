@@ -7,10 +7,10 @@ import ru.practicum.android.diploma.data.dto.RequestDto
 import ru.practicum.android.diploma.data.dto.responses.AreasResponse
 import ru.practicum.android.diploma.data.dto.responses.IndustriesResponse
 import ru.practicum.android.diploma.data.dto.responses.Response
-import ru.practicum.android.diploma.data.dto.responses.ResponseStatus
 import ru.practicum.android.diploma.data.dto.responses.VacanciesResponse
 import ru.practicum.android.diploma.data.dto.responses.VacancyResponse
 import ru.practicum.android.diploma.util.NetworkManager
+import ru.practicum.android.diploma.util.ResponseStatus
 
 class RetrofitClient(
     private val api: VacanciesApi,

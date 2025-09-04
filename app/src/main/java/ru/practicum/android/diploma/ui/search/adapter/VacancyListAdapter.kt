@@ -4,12 +4,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ru.practicum.android.diploma.databinding.VacancyItemBinding
-import ru.practicum.android.diploma.domain.models.VacancyPreview
+import ru.practicum.android.diploma.domain.search.models.VacancyPreviewPresent
 
 class VacancyListAdapter(
-    private var vacancyPreview: List<VacancyPreview>,
-    private val onVacancyPreviewClick: (VacancyPreview) -> Unit
-) : RecyclerView.Adapter<VacancyListViewHolder> () {
+    private var vacancyPreview: List<VacancyPreviewPresent>,
+    private val onVacancyPreviewClick: (VacancyPreviewPresent) -> Unit
+) : RecyclerView.Adapter<VacancyListViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VacancyListViewHolder {
         val binding = VacancyItemBinding.inflate(
