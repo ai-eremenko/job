@@ -10,6 +10,10 @@ import ru.practicum.android.diploma.data.dto.responses.Response
 import ru.practicum.android.diploma.data.dto.responses.ResponseStatus
 import ru.practicum.android.diploma.data.dto.responses.VacanciesResponse
 import ru.practicum.android.diploma.util.NetworkManager
+import java.io.IOException
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
+import javax.net.ssl.SSLHandshakeException
 
 class RetrofitClient(
     private val api: VacanciesApi,
@@ -26,8 +30,22 @@ class RetrofitClient(
             response.apply { status = ResponseStatus.SUCCESS }
         } catch (e: HttpException) {
             handleHttpException(e)
-        } catch (e: Exception) {
-            Response().apply { status = ResponseStatus.UNKNOWN_ERROR }
+        } catch (e: SocketTimeoutException) {
+            Response().apply {
+                status = ResponseStatus.SERVER_ERROR
+            }
+        } catch (e: UnknownHostException) {
+            Response().apply {
+                status = ResponseStatus.NO_INTERNET
+            }
+        } catch (e: SSLHandshakeException) {
+            Response().apply {
+                status = ResponseStatus.UNKNOWN_ERROR
+            }
+        } catch (e: IOException) {
+            Response().apply {
+                status = ResponseStatus.UNKNOWN_ERROR
+            }
         }
     }
 
