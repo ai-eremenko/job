@@ -1,21 +1,17 @@
 package ru.practicum.android.diploma.data.network
 
-import android.content.Context
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import ru.practicum.android.diploma.BuildConfig
 import ru.practicum.android.diploma.data.NetworkClient
+import ru.practicum.android.diploma.data.dto.RequestDto
 import ru.practicum.android.diploma.data.dto.responses.AreasResponse
 import ru.practicum.android.diploma.data.dto.responses.IndustriesResponse
-import ru.practicum.android.diploma.data.dto.RequestDto
 import ru.practicum.android.diploma.data.dto.responses.Response
 import ru.practicum.android.diploma.data.dto.responses.ResponseStatus
 import ru.practicum.android.diploma.data.dto.responses.VacanciesResponse
+import ru.practicum.android.diploma.data.dto.responses.VacancyResponse
 import ru.practicum.android.diploma.util.NetworkManager
-import ru.practicum.android.diploma.data.dto.Response
-import ru.practicum.android.diploma.data.dto.ResponseStatus
-import ru.practicum.android.diploma.data.dto.VacancyResponse
+
 
 class RetrofitClient(
     private val api: VacanciesApi,
@@ -25,49 +21,47 @@ class RetrofitClient(
     override suspend fun doRequest(dto: RequestDto): Response {
         if (!networkManager.isConnected()) Response().apply { status = ResponseStatus.NO_INTERNET }
 
-        return withContext(Dispatchers.IO) {
-            try {
-                val token = BuildConfig.API_ACCESS_TOKEN
-                val response = when (dto) {
-                    RequestDto.IndustriesRequest -> {
-                        val industries = api.getIndustries(token)
-                        IndustriesResponse(industries)
-                    }
-
-                    RequestDto.AreasRequest -> {
-                        val areas = api.getAreas(token)
-                        AreasResponse(areas)
-                    }
-
-                    is RequestDto.VacanciesRequest -> {
-                        val vacanciesDto = api.getVacancies(
-                            token,
-                            dto.expression,
-                            dto.page
-                        )
-                        VacanciesResponse(
-                            found = vacanciesDto.found,
-                            pages = vacanciesDto.pages,
-                            page = vacanciesDto.page,
-                            items = vacanciesDto.items
-                        )
-                    }
-
-                    is RequestDto.VacancyRequest -> {
-                        val vacancy = api.getVacancyById(
-                            token,
-                            dto.id
-                        )
-                        VacancyResponse(vacancy.result)
-                    }
+        return try {
+            val token = BuildConfig.API_ACCESS_TOKEN
+            val response = when (dto) {
+                RequestDto.IndustriesRequest -> {
+                    val industries = api.getIndustries(token)
+                    IndustriesResponse(industries)
                 }
-                response.apply { status = ResponseStatus.SUCCESS }
-            } catch (e: HttpException) {
-                when (e.code()) {
-                    HTTP_NOT_FOUND -> Response().apply { status = ResponseStatus.NOT_FOUND }
-                    HTTP_SERVER_ERROR -> Response().apply { status = ResponseStatus.SERVER_ERROR }
-                    else -> Response().apply { status = ResponseStatus.UNKNOWN_ERROR }
+
+                RequestDto.AreasRequest -> {
+                    val areas = api.getAreas(token)
+                    AreasResponse(areas)
                 }
+
+                is RequestDto.VacanciesRequest -> {
+                    val vacanciesDto = api.getVacancies(
+                        token,
+                        dto.expression,
+                        dto.page
+                    )
+                    VacanciesResponse(
+                        found = vacanciesDto.found,
+                        pages = vacanciesDto.pages,
+                        page = vacanciesDto.page,
+                        items = vacanciesDto.items
+                    )
+                }
+
+                is RequestDto.VacancyRequest -> {
+                    val vacancy = api.getVacancyById(
+                        token,
+                        dto.id
+                    )
+                    VacancyResponse(vacancy.result)
+                }
+            }
+            response.apply { status = ResponseStatus.SUCCESS }
+        } catch (e: HttpException) {
+            when (e.code()) {
+                HTTP_NOT_FOUND -> Response().apply { status = ResponseStatus.NOT_FOUND }
+                HTTP_SERVER_ERROR -> Response().apply { status = ResponseStatus.SERVER_ERROR }
+                else -> Response().apply { status = ResponseStatus.UNKNOWN_ERROR }
             }
         }
     }
