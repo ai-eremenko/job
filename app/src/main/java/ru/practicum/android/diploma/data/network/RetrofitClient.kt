@@ -13,7 +13,6 @@ import ru.practicum.android.diploma.data.dto.responses.ResponseStatus
 import ru.practicum.android.diploma.data.dto.responses.VacanciesResponse
 import ru.practicum.android.diploma.util.NetworkManager
 
-
 class RetrofitClient(
     private val api: VacanciesApi,
     private val networkManager: NetworkManager
