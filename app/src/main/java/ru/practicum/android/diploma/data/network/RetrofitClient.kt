@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.data.network
 
-import android.util.Log
 import retrofit2.HttpException
 import ru.practicum.android.diploma.BuildConfig
 import ru.practicum.android.diploma.data.NetworkClient
