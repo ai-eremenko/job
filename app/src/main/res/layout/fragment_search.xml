@@ -1,99 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    android:orientation="vertical"
+    android:background="?attr/colorSurface"
     tools:context=".ui.search.SearchFragment">
 
+
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/search_toolbar"
+        android:id="@+id/toolbar"
         style="@style/ToolbarStyle"
-        android:paddingStart="@dimen/margin_16"
-        app:menu="@menu/filter_ic_toolbar"
-        app:title="@string/title_main"
-        app:titleTextAppearance="@style/TitleStyle" />
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/margin_16"
-        android:layout_marginTop="@dimen/margin_8"
-        android:background="@drawable/rounded_corners_search">
-
-        <EditText
-            android:id="@+id/search_input_text"
-            style="@style/SearchEditTextStyle"
-            android:layout_width="316dp"
-            android:layout_height="48dp"
-            android:layout_marginTop="@dimen/margin_4"
-            android:paddingStart="@dimen/margin_16" />
-
-        <ImageView
-            android:id="@+id/search_clear_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginVertical="@dimen/margin_16"
-            android:layout_marginEnd="@dimen/margin_16"
-            android:src="@drawable/ic_search_24" />
-    </FrameLayout>
-
-    <TextView
-        android:id="@+id/search_count_result"
-        style="@style/SearchCountResultTextStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="11dp"
-        android:visibility="gone"
-        tools:text="@string/text_found_vacancies_example" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="@string/vacancies_search" />
 
     <ImageView
-        android:id="@+id/search_image"
+        android:id="@+id/icFilter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="156dp"
-        android:src="@drawable/search_placeholder" />
+        android:layout_marginEnd="@dimen/_20dp"
+        android:src="@drawable/ic_filter_off"
+        app:layout_constraintBottom_toBottomOf="@+id/toolbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/toolbar" />
+
+    <EditText
+        android:id="@+id/searchField"
+        style="@style/SearchField"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_56dp"
+        android:layout_marginHorizontal="@dimen/_12dp"
+        android:layout_marginVertical="@dimen/_8dp"
+        android:hint="@string/enter_search_request"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+    <ImageView
+        android:id="@+id/searchFieldIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_16dp"
+        android:src="@drawable/ic_search"
+        app:layout_constraintBottom_toBottomOf="@+id/searchField"
+        app:layout_constraintEnd_toEndOf="@+id/searchField"
+        app:layout_constraintTop_toTopOf="@+id/searchField" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="@style/ProgressBar"
+        android:layout_marginVertical="@dimen/_16dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerView"
+        tools:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/searchScreenCover"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/img_search_screen_cover"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchField"
+        tools:visibility="gone" />
 
     <TextView
-        android:id="@+id/search_error_text"
-        style="@style/SearchErrorTextStyle"
+        android:id="@+id/errorPlaceholder"
+        style="@style/ErrorPlaceholder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="@dimen/margin_16"
+        android:drawableTop="@drawable/img_internet_connection_error"
+        android:text="@string/no_internet"
         android:visibility="gone"
-        tools:text="@string/placeholder_no_internet" />
-
-    <ProgressBar
-        android:id="@+id/search_progress_bar"
-        style="@style/CenteredProgressBarStyle"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="244dp"
-        android:visibility="gone" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchField"
+        tools:visibility="gone" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/search_result"
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="@dimen/margin_8"
-        android:layout_weight="1"
+        android:layout_marginTop="@dimen/_8dp"
+        android:clipToPadding="false"
+        android:paddingTop="@dimen/_38dp"
         android:visibility="gone"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toTopOf="@id/progressBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchField"
+        tools:itemCount="5"
+        tools:listitem="@layout/card_item"
+        tools:visibility="visible" />
 
-    <ProgressBar
-        android:id="@+id/paginationProgressBar"
-        style="@style/CenteredProgressBarStyle"
+    <TextView
+        android:id="@+id/searchStatus"
+        style="@style/SearchStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_margin="16dp"
-        android:visibility="gone" />
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchField"
+        tools:text="@string/no_such_vacancies"
+        tools:visibility="gone" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
