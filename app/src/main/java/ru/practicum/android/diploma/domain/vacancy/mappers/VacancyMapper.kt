@@ -22,7 +22,8 @@ class VacancyMapper(private val salaryFormatter: SalaryFormatter) {
             contacts = domain.contacts,
             employerName = domain.employer.name,
             skills = domain.skills,
-            url = domain.employer.logo
+            url = domain.employer.logo,
+            isFavorite = false // добавить проверку на избранное тут или в интеракторе
         )
     }
 }
