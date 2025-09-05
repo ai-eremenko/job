@@ -5,7 +5,7 @@ data class VacancyDto(
     val name: String,
     val description: String,
     val salary: SalaryDto?,
-    val address: AddressDto?,
+    val address: AddressDto,
     val experience: ExperienceDto,
     val schedule: ScheduleDto,
     val employment: EmploymentDto,
