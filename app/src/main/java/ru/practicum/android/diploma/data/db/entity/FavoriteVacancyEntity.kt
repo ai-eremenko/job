@@ -41,4 +41,3 @@ data class FavoriteVacancyEntity(
         isFavorite = false
     )
 }
-
