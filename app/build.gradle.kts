@@ -45,7 +45,8 @@ android {
 dependencies {
     implementation(libs.androidX.core)
     implementation(libs.androidX.appCompat)
-    implementation(libs.ui.material)
+    implementation("com.google.android.material:material:1.9.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation(libs.androidx.activity)
     implementation(libs.androidx.recyclerview)
     implementation(libs.ui.constraintLayout)
