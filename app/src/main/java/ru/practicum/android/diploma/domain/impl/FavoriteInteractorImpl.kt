@@ -25,5 +25,7 @@ class FavoriteInteractorImpl(
         repository.removeFromFavorite(vacancy)
     }
 
-
+    override suspend fun getVacancyById(id: String): Vacancy? {
+        return repository.getVacancyById(id)
+    }
 }

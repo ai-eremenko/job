@@ -39,4 +39,10 @@ class FavoriteRepositoryImpl(
         }
     }
 
+    override suspend fun getVacancyById(id: String): Vacancy? {
+        return withContext(Dispatchers.IO) {
+            val entity = appDatabase.favoriteVacancyDao().getVacancyById(id)
+            entity?.let { favoriteVacancyMapper.toDomain(it) }
+        }
+    }
 }
