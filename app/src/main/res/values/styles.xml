@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="BottomNavBg">
-        <item name="android:background">@color/white_universal</item>
-    </style>
-
     <style name="Widget.App.BottomNavigationView" parent="Widget.Material3.BottomNavigationView">
         <item name="android:background">?attr/colorOnContainer</item>
         <item name="itemIconTint">@color/bottom_nav_color</item>
