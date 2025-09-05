@@ -1,5 +1,7 @@
 package ru.practicum.android.diploma.domain.search.impl
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import ru.practicum.android.diploma.domain.search.SearchInteractor
 import ru.practicum.android.diploma.domain.search.SearchRepository
 import ru.practicum.android.diploma.domain.search.mapper.VacancyPreviewMapper
@@ -13,30 +15,32 @@ class SearchInteractorImpl(
     private val mapper: VacancyPreviewMapper,
 ) : SearchInteractor {
 
-    override suspend fun searchVacancies(
+    override fun searchVacancies(
         expression: String,
         page: Int
-    ): Resource<VacanciesSearchResult<VacancyPreviewPresent>> {
-        val result = repository.searchVacancies(expression, page)
-        return when (result) {
-            is Resource.Success -> {
-                val presentItems = result.data?.items?.map { domainItem ->
-                    mapper.mapToPresentation(domainItem)
-                } ?: emptyList()
+    ): Flow<Resource<VacanciesSearchResult<VacancyPreviewPresent>>> {
+        return repository.searchVacancies(expression, page)
+            .map { resource ->
+                when (resource) {
+                    is Resource.Success -> {
+                        val presentItems = resource.data?.items?.map { domainItem ->
+                            mapper.mapToPresentation(domainItem)
+                        } ?: emptyList()
 
-                Resource.Success(
-                    VacanciesSearchResult(
-                        found = result.data?.found ?: 0,
-                        pages = result.data?.pages ?: 0,
-                        page = result.data?.page ?: 0,
-                        items = presentItems
-                    )
-                )
-            }
+                        Resource.Success(
+                            VacanciesSearchResult(
+                                found = resource.data?.found ?: 0,
+                                pages = resource.data?.pages ?: 0,
+                                page = resource.data?.page ?: 0,
+                                items = presentItems
+                            )
+                        )
+                    }
 
-            is Resource.Error -> {
-                Resource.Error(result.message ?: ResponseStatus.UNKNOWN_ERROR)
+                    is Resource.Error -> {
+                        Resource.Error(resource.message ?: ResponseStatus.UNKNOWN_ERROR)
+                    }
+                }
             }
-        }
     }
 }
