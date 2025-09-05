@@ -20,8 +20,8 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
         android:background="?attr/colorSurface"
-        app:itemIconTint="?attr/hintTextColor"
-        app:itemTextColor="?attr/colorOnSurface"
+        app:itemIconTint="@color/bottom_nav_color"
+        app:itemTextColor="@color/bottom_nav_color"
         android:layout_width="0dp"
         android:layout_height="@dimen/size_56"
         app:layout_constraintBottom_toBottomOf="parent"
