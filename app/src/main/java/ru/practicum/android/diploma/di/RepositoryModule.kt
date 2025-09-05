@@ -4,8 +4,10 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import ru.practicum.android.diploma.data.ResourcesProviderRepositoryImpl
 import ru.practicum.android.diploma.data.search.SearchRepositoryImpl
-import ru.practicum.android.diploma.domain.ResourcesProviderRepository
+import ru.practicum.android.diploma.data.vacancy.VacancyRepositoryImpl
+import ru.practicum.android.diploma.domain.util.ResourcesProviderRepository
 import ru.practicum.android.diploma.domain.search.SearchRepository
+import ru.practicum.android.diploma.domain.vacancy.VacancyRepository
 
 val repositoryModule = module {
 
@@ -15,5 +17,9 @@ val repositoryModule = module {
 
     factory<SearchRepository> {
         SearchRepositoryImpl(get())
+    }
+
+    factory<VacancyRepository> {
+        VacancyRepositoryImpl(get())
     }
 }

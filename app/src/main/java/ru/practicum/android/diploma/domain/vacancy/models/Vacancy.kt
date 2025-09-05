@@ -5,20 +5,19 @@ data class Vacancy(
     val name: String,
     val description: String,
     val salary: Salary?,
-    val city: String,
+    val address: Address,
     val experience: String,
     val schedule: String,
     val employment: String,
     val contacts: Contacts?,
     val employer: Employer,
     val skills: List<String>?,
-    val url: String,
 )
 
 data class Salary(
     val from: Int?,
     val to: Int?,
-    val currency: String,
+    val currency: String?,
 )
 
 data class Contacts(
@@ -29,10 +28,15 @@ data class Contacts(
 
 data class Employer(
     val name: String,
-    val logo: String,
+    val logo: String?,
 )
 
 data class Phone(
     val comment: String?,
     val formatted: String
+)
+
+data class Address(
+    val city: String,
+    val raw: String
 )
