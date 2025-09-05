@@ -25,7 +25,6 @@ class FavoriteRepositoryImpl(
         }
     }
 
-
     override suspend fun removeFromFavorite(vacancy: Vacancy) {
         withContext(Dispatchers.IO) {
             appDatabase.favoriteVacancyDao()
@@ -34,7 +33,7 @@ class FavoriteRepositoryImpl(
     }
 
     override fun getFavorite(): Flow<List<Vacancy>> {
-        return  appDatabase.favoriteVacancyDao().getFavorite().map { list ->
+        return appDatabase.favoriteVacancyDao().getFavorite().map { list ->
             list.map { favoriteVacancyMapper.toDomain(it) }
         }
     }

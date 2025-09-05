@@ -21,7 +21,7 @@ class FavoriteInteractorImpl(
         return repository.getFavorite()
     }
 
-    override suspend  fun removeFromFavorite(vacancy: Vacancy) {
+    override suspend fun removeFromFavorite(vacancy: Vacancy) {
         repository.removeFromFavorite(vacancy)
     }
 
