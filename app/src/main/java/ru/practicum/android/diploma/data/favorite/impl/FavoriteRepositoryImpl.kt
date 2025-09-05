@@ -9,13 +9,14 @@ import ru.practicum.android.diploma.data.db.AppDatabase
 import ru.practicum.android.diploma.data.mappers.FavoriteVacancyMapper
 import ru.practicum.android.diploma.domain.favorite.FavoriteRepository
 import ru.practicum.android.diploma.domain.vacancy.models.Vacancy
+import ru.practicum.android.diploma.domain.vacancy.models.VacancyPresent
 
 class FavoriteRepositoryImpl(
     private val appDatabase: AppDatabase,
     private val favoriteVacancyMapper: FavoriteVacancyMapper,
 ) : FavoriteRepository {
 
-    override suspend fun addToFavorite(vacancy: Vacancy) {
+    override suspend fun addToFavorite(vacancy: VacancyPresent) {
         withContext(Dispatchers.IO) {
             val existingIds = appDatabase.favoriteVacancyDao().getFavoriteIds().first()
             if (existingIds.contains(vacancy.id)) {
@@ -25,20 +26,20 @@ class FavoriteRepositoryImpl(
         }
     }
 
-    override suspend fun removeFromFavorite(vacancy: Vacancy) {
+    override suspend fun removeFromFavorite(vacancy: VacancyPresent) {
         withContext(Dispatchers.IO) {
             appDatabase.favoriteVacancyDao()
                 .removeFromFavorite(favoriteVacancyMapper.toEntity(vacancy))
         }
     }
 
-    override fun getFavorite(): Flow<List<Vacancy>> {
+    override fun getFavorite(): Flow<List<VacancyPresent>> {
         return appDatabase.favoriteVacancyDao().getFavorite().map { list ->
             list.map { favoriteVacancyMapper.toDomain(it) }
         }
     }
 
-    override suspend fun getVacancyById(id: String): Vacancy? {
+    override suspend fun getVacancyById(id: String): VacancyPresent? {
         return withContext(Dispatchers.IO) {
             val entity = appDatabase.favoriteVacancyDao().getVacancyById(id)
             entity?.let { favoriteVacancyMapper.toDomain(it) }

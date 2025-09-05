@@ -12,8 +12,7 @@ data class FavoriteVacancyEntity(
     val id: String,
     val name: String,
     val description: String,
-    // Сложные объекты храним как JSON т.к. они нам нужны только для чтения
-    val salary: String?,
+    val salary: String,
     val city: String,
     val experience: String,
     val schedule: String,
@@ -21,7 +20,7 @@ data class FavoriteVacancyEntity(
     val contacts: String?,
     val employer: String,
     val skills: String?,
-    val url: String,
+    val url: String?,
     var isFavorite: Boolean = false
 
 ) {
@@ -29,7 +28,7 @@ data class FavoriteVacancyEntity(
         id = "",
         name = "",
         description = "",
-        salary = null,
+        salary = "",
         city = "",
         experience = "",
         schedule = "",
