@@ -3,8 +3,8 @@ package ru.practicum.android.diploma.data.mappers
 import ru.practicum.android.diploma.data.dto.VacancyDto
 import ru.practicum.android.diploma.data.dto.VacancyPreviewDto
 import ru.practicum.android.diploma.data.dto.responses.VacanciesResponse
-import ru.practicum.android.diploma.domain.models.VacanciesSearchResult
-import ru.practicum.android.diploma.domain.models.VacancyPreview
+import ru.practicum.android.diploma.domain.search.models.VacanciesSearchResult
+import ru.practicum.android.diploma.domain.search.models.VacancyPreview
 import ru.practicum.android.diploma.domain.vacancy.models.Contacts
 import ru.practicum.android.diploma.domain.vacancy.models.Employer
 import ru.practicum.android.diploma.domain.vacancy.models.Phone
@@ -12,7 +12,8 @@ import ru.practicum.android.diploma.domain.vacancy.models.Salary
 import ru.practicum.android.diploma.domain.vacancy.models.Vacancy
 
 object VacancyMapper {
-    fun mapToDomain(response: VacanciesResponse): VacanciesSearchResult {
+
+    fun mapToDomain(response: VacanciesResponse): VacanciesSearchResult<VacancyPreview> {
         return VacanciesSearchResult(
             found = response.found,
             pages = response.pages,
