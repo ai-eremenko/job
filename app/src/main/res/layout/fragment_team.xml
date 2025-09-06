@@ -1,14 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/colorSurface"
     tools:context=".ui.team.TeamFragment">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:textSize="@dimen/title"
-        android:text="@string/team" />
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        style="@style/ToolbarStyle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="@string/team" />
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/tv_list_of_developers"
+        style="@style/boldText_32"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_16dp"
+        android:layout_marginTop="@dimen/_43dp"
+        android:layout_marginEnd="@dimen/_16dp"
+        android:text="@string/list_of_developers"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+    <TextView
+        android:id="@+id/tv_developer_one"
+        style="@style/mediumText_16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_32dp"
+        android:text="@string/developer_one"
+        app:layout_constraintStart_toStartOf="@+id/tv_list_of_developers"
+        app:layout_constraintTop_toBottomOf="@+id/tv_list_of_developers" />
+
+    <TextView
+        android:id="@+id/tv_developer_two"
+        style="@style/mediumText_16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_16dp"
+        android:text="@string/developer_two"
+        app:layout_constraintStart_toStartOf="@+id/tv_developer_one"
+        app:layout_constraintTop_toBottomOf="@+id/tv_developer_one" />
+
+    <TextView
+        android:id="@+id/tv_developer_three"
+        style="@style/mediumText_16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_16dp"
+        android:text="@string/developer_three"
+        app:layout_constraintStart_toStartOf="@+id/tv_developer_two"
+        app:layout_constraintTop_toBottomOf="@+id/tv_developer_two" />
+
+    <TextView
+        android:id="@+id/tv_developer_four"
+        style="@style/mediumText_16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_16dp"
+        android:text="@string/developer_four"
+        app:layout_constraintStart_toStartOf="@+id/tv_developer_three"
+        app:layout_constraintTop_toBottomOf="@+id/tv_developer_three" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
