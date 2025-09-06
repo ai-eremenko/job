@@ -6,10 +6,10 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import ru.practicum.android.diploma.data.search.EXAMPLE_PREFERENCES
 import ru.practicum.android.diploma.data.NetworkClient
 import ru.practicum.android.diploma.data.network.RetrofitClient
 import ru.practicum.android.diploma.data.network.VacanciesApi
+import ru.practicum.android.diploma.data.search.EXAMPLE_PREFERENCES
 import ru.practicum.android.diploma.util.NetworkManager
 
 val dataModule = module {

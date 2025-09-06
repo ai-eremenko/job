@@ -8,7 +8,6 @@ import kotlinx.coroutines.withContext
 import ru.practicum.android.diploma.data.db.AppDatabase
 import ru.practicum.android.diploma.data.mappers.FavoriteVacancyMapper
 import ru.practicum.android.diploma.domain.favorite.FavoriteRepository
-import ru.practicum.android.diploma.domain.vacancy.models.Vacancy
 import ru.practicum.android.diploma.domain.vacancy.models.VacancyPresent
 
 class FavoriteRepositoryImpl(
