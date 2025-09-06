@@ -28,11 +28,12 @@
     <string name="phone">Телефон</string>
     <string name="comment">Комментарий</string>
     <string name="server_error">Ошибка сервера</string>
-
     <string name="salary_from_to">От %s до %s %s</string>
     <string name="salary_from">От %s %s</string>
     <string name="salary_to">До %s %s</string>
     <string name="salary_not">Зарплата не указана</string>
+    <string name="favorites">Избранное</string>
+    <string name="empty_list">Список пуст</string>
 
 
 
