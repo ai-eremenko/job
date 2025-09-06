@@ -1,6 +1,6 @@
-package ru.practicum.android.diploma.domain.usecases
+package ru.practicum.android.diploma.domain.util.usecases
 
-import ru.practicum.android.diploma.domain.ResourcesProviderRepository
+import ru.practicum.android.diploma.domain.util.ResourcesProviderRepository
 
 class ResourcesProviderUseCase(
     private val repository: ResourcesProviderRepository
