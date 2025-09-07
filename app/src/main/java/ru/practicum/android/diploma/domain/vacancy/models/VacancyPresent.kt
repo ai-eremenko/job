@@ -4,7 +4,7 @@ data class VacancyPresent(
     val id: String,
     val name: String,
     val description: String,
-    val salary: String?,
+    val salary: String,
     val address: String,
     val experience: String,
     val schedule: String,

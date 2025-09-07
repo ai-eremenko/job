@@ -12,7 +12,7 @@ data class FavoriteVacancyEntity(
     val id: String,
     val name: String,
     val description: String,
-    val salary: String?,
+    val salary: String,
     val city: String,
     val experience: String,
     val schedule: String,

@@ -12,17 +12,17 @@ data class VacancyDto(
     val contacts: ContactsDto?,
     val employer: EmployerDto,
     val skills: List<String>?,
-    val url: String,
 )
 
 data class SalaryDto(
     val from: Int?,
     val to: Int?,
-    val currency: String,
+    val currency: String?,
 )
 
 data class AddressDto(
     val city: String,
+    val raw: String
 )
 
 data class ExperienceDto(
@@ -45,7 +45,7 @@ data class ContactsDto(
 
 data class EmployerDto(
     val name: String,
-    val logo: String,
+    val logo: String?,
 )
 
 data class PhoneDto(

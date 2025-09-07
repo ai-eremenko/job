@@ -4,6 +4,6 @@ data class VacancyPreviewDto(
     val id: String,
     val name: String,
     val salary: SalaryDto?,
-    val address: AddressDto?,
+    val address: AddressDto,
     val employer: EmployerDto
 )
