@@ -16,6 +16,8 @@ import ru.practicum.android.diploma.domain.vacancy.VacancyInteractor
 import ru.practicum.android.diploma.domain.vacancy.models.VacancyPresent
 import ru.practicum.android.diploma.presentation.vacancy.models.NavigationEventState
 import ru.practicum.android.diploma.presentation.vacancy.models.VacancyScreenState
+import ru.practicum.android.diploma.util.Resource
+import ru.practicum.android.diploma.util.ResponseStatus
 
 class VacancyViewModel(
     private val vacancyId: String,
@@ -28,7 +30,9 @@ class VacancyViewModel(
     private var favoriteJob: Job? = null
     private lateinit var currentVacancy: VacancyPresent
 
-    private var screenStateLiveData = MutableLiveData<VacancyScreenState>(VacancyScreenState.Loading)
+    private var screenStateLiveData =
+        MutableLiveData<VacancyScreenState>(VacancyScreenState.Loading)
+
     fun getScreenStateLiveData(): LiveData<VacancyScreenState> = screenStateLiveData
 
     private val navigationEvents = MutableLiveData<NavigationEventState>()
@@ -40,15 +44,20 @@ class VacancyViewModel(
 
     private fun loadVacancyModel(vacancyId: String) {
         viewModelScope.launch {
-            try {
-                val model = vacancyInteractor.getVacancyById(vacancyId)
-                if (model.data != null) {
-                    currentVacancy = model.data
-                    changeFavoriteState()
-                    screenStateLiveData.postValue(VacancyScreenState.Content(currentVacancy))
-                } else screenStateLiveData.postValue(VacancyScreenState.ErrorNotFound)
-            } catch (e: Exception) {
-                screenStateLiveData.postValue(VacancyScreenState.ErrorNotFound)
+            when (val model = vacancyInteractor.getVacancyById(vacancyId)) {
+                is Resource.Success -> {
+                    if (model.data != null) {
+                        currentVacancy = model.data
+                        changeFavoriteState()
+                        screenStateLiveData.postValue(VacancyScreenState.Content(currentVacancy))
+                    } else {
+                        screenStateLiveData.postValue(VacancyScreenState.ErrorNotFound)
+                    }
+                }
+
+                is Resource.Error -> {
+                    screenStateLiveData.postValue(VacancyScreenState.ErrorNotFound)
+                }
             }
         }
     }
@@ -56,14 +65,16 @@ class VacancyViewModel(
     private fun getIcon(isFavorite: Boolean): Drawable? {
         return if (isFavorite) {
             resourcesProvider.getDrawable(R.drawable.ic_favorites_on)
-        } else resourcesProvider.getDrawable(R.drawable.ic_favorites_off)
+        } else {
+            resourcesProvider.getDrawable(R.drawable.ic_favorites_off)
+        }
     }
 
     fun onFavoriteClicked() {
         favoriteJob?.cancel()
         favoriteJob = viewModelScope.launch {
             favoriteInteractor.toggleFavorite(currentVacancy)
-            currentVacancy.isFavorite = !currentVacancy.isFavorite
+            currentVacancy = currentVacancy.copy(isFavorite = !currentVacancy.isFavorite)
             changeFavoriteState()
         }
     }

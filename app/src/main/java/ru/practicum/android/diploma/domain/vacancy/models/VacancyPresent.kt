@@ -13,5 +13,5 @@ data class VacancyPresent(
     val employerName: String,
     val skills: List<String>?,
     val url: String?,
-    var isFavorite: Boolean
+    val isFavorite: Boolean
 )

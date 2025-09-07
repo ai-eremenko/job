@@ -24,15 +24,31 @@ class VacancyInteractorImpl(
                         val dataFavorite = data.copy(isFavorite = true)
                         favoriteRepository.addToFavorite(dataFavorite)
                         Resource.Success(dataFavorite)
-                    } else Resource.Success(data)
+                    } else {
+                        Resource.Success(data)
+                    }
                 } else {
                     Resource.Error(ResponseStatus.UNKNOWN_ERROR)
                 }
             }
 
             is Resource.Error -> {
-                Resource.Error(result.message ?: ResponseStatus.UNKNOWN_ERROR)
+                if (result.message == ResponseStatus.NO_INTERNET) {
+                    loadFromFavorite(id)?.let { favoriteVacancy ->
+                        Resource.Success(favoriteVacancy)
+                    } ?: Resource.Error(ResponseStatus.NO_INTERNET)
+                } else {
+                    Resource.Error(result.message ?: ResponseStatus.UNKNOWN_ERROR)
+                }
             }
+        }
+    }
+
+    private suspend fun loadFromFavorite(id: String): VacancyPresent? {
+        return try {
+            favoriteRepository.getVacancyById(id)
+        } catch (e: Exception) {
+            null
         }
     }
 

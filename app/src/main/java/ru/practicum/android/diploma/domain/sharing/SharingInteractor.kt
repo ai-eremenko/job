@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.domain.sharing
 
-import android.content.Intent
 import ru.practicum.android.diploma.domain.sharing.models.SharingIntent
 
 interface SharingInteractor {

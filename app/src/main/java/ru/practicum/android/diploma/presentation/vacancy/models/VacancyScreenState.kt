@@ -4,13 +4,14 @@ import android.graphics.drawable.Drawable
 import ru.practicum.android.diploma.domain.vacancy.models.VacancyPresent
 
 sealed class VacancyScreenState {
-    object Loading: VacancyScreenState()
+    object Loading : VacancyScreenState()
     data class Content(
         val vacancyModel: VacancyPresent
-    ): VacancyScreenState()
+    ) : VacancyScreenState()
 
     data class Favorite(
         val favoriteIcon: Drawable?
     ) : VacancyScreenState()
-    object ErrorNotFound: VacancyScreenState()
+
+    object ErrorNotFound : VacancyScreenState()
 }

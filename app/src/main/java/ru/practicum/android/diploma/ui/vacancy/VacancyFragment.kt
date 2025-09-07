@@ -10,16 +10,16 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
+import kotlin.getValue
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentVacancyBinding
 import ru.practicum.android.diploma.domain.vacancy.models.Phone
-import ru.practicum.android.diploma.presentation.vacancy.models.VacancyScreenState
 import ru.practicum.android.diploma.presentation.vacancy.VacancyViewModel
 import ru.practicum.android.diploma.presentation.vacancy.models.NavigationEventState
+import ru.practicum.android.diploma.presentation.vacancy.models.VacancyScreenState
 import ru.practicum.android.diploma.ui.root.NavigationVisibilityController
-import kotlin.getValue
 
 class VacancyFragment : Fragment() {
     private var _binding: FragmentVacancyBinding? = null
@@ -49,7 +49,6 @@ class VacancyFragment : Fragment() {
     }
 
     private fun setupObservers() {
-
         viewModel.getScreenStateLiveData().observe(viewLifecycleOwner) { screenState ->
             when (screenState) {
                 is VacancyScreenState.Content -> setupContent(screenState)
@@ -63,7 +62,6 @@ class VacancyFragment : Fragment() {
             openApp(state)
         }
     }
-
 
     private fun setupClickListeners() {
         binding.ivFavorite.setOnClickListener {
@@ -84,7 +82,7 @@ class VacancyFragment : Fragment() {
             tvNameVacancy.text = content.vacancyModel.name
             tvSalaryVacancy.text = content.vacancyModel.salary
             tvDescription.text = content.vacancyModel.description
-            //остальные поля с проверкой на null
+            // остальные поля с проверкой на null
             showPhones(content.vacancyModel.contacts?.phones)
         }
         changeContentVisibility(false)
@@ -125,7 +123,7 @@ class VacancyFragment : Fragment() {
         try {
             startActivity(state.intent)
         } catch (e: ActivityNotFoundException) {
-            Toast.makeText(requireContext(), state.errorMessage, Toast.LENGTH_LONG)
+            Toast.makeText(requireContext(), "$state.errorMessage $e", Toast.LENGTH_LONG)
                 .show()
         }
     }

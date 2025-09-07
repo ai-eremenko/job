@@ -25,8 +25,9 @@ class VacancyRepositoryImpl(
                     Resource.Error(ResponseStatus.UNKNOWN_ERROR)
                 }
             }
-
-            else -> Resource.Error(response.status)
+            else -> {
+                Resource.Error(response.status)
+            }
         }
     }
 }
