@@ -44,12 +44,19 @@ class FavoriteFragment : Fragment() {
             when (state) {
                 is FavoriteState.Empty -> {
                     binding.placeholder.visibility = View.VISIBLE
+                    binding.errorPlaceholder.visibility = View.GONE
                     binding.recyclerView.visibility = View.GONE
                 }
                 is FavoriteState.Content -> {
                     binding.placeholder.visibility = View.GONE
+                    binding.errorPlaceholder.visibility = View.GONE
                     binding.recyclerView.visibility = View.VISIBLE
                     adapter.updateVacancies(state.vacancies)
+                }
+                is FavoriteState.Error -> {
+                    binding.placeholder.visibility = View.GONE
+                    binding.errorPlaceholder.visibility = View.VISIBLE
+                    binding.recyclerView.visibility = View.GONE
                 }
             }
         }

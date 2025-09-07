@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.data.mappers.FavoriteVacancyMapper
@@ -26,6 +27,9 @@ class FavoriteViewModel(
         viewModelScope.launch {
             favoriteInteractor.getFavorite()
                 .map { vacancies -> mapper.mapToPreviewList(vacancies) }
+                .catch { exception ->
+                    _state.value = FavoriteState.Error(exception.message ?: "Unknown error")
+                }
                 .collect { vacancies ->
                     _state.value = if (vacancies.isEmpty()) {
                         FavoriteState.Empty
