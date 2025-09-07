@@ -64,7 +64,7 @@ class SearchFragment : Fragment() {
                 searchEditTextValue = binding.searchField.text.toString()
 
 
-                if (binding.searchField.text.toString().isEmpty()){
+                if (binding.searchField.text.toString().isEmpty()) {
                     binding.searchFieldIcon.setImageDrawable(requireContext().getDrawable(R.drawable.ic_search))
                     clearScreen()
                     showEmpty()
@@ -86,9 +86,10 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        onTrackClickDebounce = debounce<VacancyPreviewPresent>(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) { vacancy ->
-            openVacancy(vacancy)
-        }
+        onTrackClickDebounce =
+            debounce<VacancyPreviewPresent>(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) { vacancy ->
+                openVacancy(vacancy)
+            }
 
         searchEditTextCreate()
         vacancyListViewCreate()
@@ -127,13 +128,23 @@ class SearchFragment : Fragment() {
         binding.searchStatus.text = requireContext().getString(R.string.there_are_no_vacancies)
         binding.errorPlaceholder.isVisible = true
         binding.errorPlaceholder.text = requireContext().getString(R.string.no_get_list_vacancies)
-        binding.errorPlaceholder.setCompoundDrawablesWithIntrinsicBounds(null, requireContext().getDrawable(R.drawable.cat_with_plate) , null, null);
+        binding.errorPlaceholder.setCompoundDrawablesWithIntrinsicBounds(
+            null,
+            requireContext().getDrawable(R.drawable.cat_with_plate),
+            null,
+            null
+        );
     }
 
     private fun showNetworkError() {
         binding.errorPlaceholder.isVisible = true
         binding.errorPlaceholder.text = requireContext().getString(R.string.no_internet)
-        binding.errorPlaceholder.setCompoundDrawablesWithIntrinsicBounds(null, requireContext().getDrawable(R.drawable.img_internet_connection_error) , null, null);
+        binding.errorPlaceholder.setCompoundDrawablesWithIntrinsicBounds(
+            null,
+            requireContext().getDrawable(R.drawable.img_internet_connection_error),
+            null,
+            null
+        );
     }
 
     private fun showVacancy(vacancy: List<VacancyPreviewPresent>, countVacancy: Int) {
@@ -150,7 +161,7 @@ class SearchFragment : Fragment() {
         inputMethodManager?.hideSoftInputFromWindow(binding.searchField.windowToken, 0)
     }
 
-    private fun clearScreen(){
+    private fun clearScreen() {
         binding.progressBar.isVisible = false
         binding.recyclerView.isVisible = false
         binding.searchStatus.isVisible = false

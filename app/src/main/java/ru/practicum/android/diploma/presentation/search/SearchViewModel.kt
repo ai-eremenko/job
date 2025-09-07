@@ -36,14 +36,15 @@ class SearchViewModel(private val searchInteractor: SearchInteractor) : ViewMode
                 searchInteractor
                     .searchVacancies(newSearchText, 1)
                     .collect {
-                        when(it) {
+                        when (it) {
                             is Resource.Success<*> -> {
                                 if (it.data?.items == null || it.data.found == 0) {
                                     renderState(SearchScreenState.EmptyError)
-                                }else{
+                                } else {
                                     renderState(SearchScreenState.Content(it.data.items, it.data.found))
                                 }
                             }
+
                             is Resource.Error<*> -> renderState(SearchScreenState.NetworkError)
                         }
                     }
