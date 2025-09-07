@@ -45,11 +45,7 @@ class VacancyInteractorImpl(
     }
 
     private suspend fun loadFromFavorite(id: String): VacancyPresent? {
-        return try {
-            favoriteRepository.getVacancyById(id)
-        } catch (e: Exception) {
-            null
-        }
+        return favoriteRepository.getVacancyById(id)
     }
 
     private suspend fun isFavorite(id: String): Boolean {

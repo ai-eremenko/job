@@ -17,7 +17,6 @@ import ru.practicum.android.diploma.domain.vacancy.models.VacancyPresent
 import ru.practicum.android.diploma.presentation.vacancy.models.NavigationEventState
 import ru.practicum.android.diploma.presentation.vacancy.models.VacancyScreenState
 import ru.practicum.android.diploma.util.Resource
-import ru.practicum.android.diploma.util.ResponseStatus
 
 class VacancyViewModel(
     private val vacancyId: String,
@@ -28,7 +27,7 @@ class VacancyViewModel(
 ) : ViewModel() {
 
     private var favoriteJob: Job? = null
-    private lateinit var currentVacancy: VacancyPresent
+    private var currentVacancy: VacancyPresent? = null
 
     private var screenStateLiveData =
         MutableLiveData<VacancyScreenState>(VacancyScreenState.Loading)
@@ -49,7 +48,7 @@ class VacancyViewModel(
                     if (model.data != null) {
                         currentVacancy = model.data
                         changeFavoriteState()
-                        screenStateLiveData.postValue(VacancyScreenState.Content(currentVacancy))
+                        screenStateLiveData.postValue(VacancyScreenState.Content(model.data))
                     } else {
                         screenStateLiveData.postValue(VacancyScreenState.ErrorNotFound)
                     }
@@ -71,28 +70,32 @@ class VacancyViewModel(
     }
 
     fun onFavoriteClicked() {
+        val vacancy = currentVacancy ?: return
         favoriteJob?.cancel()
         favoriteJob = viewModelScope.launch {
-            favoriteInteractor.toggleFavorite(currentVacancy)
-            currentVacancy = currentVacancy.copy(isFavorite = !currentVacancy.isFavorite)
+            favoriteInteractor.toggleFavorite(vacancy)
+            currentVacancy = vacancy.copy(isFavorite = !vacancy.isFavorite)
             changeFavoriteState()
         }
     }
 
     private fun changeFavoriteState() {
-        val icon = getIcon(currentVacancy.isFavorite)
+        val vacancy = currentVacancy ?: return
+        val icon = getIcon(vacancy.isFavorite)
         screenStateLiveData.postValue(
             VacancyScreenState.Favorite(icon)
         )
     }
 
     fun share() {
-        val intent = sharingInteractor.shareVacancy(currentVacancy.id, currentVacancy.name)
+        val vacancy = currentVacancy ?: return
+        val intent = sharingInteractor.shareVacancy(vacancy.id, vacancy.name)
         navigate(intent)
     }
 
     fun sendEmail() {
-        val intent = sharingInteractor.sendOnEmail(currentVacancy.contacts!!.email)
+        val vacancy = currentVacancy ?: return
+        val intent = sharingInteractor.sendOnEmail(vacancy.contacts!!.email)
         navigate(intent)
     }
 
