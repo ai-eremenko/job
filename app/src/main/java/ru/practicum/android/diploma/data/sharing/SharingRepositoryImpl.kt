@@ -24,9 +24,9 @@ class SharingRepositoryImpl(
         }
     }
 
-    override fun call(phone: String): Intent {
+    override fun call(phoneNumber: String): Intent {
         return Intent(Intent.ACTION_DIAL).apply {
-            data = Uri.parse("tel:$phone")
+            data = Uri.parse("tel:$phoneNumber")
             flags = Intent.FLAG_ACTIVITY_NEW_TASK
         }
     }

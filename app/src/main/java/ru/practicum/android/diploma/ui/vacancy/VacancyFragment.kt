@@ -1,17 +1,24 @@
 package ru.practicum.android.diploma.ui.vacancy
 
+import android.content.ActivityNotFoundException
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentVacancyBinding
+import ru.practicum.android.diploma.domain.vacancy.models.Phone
 import ru.practicum.android.diploma.presentation.vacancy.models.VacancyScreenState
 import ru.practicum.android.diploma.presentation.vacancy.VacancyViewModel
+import ru.practicum.android.diploma.presentation.vacancy.models.NavigationEventState
+import ru.practicum.android.diploma.ui.root.NavigationVisibilityController
 import kotlin.getValue
 
 class VacancyFragment : Fragment() {
@@ -35,7 +42,7 @@ class VacancyFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //(activity as? NavigationVisibilityController)?.setNavigationVisibility(false)
+        (activity as? NavigationVisibilityController)?.setNavigationVisibility(false)
 
         setupClickListeners()
         setupObservers()
@@ -51,7 +58,12 @@ class VacancyFragment : Fragment() {
                 is VacancyScreenState.Favorite -> setupFavoriteIcon(screenState)
             }
         }
+
+        viewModel.getNavigationEvents().observe(viewLifecycleOwner) { state ->
+            openApp(state)
+        }
     }
+
 
     private fun setupClickListeners() {
         binding.ivFavorite.setOnClickListener {
@@ -65,15 +77,16 @@ class VacancyFragment : Fragment() {
         binding.tvEmail.setOnClickListener {
             viewModel.sendEmail()
         }
-
-        //Добавить обработку нажатия на номер телефона
     }
 
     private fun setupContent(content: VacancyScreenState.Content) {
-        binding.tvNameVacancy.text = content.vacancyModel.name
-        binding.tvSalaryVacancy.text = content.vacancyModel.salary
-        binding.tvDescription.text = content.vacancyModel.description
-        //остальные поля с проверкой на null
+        binding.apply {
+            tvNameVacancy.text = content.vacancyModel.name
+            tvSalaryVacancy.text = content.vacancyModel.salary
+            tvDescription.text = content.vacancyModel.description
+            //остальные поля с проверкой на null
+            showPhones(content.vacancyModel.contacts?.phones)
+        }
         changeContentVisibility(false)
     }
 
@@ -92,8 +105,33 @@ class VacancyFragment : Fragment() {
         binding.error.isVisible = true
     }
 
+    private fun showPhones(phones: List<Phone>?) {
+        phones?.forEach { phone ->
+            val phoneView = LayoutInflater.from(requireContext())
+                .inflate(R.layout.phone_item, binding.phonesContainer, false)
+
+            phoneView.findViewById<TextView>(R.id.tv_phone_number).text = phone.formatted
+            phoneView.findViewById<TextView>(R.id.tv_phone_comment).text = phone.comment ?: ""
+
+            phoneView.setOnClickListener {
+                viewModel.call(phone.formatted)
+            }
+
+            binding.phonesContainer.addView(phoneView)
+        }
+    }
+
+    private fun openApp(state: NavigationEventState) {
+        try {
+            startActivity(state.intent)
+        } catch (e: ActivityNotFoundException) {
+            Toast.makeText(requireContext(), state.errorMessage, Toast.LENGTH_LONG)
+                .show()
+        }
+    }
+
     override fun onDestroyView() {
-        //(activity as? NavigationVisibilityController)?.setNavigationVisibility(true)
+        (activity as? NavigationVisibilityController)?.setNavigationVisibility(true)
         super.onDestroyView()
         _binding = null
     }
