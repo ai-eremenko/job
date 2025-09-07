@@ -6,6 +6,5 @@ import ru.practicum.android.diploma.domain.vacancy.models.VacancyPresent
 interface FavoriteInteractor {
     suspend fun toggleFavorite(vacancy: VacancyPresent)
     fun getFavorite(): Flow<List<VacancyPresent>>
-    suspend fun removeFromFavorite(vacancy: VacancyPresent)
     suspend fun getVacancyById(id: String): VacancyPresent?
 }

@@ -15,20 +15,14 @@ class FavoriteRepositoryImpl(
     private val favoriteVacancyMapper: FavoriteVacancyMapper,
 ) : FavoriteRepository {
 
-    override suspend fun addToFavorite(vacancy: VacancyPresent) {
+    override suspend fun toggleFavorite(vacancy: VacancyPresent) {
         withContext(Dispatchers.IO) {
             val existingIds = appDatabase.favoriteVacancyDao().getFavoriteIds().first()
             if (existingIds.contains(vacancy.id)) {
                 appDatabase.favoriteVacancyDao().removeById(vacancy.id)
+            } else {
+                appDatabase.favoriteVacancyDao().addToFavorite(favoriteVacancyMapper.toEntity(vacancy))
             }
-            appDatabase.favoriteVacancyDao().addToFavorite(favoriteVacancyMapper.toEntity(vacancy))
-        }
-    }
-
-    override suspend fun removeFromFavorite(vacancy: VacancyPresent) {
-        withContext(Dispatchers.IO) {
-            appDatabase.favoriteVacancyDao()
-                .removeFromFavorite(favoriteVacancyMapper.toEntity(vacancy))
         }
     }
 

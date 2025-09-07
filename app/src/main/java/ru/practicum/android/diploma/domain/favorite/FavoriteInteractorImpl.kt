@@ -8,19 +8,11 @@ class FavoriteInteractorImpl(
 ) : FavoriteInteractor {
 
     override suspend fun toggleFavorite(vacancy: VacancyPresent) {
-        if (vacancy.isFavorite) {
-            repository.removeFromFavorite(vacancy)
-        } else {
-            repository.addToFavorite(vacancy)
-        }
+        repository.toggleFavorite(vacancy)
     }
 
     override fun getFavorite(): Flow<List<VacancyPresent>> {
         return repository.getFavorite()
-    }
-
-    override suspend fun removeFromFavorite(vacancy: VacancyPresent) {
-        repository.removeFromFavorite(vacancy)
     }
 
     override suspend fun getVacancyById(id: String): VacancyPresent? {
