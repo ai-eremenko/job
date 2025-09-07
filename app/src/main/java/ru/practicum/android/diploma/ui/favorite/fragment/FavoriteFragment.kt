@@ -6,10 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import ru.practicum.android.diploma.R
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFavoriteBinding
 import ru.practicum.android.diploma.ui.favorite.state.FavoriteState
 import ru.practicum.android.diploma.ui.favorite.viewmodel.FavoriteViewModel
@@ -17,10 +17,13 @@ import ru.practicum.android.diploma.ui.search.adapter.VacancyListAdapter
 
 class FavoriteFragment : Fragment() {
 
-    private lateinit var adapter: VacancyListAdapter
     private var _binding: FragmentFavoriteBinding? = null
     private val binding get() = _binding!!
     private val viewModel by viewModel<FavoriteViewModel>()
+    private var adapter = VacancyListAdapter(emptyList()) { vacancy ->
+        val bundle = bundleOf("vacancy_id" to vacancy.id)
+        findNavController().navigate(R.id.action_favoriteFragment_to_vacancyFragment, bundle)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,11 +36,6 @@ class FavoriteFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        adapter = VacancyListAdapter(emptyList()) { vacancy ->
-            val bundle = bundleOf("vacancy_id" to vacancy.id)
-            findNavController().navigate(R.id.action_favoriteFragment_to_vacancyFragment, bundle)
-        }
 
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())

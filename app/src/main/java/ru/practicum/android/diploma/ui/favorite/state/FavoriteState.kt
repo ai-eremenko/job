@@ -1,7 +1,6 @@
 package ru.practicum.android.diploma.ui.favorite.state
 
 import ru.practicum.android.diploma.domain.search.models.VacancyPreviewPresent
-import ru.practicum.android.diploma.domain.vacancy.models.VacancyPresent
 
 sealed class FavoriteState {
     object Empty : FavoriteState()

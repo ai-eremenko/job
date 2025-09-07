@@ -13,7 +13,7 @@ import ru.practicum.android.diploma.ui.favorite.state.FavoriteState
 class FavoriteViewModel(
     private val favoriteInteractor: FavoriteInteractor,
     private val mapper: FavoriteVacancyMapper
-): ViewModel() {
+) : ViewModel() {
 
     private val _state = MutableLiveData<FavoriteState>()
     val state: LiveData<FavoriteState> = _state
