@@ -12,7 +12,6 @@
     <string name="vacancy">Вакансия</string>
     <string name="workplace_choice">Выбор рабочего места</string>
 
-
     <string name="vacancies_search">Поиск вакансий</string>
     <string name="enter_search_request">Введите запрос</string>
     <string name="no_internet">Нет интернета</string>
@@ -28,12 +27,15 @@
     <string name="phone">Телефон</string>
     <string name="comment">Комментарий</string>
     <string name="server_error">Ошибка сервера</string>
+    <string name="vacancy_not_found">Вакансия не найдена или удалена</string>
 
     <string name="salary_from_to">От %s до %s %s</string>
     <string name="salary_from">От %s %s</string>
     <string name="salary_to">До %s %s</string>
     <string name="salary_not">Зарплата не указана</string>
 
-
-
+    <string name="share_vacancy">Посмотрите вакансию: %s\n</string>
+    <string name="error_send_email">Почтовые клиенты не установлены</string>
+    <string name="error_share">Мессенджеры не установлены</string>
+    <string name="error_phone">Не удалось набрать номер</string>
 </resources>
