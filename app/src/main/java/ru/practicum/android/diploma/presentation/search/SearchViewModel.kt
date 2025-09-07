@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.presentation.search
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -37,7 +36,6 @@ class SearchViewModel(private val searchInteractor: SearchInteractor) : ViewMode
                 searchInteractor
                     .searchVacancies(newSearchText, 1)
                     .collect {
-                        Log.i("sddsds", it.data?.items.toString())
                         when(it) {
                             is Resource.Success<*> -> {
                                 if (it.data?.items == null || it.data.found == 0) {
