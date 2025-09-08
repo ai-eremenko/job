@@ -33,10 +33,6 @@ class RetrofitClient(
             }
         } catch (e: HttpException) {
             handleHttpException(e)
-            Response().apply {
-                status = ResponseStatus.UNKNOWN_ERROR
-                errorMessage = e.message ?: "Unknown error occurred"
-            }
         }
     }
 
