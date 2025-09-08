@@ -33,14 +33,27 @@ class VacancyInteractorImpl(
             }
 
             is Resource.Error -> {
-                if (result.message == ResponseStatus.NO_INTERNET) {
-                    loadFromFavorite(id)?.let { favoriteVacancy ->
-                        Resource.Success(favoriteVacancy)
-                    } ?: Resource.Error(ResponseStatus.NO_INTERNET)
-                } else {
-                    Resource.Error(result.message ?: ResponseStatus.UNKNOWN_ERROR)
+                when (result.message) {
+                    ResponseStatus.NOT_FOUND -> {
+                        removeFromFavoriteIfExists(id)
+                        Resource.Error(ResponseStatus.NOT_FOUND)
+                    }
+                    ResponseStatus.NO_INTERNET -> {
+                        loadFromFavorite(id)?.let { favoriteVacancy ->
+                            Resource.Success(favoriteVacancy)
+                        } ?: Resource.Error(ResponseStatus.NO_INTERNET)
+                    }
+                    else -> {
+                        Resource.Error(result.message ?: ResponseStatus.UNKNOWN_ERROR)
+                    }
                 }
             }
+        }
+    }
+
+    private suspend fun removeFromFavoriteIfExists(id: String) {
+        if (isFavorite(id)) {
+            favoriteRepository.removeFromFavorite(id)
         }
     }
 
