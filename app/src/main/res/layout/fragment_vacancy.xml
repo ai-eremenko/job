@@ -151,6 +151,34 @@
                 tools:text="@string/text_required_experience"/>
 
             <TextView
+                android:id="@+id/required_experience"
+                style="@style/VacancyDetailTextStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_4dp"
+                android:layout_marginStart="@dimen/_16dp"
+                android:layout_marginEnd="@dimen/_16dp"
+                android:fontFamily="@font/ys_display_regular"
+                android:text="@string/text_required_experience_example"
+                app:layout_constraintTop_toBottomOf="@id/tv_required_experience"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                android:id="@+id/tv_type_employment"
+                style="@style/VacancyDetailTextStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_4dp"
+                android:layout_marginStart="@dimen/_16dp"
+                android:layout_marginEnd="@dimen/_16dp"
+                android:fontFamily="@font/ys_display_regular"
+                android:text="@string/text_type_employment_example"
+                app:layout_constraintTop_toBottomOf="@id/required_experience"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
                 android:id="@+id/tv_description"
                 style="@style/mediumText_22"
                 android:layout_width="0dp"
@@ -158,7 +186,7 @@
                 android:layout_marginTop="@dimen/_24dp"
                 android:layout_marginStart="@dimen/_16dp"
                 android:layout_marginEnd="@dimen/_16dp"
-                app:layout_constraintTop_toBottomOf="@id/tv_required_experience"
+                app:layout_constraintTop_toBottomOf="@id/tv_type_employment"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 tools:text="Описание вакансии" />
@@ -177,6 +205,26 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 tools:text="Обязанности" />
 
+            <LinearLayout
+                android:id="@+id/descriptionsTitle"
+                style="@style/VacancyDetailTextStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_16dp"
+                android:layout_marginEnd="@dimen/_16dp"
+                android:layout_marginTop="@dimen/_8dp"
+                app:layout_constraintTop_toBottomOf="@id/tv_duties"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <TextView
+                    android:id="@+id/descriptions"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/ys_display_regular"
+                    android:textSize="@dimen/_16sp"
+                    tools:text="@string/text_responsibilities_example" />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/tv_requirements"
@@ -186,10 +234,12 @@
                 android:layout_marginTop="@dimen/_16dp"
                 android:layout_marginStart="@dimen/_16dp"
                 android:layout_marginEnd="@dimen/_16dp"
-                app:layout_constraintTop_toBottomOf="@id/tv_duties"
+                app:layout_constraintTop_toBottomOf="@id/descriptionsTitle"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 tools:text="Требования" />
+
+
 
 
             <TextView

@@ -40,4 +40,13 @@
     <string name="developer_three">Даниил Ильс</string>
     <string name="developer_four">Владислав Московский</string>
     <string name="text_required_experience">Требуемый опыт</string>
-</resources>
+    <string name="text_required_experience_example">От 1 года до 3 лет</string>
+    <string name="text_type_employment_example">Полная занятость, Удаленная работа</string>
+    <string name="text_responsibilities_example">
+    • Разрабатывать новую функциональность приложения\n
+    • Помогать с интеграцией нашего SDK в другие приложения\n
+    • Проектировать большие новые модули\n
+    • Писать UI- и unit-тесты\n
+    • Следить за работоспособностью сервиса и устранять технический долг
+    </string>
+  </resources>
