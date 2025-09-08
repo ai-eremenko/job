@@ -31,6 +31,7 @@
     <dimen name="_32dp">32dp</dimen>
 
     <dimen name="_16sp">16sp</dimen>
+    <dimen name="_19sp">19sp</dimen>
     <dimen name="_12sp">12sp</dimen>
     <dimen name="_22sp">22sp</dimen>
     <dimen name="_32sp">32sp</dimen>
