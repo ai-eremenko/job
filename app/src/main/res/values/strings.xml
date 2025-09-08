@@ -38,4 +38,9 @@
     <string name="error_send_email">Почтовые клиенты не установлены</string>
     <string name="error_share">Мессенджеры не установлены</string>
     <string name="error_phone">Не удалось набрать номер</string>
+    <string name="list_of_developers">Над приложением работали</string>
+    <string name="developer_one">Ангелина Еременко</string>
+    <string name="developer_two">Яна Кудринская</string>
+    <string name="developer_three">Даниил Ильс</string>
+    <string name="developer_four">Владислав Московский</string>
 </resources>
