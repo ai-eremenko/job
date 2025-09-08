@@ -2,13 +2,12 @@ package ru.practicum.android.diploma.ui.search
 
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -28,17 +27,22 @@ class SearchFragment : Fragment() {
 
     private val viewModel: SearchViewModel by viewModel()
 
-    private lateinit var vacancyAdapter: VacancyListAdapter
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    private lateinit var onTrackClickDebounce: (VacancyPreviewPresent) -> Unit
+    private var _vacancyAdapter: VacancyListAdapter? = null
+
+    private val vacancyAdapter get() = _vacancyAdapter!!
 
     private fun vacancyListViewCreate() {
-        vacancyAdapter = VacancyListAdapter(onTrackClickDebounce)
+        val onVacancyClickDebounce: (VacancyPreviewPresent) -> Unit =
+            debounce<VacancyPreviewPresent>(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) { vacancy ->
+                openVacancy(vacancy)
+            }
+        _vacancyAdapter = VacancyListAdapter(onVacancyClickDebounce)
+
         binding.recyclerView.adapter = vacancyAdapter
     }
 
@@ -53,30 +57,20 @@ class SearchFragment : Fragment() {
             hideKeyboard()
         }
 
-        val simpleTextWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
+        binding.searchField.doOnTextChanged { text, _, _, _ ->
+            viewModel.searchDebounce(
+                changedText = text?.toString() ?: ""
+            )
+            searchEditTextValue = binding.searchField.text.toString()
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                viewModel.searchDebounce(
-                    changedText = s?.toString() ?: ""
-                )
-                searchEditTextValue = binding.searchField.text.toString()
-
-
-                if (binding.searchField.text.toString().isEmpty()) {
-                    binding.searchFieldIcon.setImageDrawable(requireContext().getDrawable(R.drawable.ic_search))
-                    clearScreen()
-                    showEmpty()
-                } else {
-                    binding.searchFieldIcon.setImageDrawable(requireContext().getDrawable(R.drawable.ic_close))
-                }
-            }
-
-            override fun afterTextChanged(s: Editable?) {
+            if (binding.searchField.text.toString().isEmpty()) {
+                binding.searchFieldIcon.setImageDrawable(requireContext().getDrawable(R.drawable.ic_search))
+                clearScreen()
+                showEmpty()
+            } else {
+                binding.searchFieldIcon.setImageDrawable(requireContext().getDrawable(R.drawable.ic_close))
             }
         }
-        binding.searchField.addTextChangedListener(simpleTextWatcher)
     }
 
     private fun openVacancy(vacancy: VacancyPreviewPresent) {
@@ -85,11 +79,6 @@ class SearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        onTrackClickDebounce =
-            debounce<VacancyPreviewPresent>(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) { vacancy ->
-                openVacancy(vacancy)
-            }
 
         searchEditTextCreate()
         vacancyListViewCreate()
@@ -102,6 +91,7 @@ class SearchFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        _vacancyAdapter = null
     }
 
     private fun render(state: SearchScreenState) {
@@ -133,7 +123,7 @@ class SearchFragment : Fragment() {
             requireContext().getDrawable(R.drawable.cat_with_plate),
             null,
             null
-        );
+        )
     }
 
     private fun showNetworkError() {
@@ -144,7 +134,7 @@ class SearchFragment : Fragment() {
             requireContext().getDrawable(R.drawable.img_internet_connection_error),
             null,
             null
-        );
+        )
     }
 
     private fun showVacancy(vacancy: List<VacancyPreviewPresent>, countVacancy: Int) {
