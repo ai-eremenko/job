@@ -1,12 +1,14 @@
 package ru.practicum.android.diploma.di
 
 import android.content.Context
+import androidx.room.Room
 import com.google.gson.Gson
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.practicum.android.diploma.data.NetworkClient
+import ru.practicum.android.diploma.data.db.AppDatabase
 import ru.practicum.android.diploma.data.network.RetrofitClient
 import ru.practicum.android.diploma.data.network.VacanciesApi
 import ru.practicum.android.diploma.data.search.EXAMPLE_PREFERENCES
@@ -35,5 +37,15 @@ val dataModule = module {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(VacanciesApi::class.java)
+    }
+
+    single<AppDatabase> {
+        Room.databaseBuilder(
+            androidContext(),
+            AppDatabase::class.java,
+            "favorite_vacancies.db"
+        )
+            .fallbackToDestructiveMigration()
+            .build()
     }
 }

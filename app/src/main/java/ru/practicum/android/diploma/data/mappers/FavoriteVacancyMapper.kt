@@ -3,6 +3,7 @@ package ru.practicum.android.diploma.data.mappers
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import ru.practicum.android.diploma.data.db.entity.FavoriteVacancyEntity
+import ru.practicum.android.diploma.domain.search.models.VacancyPreviewPresent
 import ru.practicum.android.diploma.domain.vacancy.models.Contacts
 import ru.practicum.android.diploma.domain.vacancy.models.VacancyPresent
 
@@ -45,5 +46,20 @@ class FavoriteVacancyMapper {
             url = vacancy.url,
             isFavorite = vacancy.isFavorite
         )
+    }
+
+    fun mapToPreview(vacancy: VacancyPresent): VacancyPreviewPresent {
+        return VacancyPreviewPresent(
+            id = vacancy.id,
+            name = vacancy.name,
+            url = vacancy.url ?: "",
+            salary = vacancy.salary,
+            addressCity = vacancy.address,
+            employerName = vacancy.employerName
+        )
+    }
+
+    fun mapToPreviewList(vacancies: List<VacancyPresent>): List<VacancyPreviewPresent> {
+        return vacancies.map { mapToPreview(it) }
     }
 }
