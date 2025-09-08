@@ -5,7 +5,6 @@ import org.koin.dsl.module
 import ru.practicum.android.diploma.presentation.search.SearchViewModel
 import ru.practicum.android.diploma.presentation.favorite.FavoriteViewModel
 
-
 val viewModelModule = module {
     viewModel {
         SearchViewModel(get())

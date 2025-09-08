@@ -29,7 +29,6 @@ class SearchViewModel(private val searchInteractor: SearchInteractor) : ViewMode
 
     private fun searchRequest(newSearchText: String) {
         if (newSearchText.isNotEmpty()) {
-
             renderState(SearchScreenState.Loading)
 
             viewModelScope.launch {

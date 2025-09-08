@@ -40,7 +40,7 @@ class SearchFragment : Fragment() {
             debounce<VacancyPreviewPresent>(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) { vacancy ->
                 openVacancy(vacancy)
             }
-        _vacancyAdapter = VacancyListAdapter(emptyList(),onVacancyClickDebounce)
+        _vacancyAdapter = VacancyListAdapter(emptyList(), onVacancyClickDebounce)
         binding.recyclerView.adapter = vacancyAdapter
     }
 
