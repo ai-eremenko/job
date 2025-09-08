@@ -52,8 +52,8 @@ class VacancyFragment : Fragment() {
             when (screenState) {
                 is VacancyScreenState.Content -> setupContent(screenState)
                 VacancyScreenState.Loading -> changeContentVisibility(loading = true)
-                VacancyScreenState.ErrorNotFound -> showError()
                 is VacancyScreenState.Favorite -> setupFavoriteIcon(screenState)
+                is VacancyScreenState.Error -> showError(screenState)
             }
         }
 
@@ -96,9 +96,11 @@ class VacancyFragment : Fragment() {
         binding.svVacancyContent.isVisible = !loading
     }
 
-    private fun showError() {
+    private fun showError(state: VacancyScreenState.Error) {
         binding.progressBar.isVisible = false
         binding.svVacancyContent.isVisible = false
+        binding.ivError.setImageDrawable(state.errorImg)
+        binding.tvError.setText(state.errorText)
         binding.error.isVisible = true
     }
 

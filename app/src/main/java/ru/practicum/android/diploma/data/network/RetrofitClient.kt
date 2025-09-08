@@ -11,6 +11,7 @@ import ru.practicum.android.diploma.data.dto.responses.VacanciesResponse
 import ru.practicum.android.diploma.data.dto.responses.VacancyResponse
 import ru.practicum.android.diploma.util.NetworkManager
 import ru.practicum.android.diploma.util.ResponseStatus
+import java.net.SocketTimeoutException
 
 class RetrofitClient(
     private val api: VacanciesApi,
@@ -25,6 +26,11 @@ class RetrofitClient(
         return try {
             val response = executeRequest(dto)
             response.apply { status = ResponseStatus.SUCCESS }
+        } catch (e: SocketTimeoutException) {
+            Response().apply {
+                status = ResponseStatus.NO_INTERNET
+                errorMessage = "Timeout: ${e.message}"
+            }
         } catch (e: HttpException) {
             handleHttpException(e)
             Response().apply {

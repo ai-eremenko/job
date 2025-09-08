@@ -13,5 +13,8 @@ sealed class VacancyScreenState {
         val favoriteIcon: Drawable?
     ) : VacancyScreenState()
 
-    object ErrorNotFound : VacancyScreenState()
+    data class Error(
+        val errorImg: Drawable?,
+        val errorText: String
+    ) : VacancyScreenState()
 }

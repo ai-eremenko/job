@@ -50,12 +50,22 @@ class VacancyViewModel(
                         changeFavoriteState()
                         screenStateLiveData.postValue(VacancyScreenState.Content(model.data))
                     } else {
-                        screenStateLiveData.postValue(VacancyScreenState.ErrorNotFound)
+                        screenStateLiveData.postValue(
+                            VacancyScreenState.Error(
+                                resourcesProvider.getDrawable(R.drawable.img_not_found),
+                                resourcesProvider.getString(R.string.vacancy_not_found)
+                            )
+                        )
                     }
                 }
 
                 is Resource.Error -> {
-                    screenStateLiveData.postValue(VacancyScreenState.ErrorNotFound)
+                    screenStateLiveData.postValue(
+                        VacancyScreenState.Error(
+                            resourcesProvider.getDrawable(R.drawable.img_screen_vacancy_error_placeholder),
+                            resourcesProvider.getString(R.string.server_error)
+                        )
+                    )
                 }
             }
         }

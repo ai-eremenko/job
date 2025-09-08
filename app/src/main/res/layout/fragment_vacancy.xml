@@ -124,21 +124,20 @@
         android:id="@+id/error"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="iv_vacancy_not_found, tv_vacancy_not_found"/>
+        app:constraint_referenced_ids="iv_error, tv_error"/>
     <ImageView
-        android:id="@+id/iv_vacancy_not_found"
+        android:id="@+id/iv_error"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar"/>
     <TextView
-        android:id="@+id/tv_vacancy_not_found"
+        android:id="@+id/tv_error"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iv_vacancy_not_found"
-        android:text="@string/app_name"/>
-
+        app:layout_constraintTop_toBottomOf="@id/iv_error"
+        tools:text="@string/app_name"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
