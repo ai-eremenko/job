@@ -13,9 +13,6 @@ interface FavoriteVacancyDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addToFavorite(vacancy: FavoriteVacancyEntity)
 
-    @Delete
-    suspend fun removeFromFavorite(vacancy: FavoriteVacancyEntity)
-
     @Query("SELECT * FROM favorite_vacancies ORDER BY id DESC")
     fun getFavorite(): Flow<List<FavoriteVacancyEntity>>
 

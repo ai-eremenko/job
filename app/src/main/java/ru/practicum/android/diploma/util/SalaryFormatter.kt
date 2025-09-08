@@ -1,11 +1,11 @@
 package ru.practicum.android.diploma.util
 
 import ru.practicum.android.diploma.R
-import ru.practicum.android.diploma.domain.ResourcesProviderRepository
+import ru.practicum.android.diploma.domain.util.ResourcesProviderRepository
 
 class SalaryFormatter(private val resourcesProvider: ResourcesProviderRepository) {
 
-    fun formatSalary(from: String?, to: String?, currency: String?): String? {
+    fun formatSalary(from: String?, to: String?, currency: String?): String {
         return when {
             from != null && to != null -> resourcesProvider.getString(
                 R.string.salary_from_to,

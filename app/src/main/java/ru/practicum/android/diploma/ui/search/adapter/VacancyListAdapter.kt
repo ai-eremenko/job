@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.ui.search.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -26,4 +27,10 @@ class VacancyListAdapter(
     }
 
     override fun getItemCount() = vacancyPreview.size
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateVacancies(newVacancies: List<VacancyPreviewPresent>) {
+        vacancyPreview = newVacancies
+        notifyDataSetChanged()
+    }
 }

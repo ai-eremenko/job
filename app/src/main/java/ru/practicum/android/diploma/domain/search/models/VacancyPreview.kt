@@ -6,7 +6,7 @@ data class VacancyPreview(
     val salaryCurrency: String?,
     val salaryFrom: String?,
     val salaryTo: String?,
-    val addressCity: String?,
+    val addressCity: String,
     val employerName: String,
-    val employerLogo: String
+    val employerLogo: String?
 ) : VacanciesResultModel
