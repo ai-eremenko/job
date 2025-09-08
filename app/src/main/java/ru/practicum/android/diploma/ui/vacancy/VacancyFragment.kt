@@ -27,7 +27,7 @@ class VacancyFragment : Fragment() {
     private val args by navArgs<VacancyFragmentArgs>()
 
     private val viewModel by viewModel<VacancyViewModel> {
-        parametersOf(args.id)
+        parametersOf(args.vacancyId)
     }
 
     override fun onCreateView(
