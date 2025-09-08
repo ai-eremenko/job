@@ -33,7 +33,6 @@ class SearchFragment : Fragment() {
     }
 
     private var _vacancyAdapter: VacancyListAdapter? = null
-
     private val vacancyAdapter get() = _vacancyAdapter!!
 
     private fun vacancyListViewCreate() {
@@ -41,8 +40,7 @@ class SearchFragment : Fragment() {
             debounce<VacancyPreviewPresent>(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) { vacancy ->
                 openVacancy(vacancy)
             }
-        _vacancyAdapter = VacancyListAdapter(onVacancyClickDebounce)
-
+        _vacancyAdapter = VacancyListAdapter(emptyList(),onVacancyClickDebounce)
         binding.recyclerView.adapter = vacancyAdapter
     }
 
@@ -50,8 +48,7 @@ class SearchFragment : Fragment() {
         binding.searchField.setText(searchEditTextValue)
         binding.searchFieldIcon.setOnClickListener {
             binding.searchField.setText("")
-            vacancyAdapter.vacancyPreview.clear()
-            vacancyAdapter.notifyDataSetChanged()
+            vacancyAdapter.updateVacancies(emptyList())
             clearScreen()
             showEmpty()
             hideKeyboard()
@@ -141,9 +138,7 @@ class SearchFragment : Fragment() {
         binding.recyclerView.isVisible = true
         binding.searchStatus.isVisible = true
         binding.searchStatus.text = requireContext().getString(R.string.vacancies_found, countVacancy)
-        vacancyAdapter.vacancyPreview.clear()
-        vacancyAdapter.vacancyPreview.addAll(vacancy)
-        vacancyAdapter.notifyDataSetChanged()
+        vacancyAdapter.updateVacancies(vacancy)
     }
 
     private fun hideKeyboard() {
