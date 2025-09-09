@@ -9,9 +9,7 @@ sealed class VacancyScreenState {
         val vacancyModel: VacancyPresent
     ) : VacancyScreenState()
 
-    data class Favorite(
-        val favoriteIcon: Drawable?
-    ) : VacancyScreenState()
+    data class Favorite(val isFavorite: Boolean) : VacancyScreenState()
 
     data class Error(
         val errorImg: Drawable?,

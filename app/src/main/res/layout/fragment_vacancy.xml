@@ -19,17 +19,38 @@
         app:titleTextAppearance="@style/ToolbarTitle"
         app:titleTextColor="?attr/colorOnSurface" />
 
-    <ImageView
-        android:id="@+id/icFavorites"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/favorite_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/_20dp"
-        android:contentDescription="@null"
-        android:src="@drawable/ic_favorites_off"
-        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@id/toolbar"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/toolbar" />
+        app:layout_constraintTop_toTopOf="@id/toolbar">
+
+        <ImageView
+            android:id="@+id/icFavoritesOn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_favorites_on"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <ImageView
+            android:id="@+id/icFavoritesOff"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_favorites_off"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ImageView
         android:id="@+id/ivSharing"
@@ -40,7 +61,7 @@
         android:src="@drawable/ic_sharing"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@id/toolbar"
-        app:layout_constraintEnd_toStartOf="@id/icFavorites"
+        app:layout_constraintEnd_toStartOf="@id/favorite_container"
         app:layout_constraintTop_toTopOf="@id/toolbar" />
 
     <ScrollView

@@ -66,7 +66,7 @@ class VacancyFragment : Fragment() {
                 }
 
                 is VacancyScreenState.Favorite -> {
-                    setupFavoriteIcon(screenState)
+                    setupFavoriteIcon(screenState.isFavorite)
                 }
 
                 is VacancyScreenState.Error -> {
@@ -85,7 +85,7 @@ class VacancyFragment : Fragment() {
             findNavController().navigateUp()
         }
 
-        binding.icFavorites.setOnClickListener {
+        binding.favoriteContainer.setOnClickListener {
             viewModel.onFavoriteClicked()
         }
 
@@ -96,6 +96,7 @@ class VacancyFragment : Fragment() {
 
     private fun setupContent(content: VacancyScreenState.Content) {
         binding.apply {
+            setupFavoriteIcon(content.vacancyModel.isFavorite)
             tvNameVacancy.text = content.vacancyModel.name
             tvSalaryVacancy.text = content.vacancyModel.salary
 
@@ -115,8 +116,9 @@ class VacancyFragment : Fragment() {
         changeContentVisibility(false)
     }
 
-    private fun setupFavoriteIcon(content: VacancyScreenState.Favorite) {
-        if (content.favoriteIcon != null) binding.icFavorites.setImageDrawable(content.favoriteIcon)
+    private fun setupFavoriteIcon(isFavorite: Boolean) {
+        binding.icFavoritesOn.isVisible = isFavorite
+        binding.icFavoritesOff.isVisible = !isFavorite
     }
 
     private fun changeContentVisibility(loading: Boolean) {
