@@ -59,12 +59,15 @@ class VacancyFragment : Fragment() {
                 is VacancyScreenState.Content -> {
                     setupContent(screenState)
                 }
+
                 VacancyScreenState.Loading -> {
                     changeContentVisibility(loading = true)
                 }
+
                 is VacancyScreenState.Favorite -> {
                     setupFavoriteIcon(screenState)
                 }
+
                 is VacancyScreenState.Error -> {
                     showError(screenState)
                 }
@@ -127,9 +130,11 @@ class VacancyFragment : Fragment() {
         binding.tvError.setText(state.errorText)
         binding.error.isVisible = true
     }
+
     private fun showSkills(skills: List<String>?) {
-        if(skills == null) binding.tvSkillsTitle.isVisible = false
-        else {
+        if (skills == null) {
+            binding.tvSkillsTitle.isVisible = false
+        } else {
             val formattedSkills = skills.joinToString(
                 separator = "\n  •  ",
                 prefix = "  •  ",
@@ -139,19 +144,20 @@ class VacancyFragment : Fragment() {
             binding.tvSkills.isVisible = true
         }
     }
+
     private fun showContacts(contacts: Contacts?) {
         if (contacts == null) return
-        //Контактное лицо
+
         val nameView = LayoutInflater.from(requireContext())
             .inflate(R.layout.vacancy_detail_item, binding.contactsContainer, false)
-        nameView.findViewById<TextView>(R.id.tv_title).text = "Контактное лицо"
+        nameView.findViewById<TextView>(R.id.tv_title).text = getString(R.string.contact_person)
         nameView.findViewById<TextView>(R.id.tv_content).text = contacts.name
         binding.contactsContainer.addView(nameView)
-        //email
-        if(contacts.email.isNotEmpty()){
+
+        if (contacts.email.isNotEmpty()) {
             val emailView = LayoutInflater.from(requireContext())
                 .inflate(R.layout.vacancy_detail_item, binding.contactsContainer, false)
-            emailView.findViewById<TextView>(R.id.tv_title).text = "E-mail"
+            emailView.findViewById<TextView>(R.id.tv_title).text = getString(R.string.e_mail)
             emailView.findViewById<TextView>(R.id.tv_content).text = contacts.email
 
             emailView.findViewById<TextView>(R.id.tv_content).setOnClickListener {
@@ -163,7 +169,7 @@ class VacancyFragment : Fragment() {
             val phoneView = LayoutInflater.from(requireContext())
                 .inflate(R.layout.vacancy_detail_item, binding.contactsContainer, false)
 
-            phoneView.findViewById<TextView>(R.id.tv_title).text = "Телефон"
+            phoneView.findViewById<TextView>(R.id.tv_title).text = getString(R.string.phone)
             phoneView.findViewById<TextView>(R.id.tv_content).text = phone.formatted
 
             phoneView.findViewById<TextView>(R.id.tv_content).setOnClickListener {
