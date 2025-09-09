@@ -44,11 +44,12 @@ class SalaryFormatter(private val resourcesProvider: ResourcesProviderRepository
     private fun getCurrencySymbol(currencyCode: String?): String {
         if (currencyCode.isNullOrBlank()) return ""
 
-        return try {
-            val currency = Currency.getInstance(currencyCode.uppercase())
-            currency.getSymbol(Locale.getDefault())
-        } catch (e: IllegalArgumentException) {
-            currencyCode
+        val upperCode = currencyCode.uppercase()
+
+        val currency = Currency.getAvailableCurrencies().firstOrNull {
+            it.currencyCode == upperCode
         }
+
+        return currency?.getSymbol(Locale.getDefault()) ?: upperCode
     }
 }
