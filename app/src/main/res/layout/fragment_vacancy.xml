@@ -32,7 +32,7 @@
         app:layout_constraintTop_toTopOf="@id/toolbar" />
 
     <ImageView
-        android:id="@+id/icShape"
+        android:id="@+id/ivSharing"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/_28dp"
@@ -131,7 +131,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_24dp"
-                tools:text="@string/text_required_experience" />
+                android:text="@string/text_required_experience" />
 
             <TextView
                 android:id="@+id/tv_experience"
@@ -155,7 +155,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_24dp"
-                tools:text="Описание вакансии" />
+                android:text="@string/job_description" />
 
             <TextView
                 android:id="@+id/tv_description"
@@ -171,7 +171,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_16dp"
-                tools:text="Ключевые навыки" />
+                android:text="@string/key_skills" />
 
             <TextView
                 android:id="@+id/tv_skills"
@@ -187,14 +187,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_16dp"
-                tools:text="Контакты" />
+                android:text="@string/contacts" />
 
             <LinearLayout
                 android:id="@+id/contacts_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginTop="@dimen/_16dp"/>
+                android:layout_marginTop="@dimen/_16dp"
+                android:layout_marginStart="@dimen/_8dp"/>
 
         </LinearLayout>
     </ScrollView>

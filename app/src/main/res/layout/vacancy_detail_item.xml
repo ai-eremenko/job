@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -7,14 +7,17 @@
 
     <TextView
         android:id="@+id/tv_title"
+        style="@style/TextMedium.16"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:text="+7 (999) 765-43-21"/>
+        tools:text="Заголовок" />
 
     <TextView
         android:id="@+id/tv_content"
+        style="@style/TextRegular.16"
+        android:textColor="@color/blue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:text="Комментарий"/>
+        tools:text="+7 (999) 765-43-21" />
 
-</LinearLayout >
+</LinearLayout>

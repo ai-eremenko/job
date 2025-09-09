@@ -8,6 +8,8 @@ import java.util.Locale
 class SalaryFormatter(private val resourcesProvider: ResourcesProviderRepository) {
 
     fun formatSalary(from: String?, to: String?, currency: String?): String {
+        val currencySymbol = getCurrencySymbol(currency)
+
         return when {
             from != null && to != null -> resourcesProvider.getString(
                 R.string.salary_from_to,
@@ -36,5 +38,22 @@ class SalaryFormatter(private val resourcesProvider: ResourcesProviderRepository
         return numberString.toIntOrNull()?.let { number ->
             NumberFormat.getNumberInstance(Locale.getDefault()).format(number)
         } ?: numberString
+    }
+
+    private fun getCurrencySymbol(currencyCode: String?): String {
+        return when (currencyCode?.uppercase()) {
+            "RUB", "RUR" -> "₽"
+            "BYR" -> "Br"
+            "USD" -> "$"
+            "EUR" -> "€"
+            "KZT" -> "₸"
+            "UAH" -> "₴"
+            "AZN" -> "₼"
+            "UZS" -> "so'm"
+            "GEL" -> "₾"
+            "KGT" -> "с"
+            "HKD" -> "HK$"
+            else -> currencyCode ?: ""
+        }
     }
 }

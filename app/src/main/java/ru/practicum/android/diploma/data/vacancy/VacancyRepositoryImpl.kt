@@ -17,16 +17,16 @@ class VacancyRepositoryImpl(
         val response = networkClient.doRequest(RequestDto.VacancyRequest(id))
         return when (response.status) {
             ResponseStatus.SUCCESS -> {
-                val vacancyResponse = response as? VacancyResponse
-                if (vacancyResponse != null) {
-                    val data = VacancyMapper.mapToDomain(vacancyResponse.result)
+                if (response is VacancyResponse) {
+                    val data = VacancyMapper.mapToDomain(response.result)
                     Resource.Success(data)
                 } else {
-                    Resource.Error(ResponseStatus.UNKNOWN_ERROR)
+                    Resource.Error(ResponseStatus.NOT_FOUND)
                 }
             }
-
-            else -> Resource.Error(response.status)
+            else -> {
+                Resource.Error(response.status)
+            }
         }
     }
 }

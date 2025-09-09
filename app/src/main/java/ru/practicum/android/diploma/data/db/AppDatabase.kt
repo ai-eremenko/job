@@ -4,8 +4,8 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import ru.practicum.android.diploma.data.db.entity.FavoriteVacancyEntity
-import ru.practicum.android.diploma.data.db.dao.FavoriteVacancyDao
 import ru.practicum.android.diploma.data.converter.Converters
+import ru.practicum.android.diploma.data.db.dao.FavoriteVacancyDao
 
 @Database(
     version = 8,

@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.domain.vacancy.impl
 
+import ru.practicum.android.diploma.domain.favorite.FavoriteRepository
 import ru.practicum.android.diploma.domain.vacancy.VacancyInteractor
 import ru.practicum.android.diploma.domain.vacancy.VacancyRepository
 import ru.practicum.android.diploma.domain.vacancy.mappers.VacancyMapper
@@ -9,6 +10,7 @@ import ru.practicum.android.diploma.util.ResponseStatus
 
 class VacancyInteractorImpl(
     private val repository: VacancyRepository,
+    private val favoriteRepository: FavoriteRepository,
     private val mapper: VacancyMapper
 ) : VacancyInteractor {
 
@@ -17,15 +19,49 @@ class VacancyInteractorImpl(
         return when (result) {
             is Resource.Success -> {
                 if (result.data != null) {
-                    Resource.Success(mapper.mapToPresentation(result.data))
+                    val data = mapper.mapToPresentation(result.data)
+                    if (isFavorite(data.id)) {
+                        val dataFavorite = data.copy(isFavorite = true)
+                        favoriteRepository.addToFavorite(dataFavorite)
+                        Resource.Success(dataFavorite)
+                    } else {
+                        Resource.Success(data)
+                    }
                 } else {
-                    Resource.Error(ResponseStatus.UNKNOWN_ERROR)
+                    Resource.Error(ResponseStatus.NOT_FOUND)
                 }
             }
 
             is Resource.Error -> {
-                Resource.Error(result.message ?: ResponseStatus.UNKNOWN_ERROR)
+                when (result.message) {
+                    ResponseStatus.NOT_FOUND -> {
+                        removeFromFavoriteIfExists(id)
+                        Resource.Error(ResponseStatus.NOT_FOUND)
+                    }
+                    ResponseStatus.NO_INTERNET -> {
+                        loadFromFavorite(id)?.let { favoriteVacancy ->
+                            Resource.Success(favoriteVacancy)
+                        } ?: Resource.Error(ResponseStatus.NO_INTERNET)
+                    }
+                    else -> {
+                        Resource.Error(result.message ?: ResponseStatus.UNKNOWN_ERROR)
+                    }
+                }
             }
         }
+    }
+
+    private suspend fun removeFromFavoriteIfExists(id: String) {
+        if (isFavorite(id)) {
+            favoriteRepository.removeFromFavorite(id)
+        }
+    }
+
+    private suspend fun loadFromFavorite(id: String): VacancyPresent? {
+        return favoriteRepository.getVacancyById(id)
+    }
+
+    private suspend fun isFavorite(id: String): Boolean {
+        return favoriteRepository.getVacancyById(id) != null
     }
 }
