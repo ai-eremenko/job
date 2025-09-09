@@ -17,7 +17,7 @@
 
     <TextView
         android:id="@+id/tv_list_of_developers"
-        style="@style/boldText_32"
+        style="@style/TextBold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_16dp"
@@ -30,7 +30,7 @@
 
     <TextView
         android:id="@+id/tv_developer_one"
-        style="@style/mediumText_16"
+        style="@style/TextMedium.16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_32dp"
@@ -40,7 +40,7 @@
 
     <TextView
         android:id="@+id/tv_developer_two"
-        style="@style/mediumText_16"
+        style="@style/TextMedium.16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_16dp"
@@ -50,7 +50,7 @@
 
     <TextView
         android:id="@+id/tv_developer_three"
-        style="@style/mediumText_16"
+        style="@style/TextMedium.16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_16dp"
@@ -60,7 +60,7 @@
 
     <TextView
         android:id="@+id/tv_developer_four"
-        style="@style/mediumText_16"
+        style="@style/TextMedium.16"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_16dp"
