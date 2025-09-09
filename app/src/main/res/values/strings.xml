@@ -51,4 +51,8 @@
     <string name="text_required_experience">Требуемый опыт</string>
     <string name="text_required_experience_example">От 1 года до 3 лет</string>
     <string name="text_type_employment_example">Полная занятость, Удаленная работа</string>
+
+    <string name="favorites">Избранное</string>
+    <string name="empty_list">Список пуст</string>
+    <string name="error_list">Не удалось получить список вакансий</string>
 </resources>
