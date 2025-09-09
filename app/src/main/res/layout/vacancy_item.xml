@@ -14,7 +14,7 @@
         android:layout_marginStart="@dimen/size_16"
         android:layout_marginTop="@dimen/size_9"
         android:layout_marginBottom="@dimen/size_51"
-        android:scaleType="centerCrop"
+        android:scaleType="fitCenter"
         android:background="?attr/selectableItemBackgroundBorderless"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
