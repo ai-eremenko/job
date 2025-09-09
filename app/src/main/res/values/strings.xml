@@ -47,4 +47,8 @@
     <string name="developer_two">Яна Кудринская</string>
     <string name="developer_three">Даниил Ильс</string>
     <string name="developer_four">Владислав Московский</string>
+
+    <string name="text_required_experience">Требуемый опыт</string>
+    <string name="text_required_experience_example">От 1 года до 3 лет</string>
+    <string name="text_type_employment_example">Полная занятость, Удаленная работа</string>
 </resources>

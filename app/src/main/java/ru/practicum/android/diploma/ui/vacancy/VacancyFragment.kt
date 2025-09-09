@@ -15,11 +15,12 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentVacancyBinding
-import ru.practicum.android.diploma.domain.vacancy.models.Phone
+import ru.practicum.android.diploma.domain.vacancy.models.Contacts
 import ru.practicum.android.diploma.presentation.vacancy.VacancyViewModel
 import ru.practicum.android.diploma.presentation.vacancy.models.NavigationEventState
 import ru.practicum.android.diploma.presentation.vacancy.models.VacancyScreenState
 import ru.practicum.android.diploma.ui.root.NavigationVisibilityController
+import ru.practicum.android.diploma.util.formatDescription
 
 class VacancyFragment : Fragment() {
     private var _binding: FragmentVacancyBinding? = null
@@ -68,7 +69,7 @@ class VacancyFragment : Fragment() {
             findNavController().navigateUp()
         }
 
-        binding.ivFavorite.setOnClickListener {
+        binding.icFavorites.setOnClickListener {
             viewModel.onFavoriteClicked()
         }
 
@@ -76,53 +77,60 @@ class VacancyFragment : Fragment() {
             viewModel.share()
         }
 
-        binding.tvEmail.setOnClickListener {
-            viewModel.sendEmail()
-        }
+//        binding.tvEmail.setOnClickListener {
+//            viewModel.sendEmail()
+//        }
     }
 
     private fun setupContent(content: VacancyScreenState.Content) {
         binding.apply {
             tvNameVacancy.text = content.vacancyModel.name
             tvSalaryVacancy.text = content.vacancyModel.salary
-            tvDescription.text = content.vacancyModel.description
+            tvDescription.text = formatDescription(requireContext(), content.vacancyModel.description)
             // остальные поля с проверкой на null
-            showPhones(content.vacancyModel.contacts?.phones)
+            showContacts(content.vacancyModel.contacts)
         }
         changeContentVisibility(false)
     }
 
     private fun setupFavoriteIcon(content: VacancyScreenState.Favorite) {
-        if (content.favoriteIcon != null) binding.ivFavorite.setImageDrawable(content.favoriteIcon)
+        if (content.favoriteIcon != null) binding.icFavorites.setImageDrawable(content.favoriteIcon)
     }
 
     private fun changeContentVisibility(loading: Boolean) {
         binding.progressBar.isVisible = loading
-        binding.svVacancyContent.isVisible = !loading
+        binding.scrollView.isVisible = !loading
     }
 
     private fun showError(state: VacancyScreenState.Error) {
         binding.progressBar.isVisible = false
-        binding.svVacancyContent.isVisible = false
+        binding.scrollView.isVisible = false
         binding.ivError.setImageDrawable(state.errorImg)
         binding.tvError.setText(state.errorText)
         binding.error.isVisible = true
     }
 
-    private fun showPhones(phones: List<Phone>?) {
-        phones?.forEach { phone ->
-            val phoneView = LayoutInflater.from(requireContext())
-                .inflate(R.layout.phone_item, binding.phonesContainer, false)
+    private fun showContacts(contacts: Contacts?) {
+        if (contacts == null) return
+        //Контактное лицо
+        val contactView = LayoutInflater.from(requireContext())
+            .inflate(R.layout.vacancy_detail_item, binding.contactsContainer, false)
+        contactView.findViewById<TextView>(R.id.tv_title).text = "Контактное лицо"
+        //email
 
-            phoneView.findViewById<TextView>(R.id.tv_phone_number).text = phone.formatted
-            phoneView.findViewById<TextView>(R.id.tv_phone_comment).text = phone.comment ?: ""
-
-            phoneView.setOnClickListener {
-                viewModel.call(phone.formatted)
-            }
-
-            binding.phonesContainer.addView(phoneView)
-        }
+//        contacts.phones?.forEach { phone ->
+//            val phoneView = LayoutInflater.from(requireContext())
+//                .inflate(R.layout.vacancy_detail_item, binding.contactsContainer, false)
+//
+//            phoneView.findViewById<TextView>(R.id.tv_title).text = phone.formatted
+//            phoneView.findViewById<TextView>(R.id.tv_title).text = phone.comment ?: ""
+//
+//            phoneView.findViewById<TextView>(R.id.tv_phone_number).setOnClickListener {
+//                viewModel.call(phone.formatted)
+//            }
+//
+//            binding.contactsContainer.addView(phoneView)
+//        }
     }
 
     private fun openApp(state: NavigationEventState) {
