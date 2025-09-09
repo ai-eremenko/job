@@ -4,6 +4,7 @@ import ru.practicum.android.diploma.domain.favorite.FavoriteRepository
 import ru.practicum.android.diploma.domain.vacancy.VacancyInteractor
 import ru.practicum.android.diploma.domain.vacancy.VacancyRepository
 import ru.practicum.android.diploma.domain.vacancy.mappers.VacancyMapper
+import ru.practicum.android.diploma.domain.vacancy.models.Vacancy
 import ru.practicum.android.diploma.domain.vacancy.models.VacancyPresent
 import ru.practicum.android.diploma.util.Resource
 import ru.practicum.android.diploma.util.ResponseStatus
@@ -15,38 +16,45 @@ class VacancyInteractorImpl(
 ) : VacancyInteractor {
 
     override suspend fun getVacancyById(id: String): Resource<VacancyPresent> {
-        val result = repository.getVacancyById(id)
-        return when (result) {
-            is Resource.Success -> {
-                if (result.data != null) {
-                    val data = mapper.mapToPresentation(result.data)
-                    if (isFavorite(data.id)) {
-                        val dataFavorite = data.copy(isFavorite = true)
-                        favoriteRepository.addToFavorite(dataFavorite)
-                        Resource.Success(dataFavorite)
-                    } else {
-                        Resource.Success(data)
-                    }
-                } else {
-                    Resource.Error(ResponseStatus.NOT_FOUND)
-                }
+        return when (val result = repository.getVacancyById(id)) {
+            is Resource.Success -> processSuccessfulResponse(result.data)
+            is Resource.Error -> processErrorResponse(result.message, id)
+        }
+    }
+
+    private suspend fun processSuccessfulResponse(result: Vacancy?): Resource<VacancyPresent> {
+        return if (result != null) {
+            val data = mapper.mapToPresentation(result)
+            if (isFavorite(data.id)) {
+                val dataFavorite = data.copy(isFavorite = true)
+                favoriteRepository.addToFavorite(dataFavorite)
+                Resource.Success(dataFavorite)
+            } else {
+                Resource.Success(data)
+            }
+        } else {
+            Resource.Error(ResponseStatus.NOT_FOUND)
+        }
+    }
+
+    private suspend fun processErrorResponse(
+        message: ResponseStatus?,
+        id: String
+    ): Resource<VacancyPresent> {
+        return when (message) {
+            ResponseStatus.NOT_FOUND -> {
+                removeFromFavoriteIfExists(id)
+                Resource.Error(ResponseStatus.NOT_FOUND)
             }
 
-            is Resource.Error -> {
-                when (result.message) {
-                    ResponseStatus.NOT_FOUND -> {
-                        removeFromFavoriteIfExists(id)
-                        Resource.Error(ResponseStatus.NOT_FOUND)
-                    }
-                    ResponseStatus.NO_INTERNET -> {
-                        loadFromFavorite(id)?.let { favoriteVacancy ->
-                            Resource.Success(favoriteVacancy)
-                        } ?: Resource.Error(ResponseStatus.NO_INTERNET)
-                    }
-                    else -> {
-                        Resource.Error(result.message ?: ResponseStatus.UNKNOWN_ERROR)
-                    }
-                }
+            ResponseStatus.NO_INTERNET -> {
+                loadFromFavorite(id)?.let { favoriteVacancy ->
+                    Resource.Success(favoriteVacancy)
+                } ?: Resource.Error(ResponseStatus.NO_INTERNET)
+            }
+
+            else -> {
+                Resource.Error(message ?: ResponseStatus.UNKNOWN_ERROR)
             }
         }
     }
