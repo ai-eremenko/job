@@ -78,11 +78,19 @@ class RetrofitClient(
         token: String,
         request: RequestDto.VacancyRequest
     ): Response {
-        val vacancyDto = api.getVacancyById(
-            token,
-            request.id
-        )
-        return VacancyResponse(vacancyDto.result)
+        return try {
+            val vacancyDto = api.getVacancyById(token, request.id)
+            VacancyResponse(vacancyDto).apply {
+                status = ResponseStatus.SUCCESS
+            }
+        } catch (e: HttpException) {
+            handleHttpException(e)
+        } catch (e: Exception) {
+            Response().apply {
+                status = ResponseStatus.UNKNOWN_ERROR
+                errorMessage = e.message
+            }
+        }
     }
 
     private fun handleHttpException(e: HttpException): Response {

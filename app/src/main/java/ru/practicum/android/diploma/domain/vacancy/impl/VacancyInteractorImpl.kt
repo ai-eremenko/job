@@ -28,7 +28,7 @@ class VacancyInteractorImpl(
                         Resource.Success(data)
                     }
                 } else {
-                    Resource.Error(ResponseStatus.UNKNOWN_ERROR)
+                    Resource.Error(ResponseStatus.NOT_FOUND)
                 }
             }
 
