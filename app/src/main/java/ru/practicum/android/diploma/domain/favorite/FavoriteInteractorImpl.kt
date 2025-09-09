@@ -1,29 +1,32 @@
 package ru.practicum.android.diploma.domain.favorite
 
 import kotlinx.coroutines.flow.Flow
-import ru.practicum.android.diploma.domain.vacancy.models.Vacancy
+import kotlinx.coroutines.flow.map
+import ru.practicum.android.diploma.data.mappers.FavoriteVacancyMapper
+import ru.practicum.android.diploma.domain.search.models.VacancyPreviewPresent
+import ru.practicum.android.diploma.domain.vacancy.models.VacancyPresent
 
 class FavoriteInteractorImpl(
-    private val repository: FavoriteRepository
+    private val repository: FavoriteRepository,
+    private val mapper: FavoriteVacancyMapper
 ) : FavoriteInteractor {
 
-    override suspend fun toggleFavorite(vacancy: Vacancy) {
-        if (vacancy.isFavorite) {
-            repository.removeFromFavorite(vacancy)
+    override suspend fun toggleFavorite(vacancy: VacancyPresent) {
+        val existingVacancy = repository.getVacancyById(vacancy.id)
+        if (existingVacancy != null) {
+            repository.removeFromFavorite(vacancy.id)
         } else {
             repository.addToFavorite(vacancy)
         }
     }
 
-    override fun getFavorite(): Flow<List<Vacancy>> {
-        return repository.getFavorite()
+    override fun getFavorite(): Flow<List<VacancyPreviewPresent>> {
+        return repository.getFavorite().map { vacancies ->
+            mapper.mapToPreviewList(vacancies)
+        }
     }
 
-    override suspend fun removeFromFavorite(vacancy: Vacancy) {
-        repository.removeFromFavorite(vacancy)
-    }
-
-    override suspend fun getVacancyById(id: String): Vacancy? {
+    override suspend fun getVacancyById(id: String): VacancyPresent? {
         return repository.getVacancyById(id)
     }
 }

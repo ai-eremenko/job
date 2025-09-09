@@ -5,6 +5,7 @@ import ru.practicum.android.diploma.data.dto.VacancyPreviewDto
 import ru.practicum.android.diploma.data.dto.responses.VacanciesResponse
 import ru.practicum.android.diploma.domain.search.models.VacanciesSearchResult
 import ru.practicum.android.diploma.domain.search.models.VacancyPreview
+import ru.practicum.android.diploma.domain.vacancy.models.Address
 import ru.practicum.android.diploma.domain.vacancy.models.Contacts
 import ru.practicum.android.diploma.domain.vacancy.models.Employer
 import ru.practicum.android.diploma.domain.vacancy.models.Phone
@@ -29,7 +30,7 @@ object VacancyMapper {
             salaryCurrency = dto.salary?.currency,
             salaryFrom = dto.salary?.from?.toString(),
             salaryTo = dto.salary?.to?.toString(),
-            addressCity = dto.address?.city,
+            addressCity = dto.address.city,
             employerName = dto.employer.name,
             employerLogo = dto.employer.logo
         )
@@ -47,7 +48,10 @@ object VacancyMapper {
                     currency = it.currency
                 )
             },
-            city = dto.address?.city ?: "",
+            address = Address(
+                city = dto.address.city,
+                raw = dto.address.raw
+            ),
             experience = dto.experience.name,
             schedule = dto.schedule.name,
             employment = dto.employment.name,
@@ -68,7 +72,6 @@ object VacancyMapper {
                 logo = dto.employer.logo
             ),
             skills = dto.skills,
-            url = dto.url
         )
     }
 }
