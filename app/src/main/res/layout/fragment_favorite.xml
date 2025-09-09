@@ -6,8 +6,6 @@
     android:layout_height="match_parent"
     android:background="?attr/colorSurface">
 
-
-
     <TextView
         android:id="@+id/placeholder"
         android:layout_width="wrap_content"
