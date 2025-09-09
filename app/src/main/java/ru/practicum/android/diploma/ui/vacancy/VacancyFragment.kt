@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -132,16 +133,15 @@ class VacancyFragment : Fragment() {
     }
 
     private fun showSkills(skills: List<String>?) {
-        if (skills == null) {
-            binding.tvSkillsTitle.isVisible = false
-        } else {
+        if (skills != null) {
+            binding.tvSkillsTitle.visibility = View.VISIBLE
             val formattedSkills = skills.joinToString(
                 separator = "\n  •  ",
                 prefix = "  •  ",
                 transform = { it.trim() }
             )
             binding.tvSkills.text = formattedSkills
-            binding.tvSkills.isVisible = true
+            binding.tvSkills.visibility = View.VISIBLE
         }
     }
 
@@ -159,6 +159,8 @@ class VacancyFragment : Fragment() {
                 .inflate(R.layout.vacancy_detail_item, binding.contactsContainer, false)
             emailView.findViewById<TextView>(R.id.tv_title).text = getString(R.string.e_mail)
             emailView.findViewById<TextView>(R.id.tv_content).text = contacts.email
+            emailView.findViewById<TextView>(R.id.tv_content)
+                .setTextColor(ContextCompat.getColor(requireContext(), R.color.blue))
 
             emailView.findViewById<TextView>(R.id.tv_content).setOnClickListener {
                 viewModel.sendEmail()
@@ -171,6 +173,8 @@ class VacancyFragment : Fragment() {
 
             phoneView.findViewById<TextView>(R.id.tv_title).text = getString(R.string.phone)
             phoneView.findViewById<TextView>(R.id.tv_content).text = phone.formatted
+            phoneView.findViewById<TextView>(R.id.tv_content)
+                .setTextColor(ContextCompat.getColor(requireContext(), R.color.blue))
 
             phoneView.findViewById<TextView>(R.id.tv_content).setOnClickListener {
                 viewModel.call(phone.formatted)
