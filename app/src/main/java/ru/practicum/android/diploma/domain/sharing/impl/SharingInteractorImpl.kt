@@ -15,7 +15,7 @@ class SharingInteractorImpl(
         vacancyName: String
     ): SharingIntent {
         val error = resourcesProvider.getString(R.string.error_share)
-        return SharingIntent(repository.sendOnEmail(vacancyName), error)
+        return SharingIntent(repository.shareVacancy(vacancyId, vacancyName), error)
     }
 
     override fun sendOnEmail(email: String): SharingIntent {

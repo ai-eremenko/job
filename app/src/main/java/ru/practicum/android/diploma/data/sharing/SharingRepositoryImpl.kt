@@ -32,6 +32,6 @@ class SharingRepositoryImpl(
     }
 
     private fun getMessage(vacancyId: String, vacancyName: String): String {
-        return resourcesProvider.getString(R.string.share_vacancy)
+        return resourcesProvider.getString(R.string.share_vacancy, vacancyName)
     }
 }
