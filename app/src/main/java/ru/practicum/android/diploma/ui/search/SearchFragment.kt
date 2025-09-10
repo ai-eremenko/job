@@ -15,7 +15,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -36,7 +35,6 @@ class SearchFragment : Fragment() {
     private val viewModel: SearchViewModel by viewModel()
 
     private var isNextPageLoading = false
-    private var currentCollectJob: Job? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
@@ -58,18 +56,15 @@ class SearchFragment : Fragment() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
 
-                if (dy > 0 && !isNextPageLoading) {
-                    val layoutManager = binding.recyclerView.layoutManager as LinearLayoutManager
-                    val visibleItemCount = layoutManager.childCount
-                    val totalItemCount = layoutManager.itemCount
-                    val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
-
-                    if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
-                        && firstVisibleItemPosition >= 0
-                        && totalItemCount >= layoutManager.itemCount
-                    ) {
-                        isNextPageLoading = true
-                        viewModel.newPageRequest()
+                if (dy > 0) {
+                    val pos = (binding.recyclerView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+                    val itemsCount = vacancyAdapter.itemCount
+                    if (pos >= itemsCount - 1) {
+                        if (!isNextPageLoading) {
+                            viewModel.newPageRequest()
+                            binding.progressBar.isVisible = true
+                            isNextPageLoading = true
+                        }
                     }
                 }
             }
@@ -84,7 +79,6 @@ class SearchFragment : Fragment() {
             clearScreen()
             showEmpty()
             hideKeyboard()
-            isNextPageLoading = false
         }
 
         binding.searchField.doOnTextChanged { text, _, _, _ ->
@@ -97,7 +91,6 @@ class SearchFragment : Fragment() {
                 binding.searchFieldIcon.setImageDrawable(requireContext().getDrawable(R.drawable.ic_search))
                 clearScreen()
                 showEmpty()
-                isNextPageLoading = false
             } else {
                 binding.searchFieldIcon.setImageDrawable(requireContext().getDrawable(R.drawable.ic_close))
             }
@@ -117,64 +110,35 @@ class SearchFragment : Fragment() {
 
         viewModel.observeState().observe(viewLifecycleOwner) {
             render(it)
-            if (it is SearchScreenState.Content && !it.isLoadingMore) {
-                isNextPageLoading = false
-            }
         }
 
-        currentCollectJob?.cancel()
-        currentCollectJob = viewLifecycleOwner.lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             viewModel.vacancyChannel
                 .receiveAsFlow()
                 .flowWithLifecycle(viewLifecycleOwner.lifecycle)
-                .collect { newItems ->
-                    vacancyAdapter.addVacancies(newItems)
+                .collect {
+                    vacancyAdapter.addVacancies(it)
                     isNextPageLoading = false
+                    binding.progressBar.isVisible = false
                 }
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        currentCollectJob?.cancel()
         _binding = null
         _vacancyAdapter = null
     }
 
     private fun render(state: SearchScreenState) {
+        clearScreen()
         when (state) {
-            is SearchScreenState.Empty -> {
-                clearScreen()
-                showEmpty()
-            }
-
-            is SearchScreenState.Loading -> {
-                clearScreen()
-                showLoading()
-            }
-
-            is SearchScreenState.Content -> {
-                showVacancy(state.vacancy, state.countVacancy, state.isLoadingMore)
-            }
-
-            is SearchScreenState.EmptyError -> {
-                clearScreen()
-                showEmptyError()
-            }
-
-            is SearchScreenState.NetworkError -> {
-                clearScreen()
-                showNetworkError()
-            }
-
-            SearchScreenState.LoadingItems -> {
-                showLoadingMore()
-            }
+            is SearchScreenState.Empty -> showEmpty()
+            is SearchScreenState.Loading -> showLoading()
+            is SearchScreenState.Content -> showVacancy(state.vacancy, state.countVacancy)
+            is SearchScreenState.EmptyError -> showEmptyError()
+            is SearchScreenState.NetworkError -> showNetworkError()
         }
-    }
-
-    private fun showLoadingMore() {
-        binding.progressBar.isVisible = true
     }
 
     private fun showEmpty() {
@@ -210,17 +174,11 @@ class SearchFragment : Fragment() {
         )
     }
 
-    private fun showVacancy(vacancy: List<VacancyPreviewPresent>, countVacancy: Int, isLoadingMore: Boolean = false) {
-        binding.progressBar.isVisible = isLoadingMore
+    private fun showVacancy(vacancy: List<VacancyPreviewPresent>, countVacancy: Int) {
         binding.recyclerView.isVisible = true
         binding.searchStatus.isVisible = true
         binding.searchStatus.text = requireContext().getString(R.string.vacancies_found, countVacancy)
-        binding.errorPlaceholder.isVisible = false
-        binding.searchScreenCover.isVisible = false
-
-        if (!isLoadingMore) {
-            vacancyAdapter.updateVacancies(vacancy)
-        }
+        vacancyAdapter.updateVacancies(vacancy)
     }
 
     private fun hideKeyboard() {
@@ -234,6 +192,9 @@ class SearchFragment : Fragment() {
         binding.searchStatus.isVisible = false
         binding.errorPlaceholder.isVisible = false
         binding.searchScreenCover.isVisible = false
+        binding.recyclerView.isVisible = false
+        binding.searchStatus.isVisible = false
+        binding.errorPlaceholder.isVisible = false
     }
 
     companion object {
