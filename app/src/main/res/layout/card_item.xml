@@ -21,7 +21,7 @@
 
     <TextView
         android:id="@+id/tv_vacancy"
-        style="@style/mediumText_22"
+        style="@style/TextMedium.22"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_12dp"
@@ -32,7 +32,7 @@
 
     <TextView
         android:id="@+id/tv_company"
-        style="@style/regularText_16"
+        style="@style/TextMedium.16"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
@@ -42,7 +42,7 @@
 
     <TextView
         android:id="@+id/tv_salary"
-        style="@style/regularText_16"
+        style="@style/TextRegular.16"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"

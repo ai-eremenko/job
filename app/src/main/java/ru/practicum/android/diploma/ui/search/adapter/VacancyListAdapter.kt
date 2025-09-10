@@ -8,7 +8,7 @@ import ru.practicum.android.diploma.databinding.VacancyItemBinding
 import ru.practicum.android.diploma.domain.search.models.VacancyPreviewPresent
 
 class VacancyListAdapter(
-    private var vacancyPreview: List<VacancyPreviewPresent>,
+    private var vacancyPreview: MutableList<VacancyPreviewPresent>,
     private val onVacancyPreviewClick: (VacancyPreviewPresent) -> Unit
 ) : RecyclerView.Adapter<VacancyListViewHolder>() {
 
@@ -29,7 +29,14 @@ class VacancyListAdapter(
 
     @SuppressLint("NotifyDataSetChanged")
     fun updateVacancies(newVacancies: List<VacancyPreviewPresent>) {
-        vacancyPreview = newVacancies
+        vacancyPreview.clear()
+        vacancyPreview.addAll(newVacancies)
+        notifyDataSetChanged()
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun addVacancies(newVacancies: List<VacancyPreviewPresent>) {
+        vacancyPreview.addAll(newVacancies)
         notifyDataSetChanged()
     }
 }

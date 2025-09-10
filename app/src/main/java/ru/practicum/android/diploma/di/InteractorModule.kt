@@ -5,14 +5,17 @@ import ru.practicum.android.diploma.domain.favorite.FavoriteInteractor
 import ru.practicum.android.diploma.domain.favorite.FavoriteInteractorImpl
 import ru.practicum.android.diploma.domain.search.SearchInteractor
 import ru.practicum.android.diploma.domain.search.impl.SearchInteractorImpl
-import ru.practicum.android.diploma.domain.util.usecases.ResourcesProviderUseCase
+import ru.practicum.android.diploma.domain.sharing.SharingInteractor
+import ru.practicum.android.diploma.domain.sharing.impl.SharingInteractorImpl
+import ru.practicum.android.diploma.domain.util.ResourcesProviderInteractor
+import ru.practicum.android.diploma.domain.util.usecases.ResourcesProviderInteractorImpl
 import ru.practicum.android.diploma.domain.vacancy.VacancyInteractor
 import ru.practicum.android.diploma.domain.vacancy.impl.VacancyInteractorImpl
 
 val interactorModule = module {
 
-    single<ResourcesProviderUseCase> {
-        ResourcesProviderUseCase(get())
+    single<ResourcesProviderInteractor> {
+        ResourcesProviderInteractorImpl(get())
     }
 
     factory<SearchInteractor> {
@@ -24,6 +27,10 @@ val interactorModule = module {
     }
 
     factory<VacancyInteractor> {
-        VacancyInteractorImpl(get(), get())
+        VacancyInteractorImpl(get(), get(), get())
+    }
+
+    factory<SharingInteractor> {
+        SharingInteractorImpl(get(), get())
     }
 }

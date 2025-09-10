@@ -5,9 +5,11 @@ import org.koin.dsl.module
 import ru.practicum.android.diploma.data.ResourcesProviderRepositoryImpl
 import ru.practicum.android.diploma.data.favorite.impl.FavoriteRepositoryImpl
 import ru.practicum.android.diploma.data.search.SearchRepositoryImpl
-import ru.practicum.android.diploma.domain.favorite.FavoriteRepository
+import ru.practicum.android.diploma.data.sharing.SharingRepositoryImpl
 import ru.practicum.android.diploma.data.vacancy.VacancyRepositoryImpl
+import ru.practicum.android.diploma.domain.favorite.FavoriteRepository
 import ru.practicum.android.diploma.domain.search.SearchRepository
+import ru.practicum.android.diploma.domain.sharing.SharingRepository
 import ru.practicum.android.diploma.domain.util.ResourcesProviderRepository
 import ru.practicum.android.diploma.domain.vacancy.VacancyRepository
 
@@ -27,5 +29,9 @@ val repositoryModule = module {
 
     factory<VacancyRepository> {
         VacancyRepositoryImpl(get())
+    }
+
+    factory<SharingRepository> {
+        SharingRepositoryImpl(get())
     }
 }

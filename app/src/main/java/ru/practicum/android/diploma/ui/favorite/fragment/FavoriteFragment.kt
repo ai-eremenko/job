@@ -20,7 +20,7 @@ class FavoriteFragment : Fragment() {
     private var _binding: FragmentFavoriteBinding? = null
     private val binding get() = _binding!!
     private val viewModel by viewModel<FavoriteViewModel>()
-    private var adapter = VacancyListAdapter(emptyList()) { vacancy ->
+    private var adapter = VacancyListAdapter(mutableListOf()) { vacancy ->
         val bundle = bundleOf("vacancy_id" to vacancy.id)
         findNavController().navigate(R.id.action_favoriteFragment_to_vacancyFragment, bundle)
     }

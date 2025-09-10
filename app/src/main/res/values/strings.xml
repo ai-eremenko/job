@@ -12,7 +12,6 @@
     <string name="vacancy">Вакансия</string>
     <string name="workplace_choice">Выбор рабочего места</string>
 
-
     <string name="vacancies_search">Поиск вакансий</string>
     <string name="enter_search_request">Введите запрос</string>
     <string name="no_internet">Нет интернета</string>
@@ -28,6 +27,7 @@
     <string name="phone">Телефон</string>
     <string name="comment">Комментарий</string>
     <string name="server_error">Ошибка сервера</string>
+    <string name="vacancy_not_found">Вакансия не найдена или удалена</string>
 
     <string name="salary_from_to">От %s до %s %s</string>
     <string name="salary_from">От %s %s</string>
@@ -38,9 +38,21 @@
     <string name="there_are_no_vacancies">Таких вакансий нет</string>
     <string name="no_get_list_vacancies">Не удалось получить список вакансий</string>
 
+    <string name="share_vacancy">Посмотрите вакансию: %s\n</string>
+    <string name="error_send_email">Почтовые клиенты не установлены</string>
+    <string name="error_share">Мессенджеры не установлены</string>
+    <string name="error_phone">Не удалось набрать номер</string>
     <string name="list_of_developers">Над приложением работали</string>
     <string name="developer_one">Ангелина Еременко</string>
     <string name="developer_two">Яна Кудринская</string>
     <string name="developer_three">Даниил Ильс</string>
     <string name="developer_four">Владислав Московский</string>
+
+    <string name="text_required_experience">Требуемый опыт</string>
+    <string name="text_required_experience_example">От 1 года до 3 лет</string>
+    <string name="text_type_employment_example">Полная занятость, Удаленная работа</string>
+
+    <string name="favorites">Избранное</string>
+    <string name="empty_list">Список пуст</string>
+    <string name="error_list">Не удалось получить список вакансий</string>
 </resources>

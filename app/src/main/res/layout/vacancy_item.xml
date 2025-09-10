@@ -5,8 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="?attr/colorPrimary">
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/sourceImage"
@@ -15,15 +14,16 @@
         android:layout_marginStart="@dimen/size_16"
         android:layout_marginTop="@dimen/size_9"
         android:layout_marginBottom="@dimen/size_51"
-        android:scaleType="centerCrop"
-        android:background="?attr/selectableItemBackgroundBorderless"
+        android:scaleType="fitCenter"
+        android:background="@drawable/border_gray"
+        android:padding="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/name"
-        style = "@style/textMedium"
+        style = "@style/TextMedium.22"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/size_12"
@@ -35,7 +35,7 @@
 
     <TextView
         android:id="@+id/employerName"
-        style="@style/textRegular"
+        style="@style/TextRegular.16"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="@+id/name"
@@ -44,7 +44,7 @@
 
     <TextView
         android:id="@+id/salary"
-        style="@style/textRegular"
+        style="@style/TextRegular.16"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="@+id/employerName"
