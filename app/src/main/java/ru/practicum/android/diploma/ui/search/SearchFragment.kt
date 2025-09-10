@@ -10,10 +10,13 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
@@ -57,7 +60,11 @@ class SearchFragment : Fragment() {
                     val pos = (binding.recyclerView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
                     val itemsCount = vacancyAdapter.itemCount
                     if (pos >= itemsCount - 1) {
-                        isNextPageLoading = true
+                        if (!isNextPageLoading) {
+                            viewModel.newPageRequest()
+                            binding.progressBar.isVisible = true
+                            isNextPageLoading = true
+                        }
                     }
                 }
             }
@@ -103,6 +110,17 @@ class SearchFragment : Fragment() {
 
         viewModel.observeState().observe(viewLifecycleOwner) {
             render(it)
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.vacancyChannel
+                .receiveAsFlow()
+                .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                .collect {
+                    vacancyAdapter.addVacancies(it)
+                    isNextPageLoading = false
+                    binding.progressBar.isVisible = false
+                }
         }
     }
 
@@ -174,9 +192,6 @@ class SearchFragment : Fragment() {
         binding.searchStatus.isVisible = false
         binding.errorPlaceholder.isVisible = false
         binding.searchScreenCover.isVisible = false
-        binding.recyclerView.isVisible = false
-        binding.searchStatus.isVisible = false
-        binding.errorPlaceholder.isVisible = false
     }
 
     companion object {
