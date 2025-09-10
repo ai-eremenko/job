@@ -70,12 +70,15 @@ class VacancyViewModel(
     }
 
     fun onFavoriteClicked() {
-        val vacancy = currentVacancy ?: return
-        favoriteJob?.cancel()
-        favoriteJob = viewModelScope.launch {
-            favoriteInteractor.toggleFavorite(vacancy)
-            currentVacancy = vacancy.copy(isFavorite = !vacancy.isFavorite)
-            changeFavoriteState()
+        currentVacancy?.let { vacancy ->
+            val updatedVacancy = vacancy.copy(isFavorite = !vacancy.isFavorite)
+            currentVacancy = updatedVacancy
+
+            favoriteJob?.cancel()
+            favoriteJob = viewModelScope.launch {
+                favoriteInteractor.toggleFavorite(updatedVacancy)
+                changeFavoriteState()
+            }
         }
     }
 
