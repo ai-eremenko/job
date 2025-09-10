@@ -192,9 +192,6 @@ class SearchFragment : Fragment() {
         binding.searchStatus.isVisible = false
         binding.errorPlaceholder.isVisible = false
         binding.searchScreenCover.isVisible = false
-        binding.recyclerView.isVisible = false
-        binding.searchStatus.isVisible = false
-        binding.errorPlaceholder.isVisible = false
     }
 
     companion object {
