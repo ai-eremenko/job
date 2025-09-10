@@ -56,7 +56,7 @@ class SearchFragment : Fragment() {
                 if (dy > 0) {
                     val pos = (binding.recyclerView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
                     val itemsCount = vacancyAdapter.itemCount
-                    if (pos >= itemsCount-1) {
+                    if (pos >= itemsCount - 1) {
                         isNextPageLoading = true
                     }
                 }
