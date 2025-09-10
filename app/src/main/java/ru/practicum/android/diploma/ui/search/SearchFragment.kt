@@ -12,6 +12,8 @@ import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
@@ -29,6 +31,8 @@ class SearchFragment : Fragment() {
 
     private val viewModel: SearchViewModel by viewModel()
 
+    private var isNextPageLoading = false
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
         return binding.root
@@ -42,8 +46,22 @@ class SearchFragment : Fragment() {
             debounce<VacancyPreviewPresent>(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) { vacancy ->
                 openVacancy(vacancy)
             }
-        _vacancyAdapter = VacancyListAdapter(emptyList(), onVacancyClickDebounce)
+        _vacancyAdapter = VacancyListAdapter(mutableListOf(), onVacancyClickDebounce)
         binding.recyclerView.adapter = vacancyAdapter
+
+        binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                if (dy > 0) {
+                    val pos = (binding.recyclerView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+                    val itemsCount = vacancyAdapter.itemCount
+                    if (pos >= itemsCount-1) {
+                        isNextPageLoading = true
+                    }
+                }
+            }
+        })
     }
 
     private fun searchEditTextCreate() {
@@ -110,6 +128,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun showLoading() {
+        hideKeyboard()
         binding.progressBar.isVisible = true
     }
 
