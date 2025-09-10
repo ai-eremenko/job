@@ -4,8 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.search.SearchInteractor
+import ru.practicum.android.diploma.domain.search.models.VacancyPreviewPresent
 import ru.practicum.android.diploma.util.Resource
 import ru.practicum.android.diploma.util.debounce
 
@@ -15,6 +17,10 @@ class SearchViewModel(private val searchInteractor: SearchInteractor) : ViewMode
     fun observeState(): LiveData<SearchScreenState> = stateLiveData
 
     private var latestSearchText: String? = null
+
+    private var totalPages = 0
+    private var currentPage = 1
+    private var searchText = ""
 
     private val vacanciesSearchDebounce = debounce<String>(SEARCH_DEBOUNCE_DELAY, viewModelScope, true) { changedText ->
         searchRequest(changedText)
@@ -27,9 +33,23 @@ class SearchViewModel(private val searchInteractor: SearchInteractor) : ViewMode
         }
     }
 
+    val vacancyChannel = Channel<List<VacancyPreviewPresent>>()
+
+    fun newPageRequest() {
+        viewModelScope.launch {
+            searchInteractor
+                .searchVacancies(searchText, ++currentPage)
+                .collect {
+                    vacancyChannel.send(it.data?.items ?: emptyList())
+                }
+        }
+    }
+
     private fun searchRequest(newSearchText: String) {
         if (newSearchText.isNotEmpty()) {
             renderState(SearchScreenState.Loading)
+
+            searchText = newSearchText
 
             viewModelScope.launch {
                 searchInteractor
@@ -41,9 +61,9 @@ class SearchViewModel(private val searchInteractor: SearchInteractor) : ViewMode
                                     renderState(SearchScreenState.EmptyError)
                                 } else {
                                     renderState(SearchScreenState.Content(it.data.items, it.data.found))
+                                    totalPages = it.data.pages
                                 }
                             }
-
                             is Resource.Error<*> -> renderState(SearchScreenState.NetworkError)
                         }
                     }
