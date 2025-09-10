@@ -2,6 +2,7 @@ package ru.practicum.android.diploma.ui.root
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -22,6 +23,10 @@ class RootActivity : AppCompatActivity(), NavigationVisibilityController {
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         bottomNavigationView.setupWithNavController(navController)
+
+        viewModel.getNavigationEvents().observe(this) { isVisible ->
+            bottomNavigationView.isVisible = isVisible
+        }
     }
 
     override fun setNavigationVisibility(visible: Boolean) {

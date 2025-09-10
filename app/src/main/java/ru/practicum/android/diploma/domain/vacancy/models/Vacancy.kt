@@ -13,6 +13,7 @@ data class Vacancy(
     val contacts: Contacts?,
     val employer: Employer,
     val skills: List<String>?,
+    val urlLink: String
 )
 
 data class Salary(

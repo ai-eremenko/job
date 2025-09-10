@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.presentation.vacancy
 
-import android.graphics.drawable.Drawable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -47,7 +46,6 @@ class VacancyViewModel(
                 is Resource.Success -> {
                     if (model.data != null) {
                         currentVacancy = model.data
-                        changeFavoriteState()
                         screenStateLiveData.postValue(VacancyScreenState.Content(model.data))
                     } else {
                         screenStateLiveData.postValue(
@@ -71,35 +69,29 @@ class VacancyViewModel(
         }
     }
 
-    private fun getIcon(isFavorite: Boolean): Drawable? {
-        return if (isFavorite) {
-            resourcesProvider.getDrawable(R.drawable.ic_favorites_on)
-        } else {
-            resourcesProvider.getDrawable(R.drawable.ic_favorites_off)
-        }
-    }
-
     fun onFavoriteClicked() {
-        val vacancy = currentVacancy ?: return
-        favoriteJob?.cancel()
-        favoriteJob = viewModelScope.launch {
-            favoriteInteractor.toggleFavorite(vacancy)
-            currentVacancy = vacancy.copy(isFavorite = !vacancy.isFavorite)
-            changeFavoriteState()
+        currentVacancy?.let { vacancy ->
+            val updatedVacancy = vacancy.copy(isFavorite = !vacancy.isFavorite)
+            currentVacancy = updatedVacancy
+
+            favoriteJob?.cancel()
+            favoriteJob = viewModelScope.launch {
+                favoriteInteractor.toggleFavorite(updatedVacancy)
+                changeFavoriteState()
+            }
         }
     }
 
     private fun changeFavoriteState() {
         val vacancy = currentVacancy ?: return
-        val icon = getIcon(vacancy.isFavorite)
         screenStateLiveData.postValue(
-            VacancyScreenState.Favorite(icon)
+            VacancyScreenState.Favorite(vacancy.isFavorite)
         )
     }
 
     fun share() {
         val vacancy = currentVacancy ?: return
-        val intent = sharingInteractor.shareVacancy(vacancy.id, vacancy.name)
+        val intent = sharingInteractor.shareVacancy(vacancy.urlLink, vacancy.name)
         navigate(intent)
     }
 

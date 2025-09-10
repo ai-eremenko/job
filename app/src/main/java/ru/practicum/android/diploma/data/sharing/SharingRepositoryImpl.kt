@@ -9,8 +9,8 @@ import ru.practicum.android.diploma.domain.util.ResourcesProviderRepository
 class SharingRepositoryImpl(
     val resourcesProvider: ResourcesProviderRepository
 ) : SharingRepository {
-    override fun shareVacancy(vacancyId: String, vacancyName: String): Intent {
-        val shareText = getMessage(vacancyId, vacancyName)
+    override fun shareVacancy(vacancyLink: String, vacancyName: String): Intent {
+        val shareText = getMessage(vacancyLink, vacancyName)
         return Intent(Intent.ACTION_SEND).apply {
             type = "text/plain"
             putExtra(Intent.EXTRA_TEXT, shareText)
@@ -31,7 +31,7 @@ class SharingRepositoryImpl(
         }
     }
 
-    private fun getMessage(vacancyId: String, vacancyName: String): String {
-        return resourcesProvider.getString(R.string.share_vacancy)
+    private fun getMessage(vacancyLink: String, vacancyName: String): String {
+        return resourcesProvider.getString(R.string.share_vacancy, vacancyName, vacancyLink)
     }
 }

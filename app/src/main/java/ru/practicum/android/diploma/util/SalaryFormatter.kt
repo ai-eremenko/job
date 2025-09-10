@@ -3,6 +3,7 @@ package ru.practicum.android.diploma.util
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.domain.util.ResourcesProviderRepository
 import java.text.NumberFormat
+import java.util.Currency
 import java.util.Locale
 
 class SalaryFormatter(private val resourcesProvider: ResourcesProviderRepository) {
@@ -15,19 +16,19 @@ class SalaryFormatter(private val resourcesProvider: ResourcesProviderRepository
                 R.string.salary_from_to,
                 formatNumber(from),
                 formatNumber(to),
-                currency ?: ""
+                currencySymbol
             )
 
             from != null -> resourcesProvider.getString(
                 R.string.salary_from,
                 formatNumber(from),
-                currency ?: ""
+                currencySymbol
             )
 
             to != null -> resourcesProvider.getString(
                 R.string.salary_to,
                 formatNumber(to),
-                currency ?: ""
+                currencySymbol
             )
 
             else -> resourcesProvider.getString(R.string.salary_not)
@@ -41,19 +42,14 @@ class SalaryFormatter(private val resourcesProvider: ResourcesProviderRepository
     }
 
     private fun getCurrencySymbol(currencyCode: String?): String {
-        return when (currencyCode?.uppercase()) {
-            "RUB", "RUR" -> "₽"
-            "BYR" -> "Br"
-            "USD" -> "$"
-            "EUR" -> "€"
-            "KZT" -> "₸"
-            "UAH" -> "₴"
-            "AZN" -> "₼"
-            "UZS" -> "so'm"
-            "GEL" -> "₾"
-            "KGT" -> "с"
-            "HKD" -> "HK$"
-            else -> currencyCode ?: ""
+        if (currencyCode.isNullOrBlank()) return ""
+
+        val upperCode = currencyCode.uppercase()
+
+        val currency = Currency.getAvailableCurrencies().firstOrNull {
+            it.currencyCode == upperCode
         }
+
+        return currency?.getSymbol(Locale.getDefault()) ?: upperCode
     }
 }

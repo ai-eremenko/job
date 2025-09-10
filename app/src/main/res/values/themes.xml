@@ -18,5 +18,7 @@
         <item name="hintTextColor">#AEAFB4</item>
         <item name="android:textColor">?attr/colorOnSurface</item>
 
+        <item name="toolbarIconColor">@color/black_universal</item>
+
     </style>
 </resources>
