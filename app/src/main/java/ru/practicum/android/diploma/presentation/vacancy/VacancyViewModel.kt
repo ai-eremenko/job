@@ -91,7 +91,7 @@ class VacancyViewModel(
 
     fun share() {
         val vacancy = currentVacancy ?: return
-        val intent = sharingInteractor.shareVacancy(vacancy.id, vacancy.name)
+        val intent = sharingInteractor.shareVacancy(vacancy.urlLink, vacancy.name)
         navigate(intent)
     }
 

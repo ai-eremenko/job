@@ -72,6 +72,7 @@ object VacancyMapper {
                 logo = dto.employer.logo
             ),
             skills = dto.skills,
+            urlLink = dto.url
         )
     }
 }

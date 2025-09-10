@@ -38,7 +38,7 @@
     <string name="there_are_no_vacancies">Таких вакансий нет</string>
     <string name="no_get_list_vacancies">Не удалось получить список вакансий</string>
 
-    <string name="share_vacancy">Посмотрите вакансию: %s\n</string>
+    <string name="share_vacancy">Посмотрите вакансию: %s\n %s</string>
     <string name="error_send_email">Почтовые клиенты не установлены</string>
     <string name="error_share">Мессенджеры не установлены</string>
     <string name="error_phone">Не удалось набрать номер</string>

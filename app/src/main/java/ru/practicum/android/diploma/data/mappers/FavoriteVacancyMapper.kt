@@ -24,7 +24,8 @@ class FavoriteVacancyMapper {
             employer = vacancy.employerName,
             skills = vacancy.skills?.let { gson.toJson(it) },
             url = vacancy.url,
-            isFavorite = vacancy.isFavorite
+            isFavorite = vacancy.isFavorite,
+            urlLink = vacancy.urlLink
         )
     }
 
@@ -44,7 +45,8 @@ class FavoriteVacancyMapper {
                 gson.fromJson(it, object : TypeToken<List<String>>() {}.type)
             },
             url = vacancy.url,
-            isFavorite = vacancy.isFavorite
+            isFavorite = vacancy.isFavorite,
+            urlLink = vacancy.urlLink
         )
     }
 

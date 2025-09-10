@@ -12,6 +12,7 @@ data class VacancyDto(
     val contacts: ContactsDto?,
     val employer: EmployerDto,
     val skills: List<String>?,
+    val url: String
 )
 
 data class SalaryDto(
