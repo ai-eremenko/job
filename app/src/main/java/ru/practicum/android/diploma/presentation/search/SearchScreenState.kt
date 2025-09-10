@@ -6,11 +6,13 @@ sealed interface SearchScreenState {
 
     object Empty : SearchScreenState
     object Loading : SearchScreenState
+    object LoadingItems : SearchScreenState
     object NetworkError : SearchScreenState
     object EmptyError : SearchScreenState
 
     data class Content(
         val vacancy: List<VacancyPreviewPresent>,
-        val countVacancy: Int
+        val countVacancy: Int,
+        val isLoadingMore: Boolean = false
     ) : SearchScreenState
 }

@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.search.SearchInteractor
@@ -21,6 +22,12 @@ class SearchViewModel(private val searchInteractor: SearchInteractor) : ViewMode
     private var totalPages = 0
     private var currentPage = 1
     private var searchText = ""
+    private var currentVacancies = emptyList<VacancyPreviewPresent>()
+    private var totalFound = 0
+
+    private var isNextPageLoading = false
+    private var currentSearchJob: Job? = null
+    private var currentPaginationJob: Job? = null
 
     private val vacanciesSearchDebounce = debounce<String>(SEARCH_DEBOUNCE_DELAY, viewModelScope, true) { changedText ->
         searchRequest(changedText)
@@ -36,39 +43,89 @@ class SearchViewModel(private val searchInteractor: SearchInteractor) : ViewMode
     val vacancyChannel = Channel<List<VacancyPreviewPresent>>()
 
     fun newPageRequest() {
-        viewModelScope.launch {
+        if (currentPage >= totalPages) return
+        if (isNextPageLoading) return
+
+        currentPaginationJob?.cancel()
+
+        isNextPageLoading = true
+        renderState(SearchScreenState.Content(currentVacancies, totalFound, isLoadingMore = true))
+
+        currentPaginationJob = viewModelScope.launch {
             searchInteractor
-                .searchVacancies(searchText, ++currentPage)
-                .collect {
-                    vacancyChannel.send(it.data?.items ?: emptyList())
+                .searchVacancies(searchText, currentPage + 1)
+                .collect { resource ->
+                    isNextPageLoading = false
+                    when (resource) {
+                        is Resource.Success -> {
+                            val newItems = resource.data?.items ?: emptyList()
+                            if (newItems.isNotEmpty()) {
+                                currentPage++
+                                currentVacancies = currentVacancies + newItems
+                                vacancyChannel.send(newItems)
+                                renderState(
+                                    SearchScreenState.Content(
+                                        currentVacancies,
+                                        totalFound,
+                                        isLoadingMore = false
+                                    )
+                                )
+                            }
+                        }
+
+                        is Resource.Error -> {
+                            renderState(SearchScreenState.Content(currentVacancies, totalFound, isLoadingMore = false))
+                        }
+                    }
                 }
         }
     }
 
     private fun searchRequest(newSearchText: String) {
         if (newSearchText.isNotEmpty()) {
+            currentSearchJob?.cancel()
+            currentPaginationJob?.cancel()
+            isNextPageLoading = false
+
             renderState(SearchScreenState.Loading)
-
             searchText = newSearchText
+            currentPage = 1
+            currentVacancies = emptyList()
+            totalFound = 0
 
-            viewModelScope.launch {
+            currentSearchJob = viewModelScope.launch {
                 searchInteractor
                     .searchVacancies(newSearchText, 1)
-                    .collect {
-                        when (it) {
-                            is Resource.Success<*> -> {
-                                if (it.data?.items == null || it.data.found == 0) {
+                    .collect { resource ->
+                        when (resource) {
+                            is Resource.Success -> {
+                                if (resource.data?.items == null || resource.data.found == 0) {
                                     renderState(SearchScreenState.EmptyError)
                                 } else {
-                                    renderState(SearchScreenState.Content(it.data.items, it.data.found))
-                                    totalPages = it.data.pages
+                                    totalPages = resource.data.pages
+                                    totalFound = resource.data.found
+                                    currentVacancies = resource.data.items
+                                    renderState(
+                                        SearchScreenState.Content(
+                                            resource.data.items,
+                                            resource.data.found,
+                                            isLoadingMore = false
+                                        )
+                                    )
                                 }
                             }
-                            is Resource.Error<*> -> renderState(SearchScreenState.NetworkError)
+
+                            is Resource.Error -> renderState(SearchScreenState.NetworkError)
                         }
                     }
             }
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        currentSearchJob?.cancel()
+        currentPaginationJob?.cancel()
     }
 
     private fun renderState(state: SearchScreenState) {
