@@ -59,12 +59,10 @@ class SearchFragment : Fragment() {
                 if (dy > 0) {
                     val pos = (binding.recyclerView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
                     val itemsCount = vacancyAdapter.itemCount
-                    if (pos >= itemsCount - 1) {
-                        if (!isNextPageLoading) {
+                    if (pos >= itemsCount - 1  && !isNextPageLoading) {
                             viewModel.newPageRequest()
                             binding.progressBar.isVisible = true
                             isNextPageLoading = true
-                        }
                     }
                 }
             }
