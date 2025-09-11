@@ -2,13 +2,18 @@ package ru.practicum.android.diploma.ui.root
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import ru.practicum.android.diploma.BuildConfig
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.presentation.root.RootViewModel
 
-class RootActivity : AppCompatActivity() {
+class RootActivity : AppCompatActivity(), NavigationVisibilityController {
+
+    internal val viewModel by viewModel<RootViewModel>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_root)
@@ -18,12 +23,14 @@ class RootActivity : AppCompatActivity() {
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         bottomNavigationView.setupWithNavController(navController)
-        // Пример использования access token для HeadHunter API
-        networkRequestExample(accessToken = BuildConfig.API_ACCESS_TOKEN)
+
+        viewModel.getNavigationEvents().observe(this) { isVisible ->
+            bottomNavigationView.isVisible = isVisible
+        }
     }
 
-    private fun networkRequestExample(accessToken: String) {
-        // ...
+    override fun setNavigationVisibility(visible: Boolean) {
+        viewModel.setNavigationVisible(visible)
     }
 
 }

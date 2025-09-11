@@ -1,7 +1,7 @@
 [versions]
 
 java = "VERSION_1_8"
-agp = "8.12.2"
+agp = "8.13.0"
 kotlin = "2.2.10"
 androidGradlePlugin = "8.12.0"
 
@@ -19,6 +19,7 @@ constraintlayout = "2.2.1"
 recyclerview = "1.4.0"
 retrofit = "3.0.0"
 lifecycleViewmodelKtx = "2.9.3"
+lifecycleLivedataKtx = "2.9.3"
 koinAndroid = "4.1.0"
 navigationUiKtx = "2.9.3"
 adapterdelegates4KotlinDsl = "4.3.2"
@@ -82,6 +83,7 @@ retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit
 retrofit2-converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
 
 androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }
+androidx-lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "lifecycleLivedataKtx" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koinAndroid" }
 adapterdelegates4-kotlin-dsl = { module = "com.hannesdorfmann:adapterdelegates4-kotlin-dsl", version.ref = "adapterdelegates4KotlinDsl" }
 adapterdelegates4-kotlin-dsl-viewbinding = { module = "com.hannesdorfmann:adapterdelegates4-kotlin-dsl-viewbinding", version.ref = "adapterdelegates4KotlinDsl" }

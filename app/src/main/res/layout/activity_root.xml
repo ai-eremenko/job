@@ -19,9 +19,11 @@
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
-        style = "@style/BottomNavBg"
+        android:background="?attr/colorSurface"
+        app:itemIconTint="@color/bottom_nav_color"
+        app:itemTextColor="@color/bottom_nav_color"
         android:layout_width="0dp"
-        android:layout_height="@dimen/size_56"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -29,7 +31,5 @@
         android:minHeight = "@dimen/size_56"
         app:itemPaddingBottom = "@dimen/size_8"
         app:itemPaddingTop = "@dimen/size_8"
-        app:itemIconTint="@color/bottom_nav_color"
-        app:itemTextColor="@color/bottom_nav_color"
         app:itemActiveIndicatorStyle="@null" />
 </androidx.constraintlayout.widget.ConstraintLayout>
