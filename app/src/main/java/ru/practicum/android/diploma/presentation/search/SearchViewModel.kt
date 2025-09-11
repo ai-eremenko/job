@@ -71,6 +71,10 @@ class SearchViewModel(private val searchInteractor: SearchInteractor) : ViewMode
         }
     }
 
+    fun isMorePage(): Boolean {
+        return totalPages >= currentPage
+    }
+
     private fun renderState(state: SearchScreenState) {
         stateLiveData.postValue(state)
     }

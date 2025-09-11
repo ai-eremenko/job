@@ -61,9 +61,11 @@ class SearchFragment : Fragment() {
                     val itemsCount = vacancyAdapter.itemCount
                     if (pos >= itemsCount - 1) {
                         if (!isNextPageLoading) {
-                            viewModel.newPageRequest()
-                            binding.progressBar.isVisible = true
-                            isNextPageLoading = true
+                            if (viewModel.isMorePage()) {
+                                viewModel.newPageRequest()
+                                binding.progressBar.isVisible = true
+                                isNextPageLoading = true
+                            }
                         }
                     }
                 }
