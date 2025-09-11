@@ -61,14 +61,10 @@ class SearchFragment : Fragment() {
                 if (dy > 0) {
                     val pos = (binding.recyclerView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
                     val itemsCount = vacancyAdapter.itemCount
-                    if (pos >= itemsCount - 1) {
-                        if (!isNextPageLoading) {
-                            if (viewModel.isMorePage()) {
-                                binding.progressBar.isVisible = true
-                                isNextPageLoading = true
-                                viewModel.newPageRequest()
-                            }
-                        }
+                    if (pos >= itemsCount - 1 && !isNextPageLoading && viewModel.isMorePage()) {
+                        binding.progressBar.isVisible = true
+                        isNextPageLoading = true
+                        viewModel.newPageRequest()
                     }
                 }
             }
@@ -132,11 +128,7 @@ class SearchFragment : Fragment() {
                 .receiveAsFlow()
                 .flowWithLifecycle(viewLifecycleOwner.lifecycle)
                 .collect {
-                    if (it == ResponseStatus.UNKNOWN_ERROR ||
-                        it == ResponseStatus.NO_INTERNET ||
-                        it == ResponseStatus.SERVER_ERROR ||
-                        it == ResponseStatus.NOT_FOUND
-                    )
+                    if (it != ResponseStatus.SUCCESS) {
                         isNextPageLoading = false
                         binding.progressBar.isVisible = false
                         Toast.makeText(
@@ -144,6 +136,7 @@ class SearchFragment : Fragment() {
                             requireContext().getString(R.string.error_list),
                             Toast.LENGTH_SHORT
                         ).show()
+                    }
                 }
         }
     }
