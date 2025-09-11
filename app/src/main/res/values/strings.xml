@@ -55,4 +55,7 @@
     <string name="favorites">Избранное</string>
     <string name="empty_list">Список пуст</string>
     <string name="error_list">Не удалось получить список вакансий</string>
+    <string name="enter_region">Введите регион</string>
+    <string name="no_region">Такого региона нет</string>
+    <string name="no_list">Не удалось получить\nсписок</string>
 </resources>
