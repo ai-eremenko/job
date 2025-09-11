@@ -22,7 +22,7 @@ val repositoryModule = module {
     }
 
     factory<SearchRepository> {
-        SearchRepositoryImpl(get(),get())
+        SearchRepositoryImpl(get(), get())
     }
 
     factory<FavoriteRepository> {
