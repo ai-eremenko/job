@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
@@ -24,6 +25,7 @@ import ru.practicum.android.diploma.domain.search.models.VacancyPreviewPresent
 import ru.practicum.android.diploma.presentation.search.SearchScreenState
 import ru.practicum.android.diploma.presentation.search.SearchViewModel
 import ru.practicum.android.diploma.ui.search.adapter.VacancyListAdapter
+import ru.practicum.android.diploma.util.ResponseStatus
 import ru.practicum.android.diploma.util.debounce
 
 class SearchFragment : Fragment() {
@@ -62,9 +64,9 @@ class SearchFragment : Fragment() {
                     if (pos >= itemsCount - 1) {
                         if (!isNextPageLoading) {
                             if (viewModel.isMorePage()) {
-                                viewModel.newPageRequest()
                                 binding.progressBar.isVisible = true
                                 isNextPageLoading = true
+                                viewModel.newPageRequest()
                             }
                         }
                     }
@@ -122,6 +124,26 @@ class SearchFragment : Fragment() {
                     vacancyAdapter.addVacancies(it)
                     isNextPageLoading = false
                     binding.progressBar.isVisible = false
+                }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.toastChannel
+                .receiveAsFlow()
+                .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                .collect {
+                    if (it == ResponseStatus.UNKNOWN_ERROR ||
+                        it == ResponseStatus.NO_INTERNET ||
+                        it == ResponseStatus.SERVER_ERROR ||
+                        it == ResponseStatus.NOT_FOUND
+                    )
+                        isNextPageLoading = false
+                        binding.progressBar.isVisible = false
+                        Toast.makeText(
+                            requireContext(),
+                            requireContext().getString(R.string.error_list),
+                            Toast.LENGTH_SHORT
+                        ).show()
                 }
         }
     }
