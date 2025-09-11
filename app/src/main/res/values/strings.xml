@@ -56,6 +56,9 @@
     <string name="empty_list">Список пуст</string>
     <string name="error_list">Не удалось получить список вакансий</string>
 
-    <string name="workplace"> Место работы</string>
-    <string name="industry"> Отрасль</string>
+    <string name="workplace">Место работы</string>
+    <string name="industry">Отрасль</string>
+    <string name="enter_amount">Введите сумму</string>
+    <string name="without_salary">Не показывать без зарплаты</string>
+    <string name="expected_salary">Ожидаемая зарплата</string>
 </resources>
