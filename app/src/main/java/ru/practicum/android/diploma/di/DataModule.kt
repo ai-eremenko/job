@@ -12,6 +12,7 @@ import ru.practicum.android.diploma.data.db.AppDatabase
 import ru.practicum.android.diploma.data.network.RetrofitClient
 import ru.practicum.android.diploma.data.network.VacanciesApi
 import ru.practicum.android.diploma.data.search.EXAMPLE_PREFERENCES
+import ru.practicum.android.diploma.data.storage.Storage
 import ru.practicum.android.diploma.util.NetworkManager
 
 val dataModule = module {
@@ -47,5 +48,9 @@ val dataModule = module {
         )
             .fallbackToDestructiveMigration()
             .build()
+    }
+
+    single {
+        Storage(get(), get())
     }
 }
