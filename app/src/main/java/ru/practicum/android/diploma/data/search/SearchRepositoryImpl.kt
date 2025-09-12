@@ -7,6 +7,7 @@ import ru.practicum.android.diploma.data.dto.RequestDto
 import ru.practicum.android.diploma.data.dto.responses.VacanciesResponse
 import ru.practicum.android.diploma.data.mappers.VacancyMapper
 import ru.practicum.android.diploma.domain.filteringsettings.FilterRepository
+import ru.practicum.android.diploma.domain.filteringsettings.models.FilterSettings
 import ru.practicum.android.diploma.domain.search.SearchRepository
 import ru.practicum.android.diploma.domain.search.models.VacanciesSearchResult
 import ru.practicum.android.diploma.domain.search.models.VacancyPreview
@@ -23,7 +24,7 @@ class SearchRepositoryImpl(
         page: Int
     ): Flow<Resource<VacanciesSearchResult<VacancyPreview>>> = flow {
         val options: HashMap<String, Int> = HashMap()
-        val filter = filter.getFilterOptions()
+        val filter = filter.getFilterOptions() ?: FilterSettings()
         if (filter.areaId != null) {
             options["area"] = filter.areaId
         }
