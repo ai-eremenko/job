@@ -155,11 +155,11 @@ class VacancyFragment : Fragment() {
             val emailView = LayoutInflater.from(requireContext())
                 .inflate(R.layout.vacancy_detail_item, binding.contactsContainer, false)
             emailView.findViewById<TextView>(R.id.tv_title).text = getString(R.string.e_mail)
-            emailView.findViewById<TextView>(R.id.tv_content).text = contacts.email
-            emailView.findViewById<TextView>(R.id.tv_content)
-                .setTextColor(ContextCompat.getColor(requireContext(), R.color.blue))
+            val viewContent = emailView.findViewById<TextView>(R.id.tv_content)
+            viewContent.text = contacts.email
+            viewContent.setTextColor(ContextCompat.getColor(requireContext(), R.color.blue))
 
-            emailView.findViewById<TextView>(R.id.tv_content).setOnClickListener {
+            viewContent.setOnClickListener {
                 viewModel.sendEmail()
             }
             binding.contactsContainer.addView(emailView)
@@ -167,13 +167,12 @@ class VacancyFragment : Fragment() {
         contacts.phones?.forEach { phone ->
             val phoneView = LayoutInflater.from(requireContext())
                 .inflate(R.layout.vacancy_detail_item, binding.contactsContainer, false)
-
+            val viewContent = phoneView.findViewById<TextView>(R.id.tv_content)
             phoneView.findViewById<TextView>(R.id.tv_title).text = getString(R.string.phone)
-            phoneView.findViewById<TextView>(R.id.tv_content).text = phone.formatted
-            phoneView.findViewById<TextView>(R.id.tv_content)
-                .setTextColor(ContextCompat.getColor(requireContext(), R.color.blue))
+            viewContent.text = phone.formatted
+            viewContent.setTextColor(ContextCompat.getColor(requireContext(), R.color.blue))
 
-            phoneView.findViewById<TextView>(R.id.tv_content).setOnClickListener {
+            viewContent.setOnClickListener {
                 viewModel.call(phone.formatted)
             }
 
