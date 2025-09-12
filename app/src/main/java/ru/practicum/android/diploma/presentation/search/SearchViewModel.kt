@@ -9,6 +9,7 @@ import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.search.SearchInteractor
 import ru.practicum.android.diploma.domain.search.models.VacancyPreviewPresent
 import ru.practicum.android.diploma.util.Resource
+import ru.practicum.android.diploma.util.ResponseStatus
 import ru.practicum.android.diploma.util.debounce
 
 class SearchViewModel(private val searchInteractor: SearchInteractor) : ViewModel() {
@@ -34,13 +35,23 @@ class SearchViewModel(private val searchInteractor: SearchInteractor) : ViewMode
     }
 
     val vacancyChannel = Channel<List<VacancyPreviewPresent>>()
+    val toastChannel = Channel<ResponseStatus>()
 
     fun newPageRequest() {
         viewModelScope.launch {
             searchInteractor
                 .searchVacancies(searchText, ++currentPage)
                 .collect {
-                    vacancyChannel.send(it.data?.items ?: emptyList())
+                    when (it) {
+                        is Resource.Success<*> -> {
+                            if (it.data?.items == null || it.data.found == 0) {
+                                renderState(SearchScreenState.NetworkError)
+                            } else {
+                                vacancyChannel.send(it.data.items)
+                            }
+                        }
+                        is Resource.Error<*> -> it.message?.let { element -> toastChannel.send(element) }
+                    }
                 }
         }
     }
@@ -69,6 +80,10 @@ class SearchViewModel(private val searchInteractor: SearchInteractor) : ViewMode
                     }
             }
         }
+    }
+
+    fun isMorePage(): Boolean {
+        return totalPages >= currentPage
     }
 
     private fun renderState(state: SearchScreenState) {

@@ -4,6 +4,7 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Path
 import retrofit2.http.Query
+import retrofit2.http.QueryMap
 import ru.practicum.android.diploma.data.dto.FilterAreaDto
 import ru.practicum.android.diploma.data.dto.FilterIndustryDto
 import ru.practicum.android.diploma.data.dto.VacancyDto
@@ -31,6 +32,8 @@ interface VacanciesApi {
     suspend fun getVacancies(
         @Header("Authorization") token: String,
         @Query("text") expression: String,
-        @Query("page") page: Int
+        @Query("page") page: Int,
+        @QueryMap options: Map<String, Int>,
+        @Query("only_with_salary") onlyWithSalary: Boolean,
     ): VacanciesResponse
 }
