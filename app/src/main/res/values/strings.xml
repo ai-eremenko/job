@@ -55,6 +55,7 @@
     <string name="favorites">Избранное</string>
     <string name="empty_list">Список пуст</string>
     <string name="error_list">Не удалось получить список вакансий</string>
+
     <string name="enter_region">Введите регион</string>
     <string name="no_region">Такого региона нет</string>
     <string name="no_list">Не удалось получить\nсписок</string>
@@ -62,4 +63,11 @@
     <string name="apply">Применить</string>
     <string name="country">Страна</string>
     <string name="region">Регион</string>
+    <string name="workplace">Место работы</string>
+    <string name="industry">Отрасль</string>
+    <string name="enter_amount">Введите сумму</string>
+    <string name="without_salary">Не показывать без зарплаты</string>
+    <string name="expected_salary">Ожидаемая зарплата</string>
+    <string name="reset">Сбросить</string>
+
 </resources>

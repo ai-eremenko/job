@@ -21,5 +21,7 @@
         <item name="toolbarIconColor">@color/black_universal</item>
         <item name="colorSecondaryVariant">@color/light_gray</item>
 
+        <item name="colorSecondaryVariant">@color/light_gray</item>
+
     </style>
 </resources>
