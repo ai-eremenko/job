@@ -6,15 +6,11 @@ import ru.practicum.android.diploma.domain.filteringsettings.models.FilterSettin
 class FilterRepositoryImpl : FilterRepository {
     override fun getFilterOptions(): FilterSettings {
         return FilterSettings()
-
     }
 
     override fun saveFilterOptions(filter: FilterSettings) {
-
     }
-
-    override fun clearFilterOptions() {
-
-    }
-
+//
+//    override fun clearFilterOptions() {
+//    }
 }
