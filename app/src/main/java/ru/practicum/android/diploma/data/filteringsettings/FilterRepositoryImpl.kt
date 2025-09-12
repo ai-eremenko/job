@@ -9,7 +9,9 @@ class FilterRepositoryImpl : FilterRepository {
     }
 
     override fun saveFilterOptions(filter: FilterSettings) {
+        // TODO("Not yet implemented")
     }
+
 //
 //    override fun clearFilterOptions() {
 //    }
