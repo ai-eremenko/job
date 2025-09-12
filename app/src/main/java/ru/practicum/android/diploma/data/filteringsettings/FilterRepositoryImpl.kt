@@ -8,12 +8,13 @@ class FilterRepositoryImpl : FilterRepository {
         return FilterSettings()
 
     }
-//
-//    override fun saveFilterOptions(filter: FilterSettings) {
-//
-//    }
-//
-//    override fun clearFilterOptions() {
-//
-//    }
+
+    override fun saveFilterOptions(filter: FilterSettings) {
+
+    }
+
+    override fun clearFilterOptions() {
+
+    }
+
 }
