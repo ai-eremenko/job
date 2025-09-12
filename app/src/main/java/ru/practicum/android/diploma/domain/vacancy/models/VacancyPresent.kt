@@ -11,7 +11,7 @@ data class VacancyPresent(
     val employment: String,
     val contacts: Contacts?,
     val employerName: String,
-    val skills: List<String>?,
+    val skills: String?,
     val url: String?,
     val isFavorite: Boolean,
     val urlLink: String

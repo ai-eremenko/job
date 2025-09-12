@@ -1,9 +1,9 @@
 package ru.practicum.android.diploma.domain.sharing
 
-import ru.practicum.android.diploma.domain.sharing.models.SharingIntent
+import android.content.Intent
 
 interface SharingInteractor {
-    fun shareVacancy(vacancyId: String, vacancyName: String): SharingIntent
-    fun sendOnEmail(email: String): SharingIntent
-    fun call(phone: String): SharingIntent
+    fun shareVacancy(vacancyId: String, vacancyName: String): Pair<Intent, String>
+    fun sendOnEmail(email: String): Pair<Intent, String>
+    fun call(phone: String): Pair<Intent, String>
 }
