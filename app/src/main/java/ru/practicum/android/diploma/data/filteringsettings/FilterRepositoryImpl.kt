@@ -10,7 +10,7 @@ class FilterRepositoryImpl : FilterRepository {
     }
 
     override fun saveFilterOptions(filter: FilterSettings) {
-        Log.d("","TODO")
+        Log.d("", "TODO")
     }
 
 //
