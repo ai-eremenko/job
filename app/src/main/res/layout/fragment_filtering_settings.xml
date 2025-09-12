@@ -28,16 +28,30 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/workplace"
-            style="@style/TextRegularGray"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_16dp"
-            android:text="@string/workplace"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/workplace_TextInputLayout"
+            style = "@style/HintAppearance"
+            app:placeholderTextColor="@color/hint_text_color"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_60dp"
+            android:hint="@string/workplace"
+            app:layout_constraintTop_toTopOf="parent"
+            app:placeholderText="@string/workplace">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/workplace_EditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:clickable="false"
+                android:inputType="none"
+                android:cursorVisible="false"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="parent" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <ImageView
             android:id="@+id/arrow_forward"
@@ -56,22 +70,36 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/industry_container"
         android:layout_width="0dp"
-        android:layout_height="60dp"
+        android:layout_height="@dimen/_60dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/workplace_container">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/industry"
-            style="@style/TextRegularGray"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_16dp"
-            android:text="@string/industry"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/industry_TextInputLayout"
+            style = "@style/HintAppearance"
+            app:placeholderTextColor="@color/hint_text_color"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_60dp"
+            android:hint="@string/industry"
+            app:layout_constraintTop_toTopOf="parent"
+            app:placeholderText="@string/workplace">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/industry_EditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:clickable="false"
+                android:inputType="none"
+                android:cursorVisible="false"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="parent" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <ImageView
             android:id="@+id/arrow_forward_2"
@@ -91,6 +119,7 @@
         style = "@style/SalaryField"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_24dp"
         android:hint="@string/expected_salary"
         app:placeholderText="@string/enter_amount"
         app:placeholderTextColor="@color/hint_text_color"
@@ -102,6 +131,7 @@
         android:id="@+id/expected_salary"
         android:background="@drawable/bg_expected_salary"
         android:layout_width="match_parent"
+        android:maxLines="1"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_16dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -114,13 +144,14 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_16dp"
+        android:layout_marginTop="24dp"
         android:enabled="true"
         android:layoutDirection="rtl"
         android:paddingStart="0dp"
         android:text="@string/without_salary"
+        android:textAppearance="@style/TextRegular.16"
         android:textDirection="ltr"
         app:buttonTint="@color/blue"
-        android:textAppearance="@style/TextRegular.16"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/expected_salary_container"

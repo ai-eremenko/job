@@ -111,4 +111,10 @@
         <item name="expandedHintEnabled">false</item>
         <item name="boxStrokeWidth">0dp</item>
     </style>
+
+    <style name="HintAppearance">
+        <item name="android:textColorHint">@color/gray</item>
+        <item name="expandedHintEnabled">true</item>
+        <item name="boxStrokeWidth">0dp</item>
+    </style>
 </resources>
