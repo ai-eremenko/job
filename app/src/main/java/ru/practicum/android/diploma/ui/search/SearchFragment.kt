@@ -122,8 +122,7 @@ class SearchFragment : Fragment() {
                     binding.progressBar.isVisible = false
                 }
         }
-
-
+        
         binding.icFilter.setOnClickListener {
             findNavController().navigate(R.id.action_mainFragment_to_filteringSettingsFragment)
         }
