@@ -134,15 +134,10 @@ class VacancyFragment : Fragment() {
         binding.error.isVisible = true
     }
 
-    private fun showSkills(skills: List<String>?) {
+    private fun showSkills(skills: String?) {
         if (skills != null) {
             binding.tvSkillsTitle.visibility = View.VISIBLE
-            val formattedSkills = skills.joinToString(
-                separator = "\n  •  ",
-                prefix = "  •  ",
-                transform = { it.trim() }
-            )
-            binding.tvSkills.text = formattedSkills
+            binding.tvSkills.text = skills
             binding.tvSkills.visibility = View.VISIBLE
         }
     }
