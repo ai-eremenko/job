@@ -18,4 +18,19 @@
         app:title="@string/country_choice"
         app:titleTextAppearance="@style/ToolbarTitle"
         app:titleTextColor="?attr/colorOnSurface" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/_16dp"
+        android:clipToPadding="false"
+        android:paddingTop="@dimen/_38dp"
+        android:visibility="gone"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        tools:visibility="visible" />
 </androidx.constraintlayout.widget.ConstraintLayout>

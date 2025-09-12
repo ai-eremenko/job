@@ -58,4 +58,6 @@
     <string name="enter_region">Введите регион</string>
     <string name="no_region">Такого региона нет</string>
     <string name="no_list">Не удалось получить\nсписок</string>
+    <string name="enter_industry">Введите отрасль</string>
+    <string name="apply">Применить</string>
 </resources>
