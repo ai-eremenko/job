@@ -1,9 +1,9 @@
 package ru.practicum.android.diploma.data.storage
 
 import android.content.SharedPreferences
+import androidx.core.content.edit
 import com.google.gson.Gson
 import ru.practicum.android.diploma.domain.filteringsettings.models.FilterSettings
-import androidx.core.content.edit
 
 const val EXAMPLE_PREFERENCES = "example_preferences"
 const val FILTERS = "filters"
