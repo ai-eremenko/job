@@ -10,7 +10,7 @@
     <string name="region_choice">Выбор региона</string>
     <string name="team">Команда</string>
     <string name="vacancy">Вакансия</string>
-    <string name="workplace_choice">Выбор рабочего места</string>
+    <string name="workplace_choice">Выбор места работы</string>
 
     <string name="vacancies_search">Поиск вакансий</string>
     <string name="enter_search_request">Введите запрос</string>
@@ -60,4 +60,6 @@
     <string name="no_list">Не удалось получить\nсписок</string>
     <string name="enter_industry">Введите отрасль</string>
     <string name="apply">Применить</string>
+    <string name="country">Страна</string>
+    <string name="region">Регион</string>
 </resources>
