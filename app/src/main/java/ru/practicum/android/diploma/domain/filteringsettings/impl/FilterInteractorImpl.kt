@@ -7,7 +7,7 @@ import ru.practicum.android.diploma.domain.filteringsettings.models.FilterSettin
 class FilterInteractorImpl(
     val repository: FilterRepository,
 ) : FilterInteractor {
-    override fun getFilterOptions(): FilterSettings? {
+    override fun getFilterOptions(): FilterSettings {
         return repository.getFilterOptions()
     }
 

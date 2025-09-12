@@ -7,4 +7,17 @@ data class FilterSettings(
     val industryName: String? = null,
     val salary: Int? = null,
     val onlyWithSalary: Boolean = false
-)
+) {
+    fun hasActiveFilters(): Boolean {
+        return areaId != null || industryId != null || salary != null || onlyWithSalary
+    }
+
+    fun isEmpty(): Boolean {
+        return areaId == null &&
+                areaName == null &&
+                industryId == null &&
+                industryName == null &&
+                salary == null &&
+                !onlyWithSalary
+    }
+}

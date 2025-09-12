@@ -10,20 +10,32 @@ class FilterViewModel(
     private val filterInteractor: FilterInteractor
 ) : ViewModel() {
 
-    var currentFilterSettings: FilterSettings? = null
-    private val filterStateLiveData = MutableLiveData<FilterSettings?>()
-    fun getFilterStateLiveData(): LiveData<FilterSettings?> = filterStateLiveData
+    var currentFilterSettings = FilterSettings()
+    private val filterStateLiveData = MutableLiveData<FilterSettings>()
+    fun getFilterStateLiveData(): LiveData<FilterSettings> = filterStateLiveData
 
     init {
         getFilterSettings()
     }
 
     private fun getFilterSettings() {
-        //currentFilterSettings = filterInteractor.getFilterOptions()
-        val settings = FilterSettings(
-            null, "Россия, Москва", null, "IT", 40000, true
-        )
-        currentFilterSettings = settings
+        currentFilterSettings = filterInteractor.getFilterOptions()
         filterStateLiveData.value = currentFilterSettings
+    }
+
+    fun clearFilter() {
+        currentFilterSettings = FilterSettings()
+        filterInteractor.clearFilterOptions()
+        filterStateLiveData.value = currentFilterSettings
+    }
+
+    fun updateFilterSettings(isChecked: Boolean) {
+        currentFilterSettings = currentFilterSettings.copy(onlyWithSalary = isChecked)
+        filterInteractor.saveFilterOptions(currentFilterSettings)
+        filterStateLiveData.value = currentFilterSettings
+    }
+
+    fun hasActiveFilters(): Boolean {
+        return currentFilterSettings.hasActiveFilters()
     }
 }

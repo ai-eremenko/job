@@ -12,24 +12,21 @@ class Storage(
     val sharedPreferences: SharedPreferences,
     private val gson: Gson,
 ) {
-    fun getFilterOptions(): FilterSettings? {
-        val json = sharedPreferences.getString(FILTERS, null) ?: return null
-        return gson.fromJson(json, FilterSettings::class.java)
-    }
-
-    fun saveFilterOptions(filter: FilterSettings?) {
-        if (filter == null) {
-            sharedPreferences.edit {
-                putString(FILTERS, null)
-            }
+    fun getFilterOptions(): FilterSettings {
+        val json = sharedPreferences.getString(FILTERS, null)
+        return if (json.isNullOrEmpty()) {
+            FilterSettings()
         } else {
-            sharedPreferences.edit {
-                putString(FILTERS, createJsonFromFilter(filter))
-            }
+            gson.fromJson(json, FilterSettings::class.java) ?: FilterSettings()
         }
     }
 
-    private fun createJsonFromFilter(filter: FilterSettings?): String? {
-        return gson.toJson(filter)
+    fun saveFilterOptions(filter: FilterSettings) {
+        if (filter.hasActiveFilters()) {
+            val json = gson.toJson(filter)
+            sharedPreferences.edit { putString(FILTERS, json) }
+        } else {
+            sharedPreferences.edit { remove(FILTERS) }
+        }
     }
 }

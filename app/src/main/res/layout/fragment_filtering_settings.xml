@@ -19,27 +19,35 @@
         app:titleTextAppearance="@style/ToolbarTitle"
         app:titleTextColor="?attr/colorOnSurface" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/workplace_container"
-        android:layout_width="0dp"
-        android:layout_height="@dimen/_60dp"
-        android:layout_marginTop="@dimen/_16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/leftBorder"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="@dimen/_16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/rightBorder"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="@dimen/_16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/workplace_TextInputLayout"
+            android:id="@+id/til_workplace"
             style = "@style/HintAppearance"
             app:placeholderTextColor="@color/hint_text_color"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="@dimen/_60dp"
             android:hint="@string/workplace"
-            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="@dimen/_16dp"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:placeholderText="@string/workplace">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/workplace_EditText"
+                android:id="@+id/et_workplace"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
@@ -47,47 +55,34 @@
                 android:focusableInTouchMode="false"
                 android:clickable="false"
                 android:inputType="none"
-                android:cursorVisible="false"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="parent" />
+                android:cursorVisible="false"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <ImageView
             android:id="@+id/arrow_forward"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/_16dp"
             android:src="@drawable/ic_arrow_forward"
-            android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:tint="?attr/toolbarIconColor"
+            app:layout_constraintBottom_toBottomOf="@id/til_workplace"
+            app:layout_constraintEnd_toEndOf="@id/rightBorder"
+            app:layout_constraintTop_toTopOf="@id/til_workplace" />
 
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/industry_container"
-        android:layout_width="0dp"
-        android:layout_height="@dimen/_60dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/workplace_container">
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/industry_TextInputLayout"
+            android:id="@+id/til_industry"
             style = "@style/HintAppearance"
             app:placeholderTextColor="@color/hint_text_color"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="@dimen/_60dp"
             android:hint="@string/industry"
-            app:layout_constraintTop_toTopOf="parent"
-            app:placeholderText="@string/workplace">
+            app:layout_constraintTop_toBottomOf="@id/til_workplace"
+            app:placeholderText="@string/workplace"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/industry_EditText"
+                android:id="@+id/et_industry"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
@@ -95,48 +90,41 @@
                 android:focusableInTouchMode="false"
                 android:clickable="false"
                 android:inputType="none"
-                android:cursorVisible="false"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="parent" />
+                android:cursorVisible="false"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <ImageView
             android:id="@+id/arrow_forward_2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/_16dp"
             android:src="@drawable/ic_arrow_forward"
-            android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            app:tint="?attr/toolbarIconColor"
+            app:layout_constraintBottom_toBottomOf="@id/til_industry"
+            app:layout_constraintEnd_toEndOf="@id/rightBorder"
+            app:layout_constraintTop_toTopOf="@id/til_industry" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/expected_salary_container"
         style = "@style/SalaryField"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_24dp"
         android:hint="@string/expected_salary"
         app:placeholderText="@string/enter_amount"
         app:placeholderTextColor="@color/hint_text_color"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/industry_container">
+        app:layout_constraintEnd_toEndOf="@id/rightBorder"
+        app:layout_constraintStart_toStartOf="@id/leftBorder"
+        app:layout_constraintTop_toBottomOf="@id/til_industry">
 
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/expected_salary"
-        android:background="@drawable/bg_expected_salary"
-        android:layout_width="match_parent"
-        android:maxLines="1"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/_16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/industry_container" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/expected_salary"
+            android:background="@drawable/bg_expected_salary"
+            android:layout_width="match_parent"
+            android:inputType="number"
+            android:digits="0123456789"
+            android:imeOptions="actionDone"
+            android:maxLines="1"
+            android:layout_height="wrap_content"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.checkbox.MaterialCheckBox
@@ -160,32 +148,29 @@
     <Button
         android:id="@+id/apply_button"
         android:textAppearance="@style/TextMedium.16"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="@dimen/_60dp"
-        android:layout_marginHorizontal="@dimen/_17dp"
         android:layout_marginBottom="@dimen/_8dp"
         android:background="@drawable/bg_blue_button"
-        android:gravity="center"
         android:text="@string/apply"
         android:textAllCaps="false"
-        app:layout_constraintBottom_toTopOf="@+id/reset_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/reset_button"
+        app:layout_constraintEnd_toEndOf="@id/rightBorder"
+        app:layout_constraintStart_toStartOf="@id/leftBorder" />
 
     <Button
         android:id="@+id/reset_button"
         android:textAppearance="@style/TextMedium.16"
         android:textColor="@color/red"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="@dimen/_60dp"
-        android:layout_marginHorizontal="@dimen/_17dp"
         android:layout_marginBottom="@dimen/_24dp"
         android:background="@android:color/transparent"
-        android:gravity="center"
         android:text="@string/reset"
         android:textAllCaps="false"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
+        app:layout_constraintEnd_toEndOf="@id/rightBorder"
+        app:layout_constraintStart_toStartOf="@id/leftBorder" />
 </androidx.constraintlayout.widget.ConstraintLayout>
