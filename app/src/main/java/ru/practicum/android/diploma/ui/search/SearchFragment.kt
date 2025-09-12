@@ -123,6 +123,10 @@ class SearchFragment : Fragment() {
                 }
         }
 
+        binding.icFilter.setOnClickListener {
+            findNavController().navigate(R.id.action_mainFragment_to_filteringSettingsFragment)
+        }
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.toastChannel
                 .receiveAsFlow()
