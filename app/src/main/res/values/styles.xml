@@ -103,6 +103,7 @@
 
     <style name="TextRegularGray" parent="TextRegular.16">
         <item name="android:textColor">@color/gray</item>
+        <item name="android:background">@android:color/transparent</item>
     </style>
 
     <style name="SalaryField">
