@@ -63,11 +63,15 @@ class FilteringSettingsFragment : Fragment() {
         }
 
         binding.tilWorkplace.setOnClickListener {
-            findNavController().navigate(FilteringSettingsFragmentDirections.actionFilteringSettingsFragmentToChoiceOfWorkplaceFragment())
+            val direction = FilteringSettingsFragmentDirections
+                .actionFilteringSettingsFragmentToChoiceOfWorkplaceFragment()
+            findNavController().navigate(direction)
         }
 
         binding.tilIndustry.setOnClickListener {
-            findNavController().navigate(FilteringSettingsFragmentDirections.actionFilteringSettingsFragmentToIndustryChoiceFragment())
+            val direction = FilteringSettingsFragmentDirections
+                .actionFilteringSettingsFragmentToIndustryChoiceFragment()
+            findNavController().navigate(direction)
         }
     }
 
@@ -117,17 +121,28 @@ class FilteringSettingsFragment : Fragment() {
 
     private fun setupContent(filter: FilterSettings) {
         showContent(filter)
-        updateButtonsVisibility(filter.hasActiveFilters())
+        updateButtonsVisibility(filter.checkActiveFilters())
     }
 
     private fun showContent(filter: FilterSettings) {
         with(binding) {
-
             etWorkplace.setText(filter.areaName ?: "")
-            arrowForward.setImageResource(if (filter.areaName != null) R.drawable.ic_close else R.drawable.ic_arrow_forward)
+            arrowForward.setImageResource(
+                if (filter.areaName != null) {
+                    R.drawable.ic_close
+                } else {
+                    R.drawable.ic_arrow_forward
+                }
+            )
 
             etIndustry.setText(filter.industryName ?: "")
-            arrowForward2.setImageResource(if (filter.industryName != null) R.drawable.ic_close else R.drawable.ic_arrow_forward)
+            arrowForward2.setImageResource(
+                if (filter.industryName != null) {
+                    R.drawable.ic_close
+                } else {
+                    R.drawable.ic_arrow_forward
+                }
+            )
 
             expectedSalary.setText(filter.salary?.toString() ?: "")
             materialCheckBox.isChecked = filter.onlyWithSalary
