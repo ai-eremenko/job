@@ -14,9 +14,4 @@ class FilterInteractorImpl(
     override fun saveFilterOptions(filter: FilterSettings) {
         repository.saveFilterOptions(filter)
     }
-
-    override fun clearFilterOptions() {
-        repository.clearFilterOptions()
-    }
-
 }

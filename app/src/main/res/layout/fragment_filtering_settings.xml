@@ -124,8 +124,21 @@
             android:digits="0123456789"
             android:imeOptions="actionDone"
             android:maxLines="1"
+            android:maxLength="10"
             android:layout_height="wrap_content"/>
     </com.google.android.material.textfield.TextInputLayout>
+
+    <ImageView
+        android:id="@+id/clear_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_12dp"
+        android:src="@drawable/ic_close"
+        app:tint="?attr/toolbarIconColor"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="@id/expected_salary_container"
+        app:layout_constraintBottom_toBottomOf="@id/expected_salary_container"
+        app:layout_constraintEnd_toEndOf="@id/rightBorder"/>
 
     <com.google.android.material.checkbox.MaterialCheckBox
         android:id="@+id/materialCheckBox"

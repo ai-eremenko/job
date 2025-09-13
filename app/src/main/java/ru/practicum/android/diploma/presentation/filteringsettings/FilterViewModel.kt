@@ -25,17 +25,22 @@ class FilterViewModel(
 
     fun clearFilter() {
         currentFilterSettings = FilterSettings()
-        filterInteractor.clearFilterOptions()
-        filterStateLiveData.value = currentFilterSettings
+        updateFilter()
     }
 
-    fun updateFilterSettings(isChecked: Boolean) {
+    fun updateOnlyWithSalary(isChecked: Boolean) {
         currentFilterSettings = currentFilterSettings.copy(onlyWithSalary = isChecked)
+        updateFilter()
+    }
+
+    fun updateSalary(salary: String) {
+        val salaryValue = salary.takeIf { it.isNotBlank() }?.toIntOrNull()
+        currentFilterSettings = currentFilterSettings.copy(salary = salaryValue)
+        updateFilter()
+    }
+
+    private fun updateFilter() {
         filterInteractor.saveFilterOptions(currentFilterSettings)
         filterStateLiveData.value = currentFilterSettings
-    }
-
-    fun hasActiveFilters(): Boolean {
-        return currentFilterSettings.hasActiveFilters()
     }
 }

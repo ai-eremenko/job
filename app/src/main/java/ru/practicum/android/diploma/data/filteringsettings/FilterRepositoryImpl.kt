@@ -14,8 +14,4 @@ class FilterRepositoryImpl(
     override fun saveFilterOptions(filter: FilterSettings) {
         storage.saveFilterOptions(filter)
     }
-
-    override fun clearFilterOptions() {
-        storage.saveFilterOptions(FilterSettings())
-    }
 }
