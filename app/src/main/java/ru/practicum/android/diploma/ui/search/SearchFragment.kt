@@ -112,6 +112,10 @@ class SearchFragment : Fragment() {
             render(it)
         }
 
+        viewModel.getFilterState().observe(viewLifecycleOwner) { hasActiveFilters ->
+            updateFilterIcon(hasActiveFilters)
+        }
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.vacancyChannel
                 .receiveAsFlow()
@@ -143,6 +147,11 @@ class SearchFragment : Fragment() {
                     }
                 }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.updateFilterState()
     }
 
     override fun onDestroyView() {
@@ -213,6 +222,15 @@ class SearchFragment : Fragment() {
         binding.searchStatus.isVisible = false
         binding.errorPlaceholder.isVisible = false
         binding.searchScreenCover.isVisible = false
+    }
+
+    private fun updateFilterIcon(hasActiveFilters: Boolean) {
+        val iconRes = if (hasActiveFilters) {
+            R.drawable.ic_filter_on
+        } else {
+            R.drawable.ic_filter_off
+        }
+        binding.icFilter.setImageResource(iconRes)
     }
 
     companion object {
