@@ -22,11 +22,7 @@ class Storage(
     }
 
     fun saveFilterOptions(filter: FilterSettings) {
-        if (filter.checkActiveFilters()) {
-            val json = gson.toJson(filter)
-            sharedPreferences.edit { putString(FILTERS, json) }
-        } else {
-            sharedPreferences.edit { remove(FILTERS) }
-        }
+        val json = gson.toJson(filter)
+        sharedPreferences.edit { putString(FILTERS, json) }
     }
 }

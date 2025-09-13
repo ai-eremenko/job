@@ -5,42 +5,54 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ru.practicum.android.diploma.domain.filteringsettings.FilterInteractor
 import ru.practicum.android.diploma.domain.filteringsettings.models.FilterSettings
+import ru.practicum.android.diploma.presentation.filteringsettings.models.FilterScreenState
 
 class FilterViewModel(
     private val filterInteractor: FilterInteractor
 ) : ViewModel() {
 
-    var currentFilterSettings = FilterSettings()
-    private val filterStateLiveData = MutableLiveData<FilterSettings>()
-    fun getFilterStateLiveData(): LiveData<FilterSettings> = filterStateLiveData
+    private val filterStateLiveData = MutableLiveData<FilterScreenState>()
+    fun getFilterStateLiveData(): LiveData<FilterScreenState> = filterStateLiveData
 
     init {
-        getFilterSettings()
+        loadFilterSettings()
     }
 
-    private fun getFilterSettings() {
-        currentFilterSettings = filterInteractor.getFilterOptions()
-        filterStateLiveData.value = currentFilterSettings
+    private fun loadFilterSettings() {
+        val filter = filterInteractor.getFilterOptions()
+        updateScreenState(filter)
     }
 
     fun clearFilter() {
-        currentFilterSettings = FilterSettings()
-        updateFilter()
+        val emptyFilter = FilterSettings()
+        filterInteractor.saveFilterOptions(emptyFilter)
+        updateScreenState(emptyFilter)
     }
 
     fun updateOnlyWithSalary(isChecked: Boolean) {
-        currentFilterSettings = currentFilterSettings.copy(onlyWithSalary = isChecked)
-        updateFilter()
+        val currentFilter = filterInteractor.getFilterOptions()
+        val updatedFilter = currentFilter.copy(onlyWithSalary = isChecked)
+        saveAndUpdate(updatedFilter)
     }
 
     fun updateSalary(salary: String) {
+        val currentFilter = filterInteractor.getFilterOptions()
         val salaryValue = salary.takeIf { it.isNotBlank() }?.toIntOrNull()
-        currentFilterSettings = currentFilterSettings.copy(salary = salaryValue)
-        updateFilter()
+        val updatedFilter = currentFilter.copy(salary = salaryValue)
+        saveAndUpdate(updatedFilter)
     }
 
-    private fun updateFilter() {
-        filterInteractor.saveFilterOptions(currentFilterSettings)
-        filterStateLiveData.value = currentFilterSettings
+    private fun saveAndUpdate(filter: FilterSettings) {
+        filterInteractor.saveFilterOptions(filter)
+        updateScreenState(filter)
+    }
+
+    private fun updateScreenState(filter: FilterSettings) {
+        val state = if (filterInteractor.hasActiveFilters()) {
+            FilterScreenState.Content(filter)
+        } else {
+            FilterScreenState.Empty
+        }
+        filterStateLiveData.value = state
     }
 }

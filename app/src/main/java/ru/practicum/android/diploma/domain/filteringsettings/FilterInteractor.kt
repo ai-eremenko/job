@@ -5,4 +5,5 @@ import ru.practicum.android.diploma.domain.filteringsettings.models.FilterSettin
 interface FilterInteractor {
     fun getFilterOptions(): FilterSettings
     fun saveFilterOptions(filter: FilterSettings)
+    fun hasActiveFilters(): Boolean
 }

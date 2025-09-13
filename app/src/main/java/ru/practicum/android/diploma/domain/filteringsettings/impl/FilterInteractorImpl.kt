@@ -14,4 +14,9 @@ class FilterInteractorImpl(
     override fun saveFilterOptions(filter: FilterSettings) {
         repository.saveFilterOptions(filter)
     }
+
+    override fun hasActiveFilters(): Boolean {
+        val filter = repository.getFilterOptions()
+        return filter.areaId != null || filter.industryId != null || filter.salary != null || filter.onlyWithSalary
+    }
 }

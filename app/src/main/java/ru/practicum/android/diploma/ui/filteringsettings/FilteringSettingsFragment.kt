@@ -17,6 +17,7 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFilteringSettingsBinding
 import ru.practicum.android.diploma.domain.filteringsettings.models.FilterSettings
 import ru.practicum.android.diploma.presentation.filteringsettings.FilterViewModel
+import ru.practicum.android.diploma.presentation.filteringsettings.models.FilterScreenState
 import ru.practicum.android.diploma.ui.root.NavigationVisibilityController
 
 class FilteringSettingsFragment : Fragment() {
@@ -24,7 +25,14 @@ class FilteringSettingsFragment : Fragment() {
     private var _binding: FragmentFilteringSettingsBinding? = null
     private val binding get() = _binding!!
     private val viewModel by viewModel<FilterViewModel>()
-    private lateinit var simpleTextWatcher: TextWatcher
+    private val simpleTextWatcher = object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            binding.clearIcon.visibility = clearButtonVisibility(s)
+        }
+
+        override fun afterTextChanged(s: Editable?) {}
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -76,24 +84,15 @@ class FilteringSettingsFragment : Fragment() {
     }
 
     private fun setupObserves() {
-        viewModel.getFilterStateLiveData().observe(viewLifecycleOwner) {
-            setupContent(it)
+        viewModel.getFilterStateLiveData().observe(viewLifecycleOwner) { state ->
+            when (state) {
+                is FilterScreenState.Content -> showContent(state.filter)
+                FilterScreenState.Empty -> showEmptyState()
+            }
         }
     }
 
     private fun setupSalaryListener() {
-        simpleTextWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                binding.clearIcon.visibility = clearButtonVisibility(s)
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-            }
-        }
-
         simpleTextWatcher.let { binding.expectedSalary.addTextChangedListener(it) }
 
         binding.expectedSalary.setOnEditorActionListener { _, actionId, _ ->
@@ -119,34 +118,36 @@ class FilteringSettingsFragment : Fragment() {
         }
     }
 
-    private fun setupContent(filter: FilterSettings) {
-        showContent(filter)
-        updateButtonsVisibility(filter.checkActiveFilters())
+    private fun showEmptyState() {
+        with(binding) {
+            etWorkplace.setText("")
+            arrowForward.setImageResource(R.drawable.ic_arrow_forward)
+
+            etIndustry.setText("")
+            arrowForward2.setImageResource(R.drawable.ic_arrow_forward)
+
+            expectedSalary.setText("")
+            materialCheckBox.isChecked = false
+        }
+        updateButtonsVisibility(false)
     }
 
     private fun showContent(filter: FilterSettings) {
         with(binding) {
             etWorkplace.setText(filter.areaName ?: "")
-            arrowForward.setImageResource(
-                if (filter.areaName != null) {
-                    R.drawable.ic_close
-                } else {
-                    R.drawable.ic_arrow_forward
-                }
-            )
+            arrowForward.setImageResource(getArrowIcon(filter.areaName))
 
             etIndustry.setText(filter.industryName ?: "")
-            arrowForward2.setImageResource(
-                if (filter.industryName != null) {
-                    R.drawable.ic_close
-                } else {
-                    R.drawable.ic_arrow_forward
-                }
-            )
+            arrowForward2.setImageResource(getArrowIcon(filter.industryName))
 
             expectedSalary.setText(filter.salary?.toString() ?: "")
             materialCheckBox.isChecked = filter.onlyWithSalary
         }
+        updateButtonsVisibility(true)
+    }
+
+    private fun getArrowIcon(text: String?): Int {
+        return if (text != null) R.drawable.ic_close else R.drawable.ic_arrow_forward
     }
 
     private fun updateButtonsVisibility(isFilterApplied: Boolean) {
