@@ -107,10 +107,13 @@ class SearchFragment : Fragment() {
 
         searchEditTextCreate()
         vacancyListViewCreate()
-        setupListeners()
 
         viewModel.observeState().observe(viewLifecycleOwner) {
             render(it)
+        }
+
+        viewModel.getFilterState().observe(viewLifecycleOwner) { hasActiveFilters ->
+            updateFilterIcon(hasActiveFilters)
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -146,10 +149,9 @@ class SearchFragment : Fragment() {
         }
     }
 
-    private fun setupListeners() {
-        binding.icFilter.setOnClickListener {
-            findNavController().navigate(SearchFragmentDirections.actionMainFragmentToFilteringSettingsFragment())
-        }
+    override fun onResume() {
+        super.onResume()
+        viewModel.updateFilterState()
     }
 
     override fun onDestroyView() {
@@ -220,6 +222,15 @@ class SearchFragment : Fragment() {
         binding.searchStatus.isVisible = false
         binding.errorPlaceholder.isVisible = false
         binding.searchScreenCover.isVisible = false
+    }
+
+    private fun updateFilterIcon(hasActiveFilters: Boolean) {
+        val iconRes = if (hasActiveFilters) {
+            R.drawable.ic_filter_on
+        } else {
+            R.drawable.ic_filter_off
+        }
+        binding.icFilter.setImageResource(iconRes)
     }
 
     companion object {
