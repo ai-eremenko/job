@@ -10,7 +10,7 @@ class AreasInteractorImpl(
     private val repository: AreasRepository
 ) : AreasInteractor {
     override suspend fun getCountries(): Resource<List<Area>> {
-        return when(val result = repository.getAreas()) {
+        return when (val result = repository.getAreas()) {
             is Resource.Success -> {
                 Resource.Success(result.data?.filter { it.parentId == null }.orEmpty())
             }
@@ -21,7 +21,7 @@ class AreasInteractorImpl(
     }
 
     override suspend fun getAreasForCountry(areaParentId: Int): Resource<List<Area>> {
-        return when(val result = repository.getAreas()) {
+        return when (val result = repository.getAreas()) {
             is Resource.Success -> {
                 Resource.Success(result.data?.firstOrNull { it.parentId == areaParentId }?.areas.orEmpty())
             }

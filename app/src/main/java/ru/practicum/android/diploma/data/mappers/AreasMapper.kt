@@ -5,7 +5,7 @@ import ru.practicum.android.diploma.domain.areas.models.Area
 
 object AreasMapper {
 
-    fun List<FilterAreaDto>.mapToDomain() : List<Area> {
+    fun List<FilterAreaDto>.mapToDomain(): List<Area> {
         return this.map {
             Area(
                 id = it.id,
