@@ -7,7 +7,7 @@ import ru.practicum.android.diploma.domain.filteringsettings.models.FilterSettin
 class FilterInteractorImpl(
     val repository: FilterRepository,
 ) : FilterInteractor {
-    override fun getFilterOptions(): FilterSettings? {
+    override fun getFilterOptions(): FilterSettings {
         return repository.getFilterOptions()
     }
 
@@ -15,8 +15,8 @@ class FilterInteractorImpl(
         repository.saveFilterOptions(filter)
     }
 
-    override fun clearFilterOptions() {
-        repository.clearFilterOptions()
+    override fun hasActiveFilters(): Boolean {
+        val filter = repository.getFilterOptions()
+        return filter.areaId != null || filter.industryId != null || filter.salary != null || filter.onlyWithSalary
     }
-
 }

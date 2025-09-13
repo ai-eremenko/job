@@ -107,6 +107,7 @@ class SearchFragment : Fragment() {
 
         searchEditTextCreate()
         vacancyListViewCreate()
+        setupListeners()
 
         viewModel.observeState().observe(viewLifecycleOwner) {
             render(it)
@@ -142,6 +143,12 @@ class SearchFragment : Fragment() {
                         ).show()
                     }
                 }
+        }
+    }
+
+    private fun setupListeners() {
+        binding.icFilter.setOnClickListener {
+            findNavController().navigate(SearchFragmentDirections.actionMainFragmentToFilteringSettingsFragment())
         }
     }
 
