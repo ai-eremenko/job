@@ -16,7 +16,7 @@ import ru.practicum.android.diploma.util.debounce
 class SearchViewModel(
     private val searchInteractor: SearchInteractor,
     private val filterInteractor: FilterInteractor
-    ) : ViewModel() {
+) : ViewModel() {
 
     private val stateLiveData = MutableLiveData<SearchScreenState>()
     fun observeState(): LiveData<SearchScreenState> = stateLiveData
@@ -41,6 +41,7 @@ class SearchViewModel(
     private fun checkFilterState() {
         filterState.value = filterInteractor.hasActiveFilters()
     }
+
     fun searchDebounce(changedText: String) {
         if (latestSearchText != changedText) {
             latestSearchText = changedText
@@ -64,6 +65,7 @@ class SearchViewModel(
                                 vacancyChannel.send(it.data.items)
                             }
                         }
+
                         is Resource.Error<*> -> it.message?.let { element -> toastChannel.send(element) }
                     }
                 }
@@ -89,6 +91,7 @@ class SearchViewModel(
                                     totalPages = it.data.pages
                                 }
                             }
+
                             is Resource.Error<*> -> renderState(SearchScreenState.NetworkError)
                         }
                     }
