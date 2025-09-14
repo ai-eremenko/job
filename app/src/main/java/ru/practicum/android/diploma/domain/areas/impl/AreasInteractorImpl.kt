@@ -9,25 +9,12 @@ import ru.practicum.android.diploma.util.ResponseStatus
 class AreasInteractorImpl(
     private val repository: AreasRepository
 ) : AreasInteractor {
-    override suspend fun getCountries(): Resource<List<Area>> {
-        return when (val result = repository.getAreas()) {
-            is Resource.Success -> {
-                Resource.Success(result.data?.filter { it.parentId == null }.orEmpty())
-            }
-            is Resource.Error -> {
-                Resource.Error(ResponseStatus.NOT_FOUND)
-            }
-        }
-    }
+    private var cachedResult: Resource<List<Area>>? = null
 
-    override suspend fun getAreasForCountry(areaParentId: Int): Resource<List<Area>> {
-        return when (val result = repository.getAreas()) {
-            is Resource.Success -> {
-                Resource.Success(result.data?.firstOrNull { it.parentId == areaParentId }?.areas.orEmpty())
-            }
-            is Resource.Error -> {
-                Resource.Error(ResponseStatus.NOT_FOUND)
-            }
+    override suspend fun getAreas(): Resource<List<Area>> {
+        if (cachedResult == null) {
+            cachedResult = repository.getAreas()
         }
+        return cachedResult!!
     }
 }
