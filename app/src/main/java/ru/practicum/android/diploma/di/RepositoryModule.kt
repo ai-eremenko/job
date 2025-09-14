@@ -3,11 +3,13 @@ package ru.practicum.android.diploma.di
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import ru.practicum.android.diploma.data.ResourcesProviderRepositoryImpl
+import ru.practicum.android.diploma.data.areas.AreasRepositoryImpl
 import ru.practicum.android.diploma.data.favorite.impl.FavoriteRepositoryImpl
 import ru.practicum.android.diploma.data.filteringsettings.FilterRepositoryImpl
 import ru.practicum.android.diploma.data.search.SearchRepositoryImpl
 import ru.practicum.android.diploma.data.sharing.SharingRepositoryImpl
 import ru.practicum.android.diploma.data.vacancy.VacancyRepositoryImpl
+import ru.practicum.android.diploma.domain.areas.AreasRepository
 import ru.practicum.android.diploma.domain.favorite.FavoriteRepository
 import ru.practicum.android.diploma.domain.filteringsettings.FilterRepository
 import ru.practicum.android.diploma.domain.search.SearchRepository
@@ -39,6 +41,10 @@ val repositoryModule = module {
 
     factory<FilterRepository> {
         FilterRepositoryImpl(get())
+    }
+
+    factory<AreasRepository> {
+        AreasRepositoryImpl(get())
     }
 
 }
