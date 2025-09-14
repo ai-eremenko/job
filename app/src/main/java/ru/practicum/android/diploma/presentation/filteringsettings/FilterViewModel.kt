@@ -10,7 +10,6 @@ import ru.practicum.android.diploma.presentation.filteringsettings.models.Filter
 class FilterViewModel(
     private val filterInteractor: FilterInteractor
 ) : ViewModel() {
-
     private val filterStateLiveData = MutableLiveData<FilterScreenState>()
     fun getFilterStateLiveData(): LiveData<FilterScreenState> = filterStateLiveData
 
