@@ -4,7 +4,6 @@ import ru.practicum.android.diploma.domain.areas.AreasInteractor
 import ru.practicum.android.diploma.domain.areas.AreasRepository
 import ru.practicum.android.diploma.domain.areas.models.Area
 import ru.practicum.android.diploma.util.Resource
-import ru.practicum.android.diploma.util.ResponseStatus
 
 class AreasInteractorImpl(
     private val repository: AreasRepository
@@ -12,9 +11,6 @@ class AreasInteractorImpl(
     private var cachedResult: Resource<List<Area>>? = null
 
     override suspend fun getAreas(): Resource<List<Area>> {
-        if (cachedResult == null) {
-            cachedResult = repository.getAreas()
-        }
-        return cachedResult!!
+        return cachedResult ?: repository.getAreas().also { cachedResult = it }
     }
 }
