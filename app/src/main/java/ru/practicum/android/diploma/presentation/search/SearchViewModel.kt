@@ -42,7 +42,11 @@ class SearchViewModel(
         filterState.value = filterInteractor.hasActiveFilters()
     }
 
-    fun searchDebounce(changedText: String) {
+    fun searchDebounce(changedText: String, force: Boolean = false) {
+        if (force) {
+            latestSearchText = null
+        }
+
         if (latestSearchText != changedText) {
             latestSearchText = changedText
             vacanciesSearchDebounce(changedText)
