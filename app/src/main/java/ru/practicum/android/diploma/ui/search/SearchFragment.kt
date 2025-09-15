@@ -105,13 +105,9 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        searchEditTextCreate()
-        vacancyListViewCreate()
+        setupSearchViews()
+        setupObserves()
         setupListeners()
-
-        viewModel.observeState().observe(viewLifecycleOwner) {
-            render(it)
-        }
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.vacancyChannel
@@ -122,10 +118,6 @@ class SearchFragment : Fragment() {
                     isNextPageLoading = false
                     binding.progressBar.isVisible = false
                 }
-        }
-
-        binding.icFilter.setOnClickListener {
-            findNavController().navigate(R.id.action_mainFragment_to_filteringSettingsFragment)
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -146,9 +138,24 @@ class SearchFragment : Fragment() {
         }
     }
 
+    private fun setupObserves() {
+        viewModel.observeState().observe(viewLifecycleOwner) {
+            render(it)
+        }
+    }
+
+    private fun setupSearchViews() {
+        searchEditTextCreate()
+        vacancyListViewCreate()
+    }
+
     private fun setupListeners() {
         binding.icFilter.setOnClickListener {
             findNavController().navigate(SearchFragmentDirections.actionMainFragmentToFilteringSettingsFragment())
+        }
+
+        binding.icFilter.setOnClickListener {
+            findNavController().navigate(R.id.action_mainFragment_to_filteringSettingsFragment)
         }
     }
 
