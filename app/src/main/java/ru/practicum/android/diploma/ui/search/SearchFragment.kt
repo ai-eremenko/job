@@ -110,23 +110,6 @@ class SearchFragment : Fragment() {
         setupSearchViews()
         setupObserves()
         setupListeners()
-        searchEditTextCreate()
-        vacancyListViewCreate()
-
-        viewModel.observeState().observe(viewLifecycleOwner) {
-            render(it)
-        }
-
-        viewModel.getFilterState().observe(viewLifecycleOwner) { hasActiveFilters ->
-            updateFilterIcon(hasActiveFilters)
-        }
-
-        sharedViewModel.filtersUpdated.observe(viewLifecycleOwner) { updated ->
-            if (updated && searchEditTextValue.isNotEmpty()) {
-                viewModel.searchDebounce(searchEditTextValue, true)
-                sharedViewModel.resetFiltersNotification()
-            }
-        }
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.vacancyChannel
@@ -161,6 +144,17 @@ class SearchFragment : Fragment() {
         viewModel.observeState().observe(viewLifecycleOwner) {
             render(it)
         }
+
+        sharedViewModel.filtersUpdated.observe(viewLifecycleOwner) { updated ->
+            if (updated && searchEditTextValue.isNotEmpty()) {
+                viewModel.searchDebounce(searchEditTextValue, true)
+                sharedViewModel.resetFiltersNotification()
+            }
+        }
+
+        viewModel.getFilterState().observe(viewLifecycleOwner) { hasActiveFilters ->
+            updateFilterIcon(hasActiveFilters)
+        }
     }
 
     private fun setupSearchViews() {
@@ -176,6 +170,8 @@ class SearchFragment : Fragment() {
         binding.icFilter.setOnClickListener {
             findNavController().navigate(R.id.action_mainFragment_to_filteringSettingsFragment)
         }
+    }
+
     override fun onResume() {
         super.onResume()
         viewModel.updateFilterState()
