@@ -54,12 +54,15 @@ class FilteringSettingsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (activity as? NavigationVisibilityController)?.setNavigationVisibility(false)
 
         setupObserves()
         setupListeners()
     }
 
+    override fun onResume() {
+        super.onResume()
+        (activity as? NavigationVisibilityController)?.setNavigationVisibility(false)
+    }
     private fun setupListeners() {
         binding.toolbar.setNavigationOnClickListener {
             findNavController().navigateUp()
