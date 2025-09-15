@@ -40,8 +40,4 @@ data class FavoriteVacancyEntity(
         isFavorite = false,
         urlLink = ""
     )
-
-    fun setFavorite(isFavorite: Boolean): FavoriteVacancyEntity {
-        return this.copy(isFavorite = isFavorite)
-    }
 }

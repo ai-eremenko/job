@@ -13,10 +13,6 @@ data class VacancyPresent(
     val employerName: String,
     val skills: String?,
     val url: String?,
-    var isFavorite: Boolean,
+    val isFavorite: Boolean,
     val urlLink: String
-) {
-    fun copyWithFavorite(isFavorite: Boolean): VacancyPresent {
-        return this.copy(isFavorite = isFavorite)
-    }
-}
+)
