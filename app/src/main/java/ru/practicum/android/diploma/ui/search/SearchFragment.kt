@@ -107,23 +107,9 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        searchEditTextCreate()
-        vacancyListViewCreate()
-
-        viewModel.observeState().observe(viewLifecycleOwner) {
-            render(it)
-        }
-
-        viewModel.getFilterState().observe(viewLifecycleOwner) { hasActiveFilters ->
-            updateFilterIcon(hasActiveFilters)
-        }
-
-        sharedViewModel.filtersUpdated.observe(viewLifecycleOwner) { updated ->
-            if (updated && searchEditTextValue.isNotEmpty()) {
-                viewModel.searchDebounce(searchEditTextValue, true)
-                sharedViewModel.resetFiltersNotification()
-            }
-        }
+        setupSearchViews()
+        setupObserves()
+        setupListeners()
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.vacancyChannel
@@ -134,10 +120,6 @@ class SearchFragment : Fragment() {
                     isNextPageLoading = false
                     binding.progressBar.isVisible = false
                 }
-        }
-
-        binding.icFilter.setOnClickListener {
-            findNavController().navigate(R.id.action_mainFragment_to_filteringSettingsFragment)
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -155,6 +137,38 @@ class SearchFragment : Fragment() {
                         ).show()
                     }
                 }
+        }
+    }
+
+    private fun setupObserves() {
+        viewModel.observeState().observe(viewLifecycleOwner) {
+            render(it)
+        }
+
+        sharedViewModel.filtersUpdated.observe(viewLifecycleOwner) { updated ->
+            if (updated && searchEditTextValue.isNotEmpty()) {
+                viewModel.searchDebounce(searchEditTextValue, true)
+                sharedViewModel.resetFiltersNotification()
+            }
+        }
+
+        viewModel.getFilterState().observe(viewLifecycleOwner) { hasActiveFilters ->
+            updateFilterIcon(hasActiveFilters)
+        }
+    }
+
+    private fun setupSearchViews() {
+        searchEditTextCreate()
+        vacancyListViewCreate()
+    }
+
+    private fun setupListeners() {
+        binding.icFilter.setOnClickListener {
+            findNavController().navigate(SearchFragmentDirections.actionMainFragmentToFilteringSettingsFragment())
+        }
+
+        binding.icFilter.setOnClickListener {
+            findNavController().navigate(R.id.action_mainFragment_to_filteringSettingsFragment)
         }
     }
 
