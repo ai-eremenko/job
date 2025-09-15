@@ -23,21 +23,4 @@ data class FavoriteVacancyEntity(
     val isFavorite: Boolean = false,
     val urlLink: String
 
-) {
-    constructor() : this(
-        id = "",
-        name = "",
-        description = "",
-        salary = "",
-        city = "",
-        experience = "",
-        schedule = "",
-        employment = "",
-        contacts = null,
-        employer = "",
-        skills = null,
-        url = "",
-        isFavorite = false,
-        urlLink = ""
-    )
-}
+)
