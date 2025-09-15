@@ -3,6 +3,8 @@ package ru.practicum.android.diploma.di
 import org.koin.dsl.module
 import ru.practicum.android.diploma.domain.favorite.FavoriteInteractor
 import ru.practicum.android.diploma.domain.favorite.FavoriteInteractorImpl
+import ru.practicum.android.diploma.domain.industrychoice.IndustryInteractor
+import ru.practicum.android.diploma.domain.industrychoice.impl.IndustryInteractorImpl
 import ru.practicum.android.diploma.domain.filteringsettings.FilterInteractor
 import ru.practicum.android.diploma.domain.filteringsettings.impl.FilterInteractorImpl
 import ru.practicum.android.diploma.domain.search.SearchInteractor
@@ -38,5 +40,9 @@ val interactorModule = module {
 
     factory<FilterInteractor> {
         FilterInteractorImpl(get())
+    }
+
+    factory<IndustryInteractor> {
+        IndustryInteractorImpl(get(), get())
     }
 }
