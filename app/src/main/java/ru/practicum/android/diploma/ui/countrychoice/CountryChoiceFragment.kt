@@ -1,51 +1,51 @@
 package ru.practicum.android.diploma.ui.countrychoice
 
-import androidx.fragment.app.Fragment
-
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.databinding.FragmentCountryChoiceBinding
+import ru.practicum.android.diploma.domain.country.Area
 import ru.practicum.android.diploma.ui.countrychoice.adapter.AreaAdapter
-import ru.practicum.android.diploma.ui.countrychoice.adapter.AreaItemUi
 
 class CountryChoiceFragment : Fragment() {
 
-    private val recycler: RecyclerView by lazy {
-        requireView().findViewById(R.id.recyclerAreas)
-    }
+    private var _binding: FragmentCountryChoiceBinding? = null
+    private val binding get() = _binding!!
 
-    private val adapter: AreaAdapter by lazy {
-        AreaAdapter(
-            emptyList()
-        ) { item ->
-            // обработка выбора страны
-        }
-    }
+    private lateinit var adapter: AreaAdapter
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+        inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_country_choice, container, false)
+    ): View {
+        _binding = FragmentCountryChoiceBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        recycler.layoutManager = LinearLayoutManager(requireContext())
-        recycler.adapter = adapter
+        adapter = AreaAdapter { item ->
+            // обработка выбора страны/региона
+        }
 
-        adapter.update(
-            listOf(
-                AreaItemUi("1", "Россия"),
-                AreaItemUi("2", "США"),
-                AreaItemUi("3", "Германия")
+        binding.recyclerAreas.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerAreas.adapter = adapter
+
+        adapter.setItems(
+            mutableListOf(
+                Area(1, null, "Россия"),
+                Area(2, null, "США"),
+                Area(3, null, "Германия")
             )
         )
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

@@ -1,21 +1,19 @@
 package ru.practicum.android.diploma.ui.countrychoice.adapter
 
-import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
+
 import androidx.recyclerview.widget.RecyclerView
-import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.databinding.AreaItemBinding
+import ru.practicum.android.diploma.domain.country.Area
 
-class AreaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class AreaViewHolder(
+    private val binding: AreaItemBinding
+) : RecyclerView.ViewHolder(binding.root) {
 
-    private val title: TextView = itemView.findViewById(R.id.area_text)
-    private val button: ImageView = itemView.findViewById(R.id.area_btn)
+    fun bind(item: Area, onClick: (Area) -> Unit) {
+        binding.areaText.text = item.name
+        // Можно менять иконку, если нужно: item.isSelected
 
-    fun bind(item: AreaItemUi, onClick: (AreaItemUi) -> Unit) {
-        title.text = item.name
-        // Можно использовать isSelected для изменения иконки
-
-        itemView.setOnClickListener { onClick(item) }
-        button.setOnClickListener { onClick(item) }
+        binding.root.setOnClickListener { onClick(item) }
+        binding.areaBtn.setOnClickListener { onClick(item) }
     }
 }

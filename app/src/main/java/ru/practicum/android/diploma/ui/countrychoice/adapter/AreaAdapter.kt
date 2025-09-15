@@ -3,17 +3,20 @@ package ru.practicum.android.diploma.ui.countrychoice.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.databinding.AreaItemBinding
+import ru.practicum.android.diploma.domain.country.Area
 
 class AreaAdapter(
-    private var items: List<AreaItemUi> = emptyList(),
-    private val onClick: (AreaItemUi) -> Unit
+    private val onClick: (Area) -> Unit
 ) : RecyclerView.Adapter<AreaViewHolder>() {
 
+    private var items: MutableList<Area> = mutableListOf()
+    private val originalList: MutableList<Area> = mutableListOf()
+    private val filteredList: MutableList<Area> = mutableListOf()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AreaViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.area_item, parent, false)
-        return AreaViewHolder(view)
+        val binding = AreaItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return AreaViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: AreaViewHolder, position: Int) {
@@ -22,8 +25,30 @@ class AreaAdapter(
 
     override fun getItemCount(): Int = items.size
 
-    fun update(newItems: List<AreaItemUi>) {
+    fun setItems(newItems: MutableList<Area>) {
         items = newItems
         notifyDataSetChanged()
+        originalList.clear()
+        originalList.addAll(newItems)
+    }
+
+    private fun updateDisplayList(updatedList: List<Area>) {
+        items.clear()
+        items.addAll(updatedList)
+        notifyDataSetChanged()
+    }
+
+    fun filter(query: String?) {
+        filteredList.clear()
+        if (query.isNullOrEmpty()) {
+            updateDisplayList(originalList)
+        } else {
+            for (item in originalList) {
+                if (item.name.contains(query, ignoreCase = true)) {
+                    filteredList.add(item)
+                }
+            }
+            updateDisplayList(filteredList)
+        }
     }
 }
