@@ -13,8 +13,14 @@ import ru.practicum.android.diploma.ui.industrychoice.adapter.IndustryItemUi
 
 class IndustryChoiceFragment : Fragment() {
 
-    private lateinit var recycler: RecyclerView
-    private lateinit var adapter: IndustryAdapter
+    private val adapter: IndustryAdapter by lazy {
+        IndustryAdapter(emptyList()) { item ->
+            // обработка выбора отрасли
+        }
+    }
+    private val recycler: RecyclerView by lazy {
+        requireView().findViewById<RecyclerView>(R.id.recyclerIndustries)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,11 +32,8 @@ class IndustryChoiceFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        recycler = view.findViewById(R.id.recyclerIndustries)
-
-        adapter = IndustryAdapter(emptyList()) { item ->
-            // TODO: обработка выбора отрасли
-        }
+        recycler.layoutManager = LinearLayoutManager(requireContext())
+        recycler.adapter = adapter
 
         recycler.layoutManager = LinearLayoutManager(requireContext())
         recycler.adapter = adapter
