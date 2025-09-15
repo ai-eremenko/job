@@ -15,10 +15,15 @@ class IndustryChoiceFragment : Fragment() {
     private var _binding: FragmentIndustryChoiceBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var adapter: IndustryAdapter
+    private val adapter: IndustryAdapter by lazy {
+        IndustryAdapter { item: IndustryItemUi ->
+            // обработка выбора отрасли
+        }
+    }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentIndustryChoiceBinding.inflate(inflater, container, false)
@@ -27,10 +32,6 @@ class IndustryChoiceFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        adapter = IndustryAdapter { item ->
-            // Обработка выбора отрасли
-        }
 
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = adapter
@@ -49,3 +50,4 @@ class IndustryChoiceFragment : Fragment() {
         _binding = null
     }
 }
+
