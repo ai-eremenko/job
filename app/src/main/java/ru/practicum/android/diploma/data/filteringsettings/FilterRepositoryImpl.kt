@@ -7,15 +7,11 @@ import ru.practicum.android.diploma.domain.filteringsettings.models.FilterSettin
 class FilterRepositoryImpl(
     val storage: Storage
 ) : FilterRepository {
-    override fun getFilterOptions(): FilterSettings? {
+    override fun getFilterOptions(): FilterSettings {
         return storage.getFilterOptions()
     }
 
     override fun saveFilterOptions(filter: FilterSettings) {
         storage.saveFilterOptions(filter)
-    }
-
-    override fun clearFilterOptions() {
-        storage.saveFilterOptions(null)
     }
 }
