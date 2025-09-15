@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import ru.practicum.android.diploma.databinding.FragmentCountryChoiceBinding
-import ru.practicum.android.diploma.domain.country.Area
+import ru.practicum.android.diploma.domain.areas.models.Area
 import ru.practicum.android.diploma.ui.countrychoice.adapter.AreaAdapter
 
 class CountryChoiceFragment : Fragment() {
@@ -38,9 +38,9 @@ class CountryChoiceFragment : Fragment() {
 
         adapter.setItems(
             mutableListOf(
-                Area(ID_RUSSIA, null, "Россия"),
-                Area(ID_USA, null, "США"),
-                Area(ID_GERMANY, null, "Германия")
+                Area(ID_RUSSIA, "Россия", null),
+                Area(ID_USA, "США", null),
+                Area(ID_GERMANY, "Германия", null)
             )
         )
     }
