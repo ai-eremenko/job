@@ -9,6 +9,7 @@ import ru.practicum.android.diploma.presentation.filteringsettings.SharedViewMod
 import ru.practicum.android.diploma.presentation.root.RootViewModel
 import ru.practicum.android.diploma.presentation.search.SearchViewModel
 import ru.practicum.android.diploma.presentation.vacancy.VacancyViewModel
+import ru.practicum.android.diploma.presentation.workplacechoice.WorkplaceViewModel
 
 val viewModelModule = module {
 
@@ -31,5 +32,9 @@ val viewModelModule = module {
 
     viewModel {
         SharedViewModel()
+    }
+
+    viewModel {
+        WorkplaceViewModel(get())
     }
 }
