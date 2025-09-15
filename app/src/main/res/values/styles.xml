@@ -135,6 +135,7 @@
         <item name="boxStrokeWidth">0dp</item>
     </style>
 
+
     <style name="image_filter">
         <item name="backgroundTint">?attr/backgroundColor</item>
         <item name="android:layout_width">wrap_content</item>
