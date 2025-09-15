@@ -15,7 +15,9 @@ class IndustryAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IndustryViewHolder {
         val binding = IndustryItemBinding.inflate(
-            LayoutInflater.from(parent.context), parent, false
+            LayoutInflater.from(parent.context),
+            parent,
+            false
         )
         return IndustryViewHolder(binding)
     }
