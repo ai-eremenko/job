@@ -15,10 +15,15 @@ class CountryChoiceFragment : Fragment() {
     private var _binding: FragmentCountryChoiceBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var adapter: AreaAdapter
+    private val adapter: AreaAdapter by lazy {
+        AreaAdapter { item ->
+            // обработка выбора страны/региона
+        }
+    }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentCountryChoiceBinding.inflate(inflater, container, false)
@@ -28,20 +33,23 @@ class CountryChoiceFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = AreaAdapter { item ->
-            // обработка выбора страны/региона
-        }
 
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = adapter
 
         adapter.setItems(
             mutableListOf(
-                Area(1, null, "Россия"),
-                Area(2, null, "США"),
-                Area(3, null, "Германия")
+                Area(ID_RUSSIA, null, "Россия"),
+                Area(ID_USA, null, "США"),
+                Area(ID_GERMANY, null, "Германия")
             )
         )
+    }
+
+    companion object {
+        private const val ID_RUSSIA = 1
+        private const val ID_USA = 2
+        private const val ID_GERMANY = 3
     }
 
     override fun onDestroyView() {

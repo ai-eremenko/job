@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.ui.countrychoice.adapter
 
-
 import androidx.recyclerview.widget.RecyclerView
 import ru.practicum.android.diploma.databinding.AreaItemBinding
 import ru.practicum.android.diploma.domain.country.Area
