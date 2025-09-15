@@ -40,6 +40,7 @@ class WorkplaceChoiceFragment : Fragment() {
 
     private fun setupListeners() {
         binding.toolbar.setNavigationOnClickListener {
+            viewModel.resetToSavedSettings()
             findNavController().navigateUp()
         }
 
