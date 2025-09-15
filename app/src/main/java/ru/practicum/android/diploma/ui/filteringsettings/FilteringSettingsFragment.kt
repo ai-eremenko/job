@@ -27,11 +27,17 @@ class FilteringSettingsFragment : Fragment() {
     private var _binding: FragmentFilteringSettingsBinding? = null
     private val binding get() = _binding!!
     private val viewModel by viewModel<FilterViewModel>()
+    private var hasUserInteracted = false
+    private var isInitialLoad = true
     private val sharedViewModel: SharedViewModel by activityViewModel()
     private val simpleTextWatcher = object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             binding.clearIcon.visibility = clearButtonVisibility(s)
+            if (!isInitialLoad) {
+                hasUserInteracted = true
+                updateButtonsVisibility()
+            }
         }
 
         override fun afterTextChanged(s: Editable?) = Unit
@@ -52,7 +58,6 @@ class FilteringSettingsFragment : Fragment() {
 
         setupObserves()
         setupListeners()
-        setupSalaryListener()
     }
 
     private fun setupListeners() {
@@ -62,6 +67,7 @@ class FilteringSettingsFragment : Fragment() {
 
         binding.applyButton.setOnClickListener {
             sharedViewModel.notifyFiltersApplied()
+            hasUserInteracted = false
             findNavController().navigateUp()
         }
 
@@ -71,6 +77,10 @@ class FilteringSettingsFragment : Fragment() {
 
         binding.materialCheckBox.setOnCheckedChangeListener { checkBox, isChecked ->
             binding.expectedSalary.clearFocus()
+            if (!isInitialLoad) {
+                hasUserInteracted = true
+                updateButtonsVisibility()
+            }
             viewModel.updateOnlyWithSalary(isChecked)
         }
 
@@ -85,14 +95,25 @@ class FilteringSettingsFragment : Fragment() {
                 .actionFilteringSettingsFragmentToIndustryChoiceFragment()
             findNavController().navigate(direction)
         }
+        setupSalaryListener()
     }
 
     private fun setupObserves() {
         viewModel.getFilterStateLiveData().observe(viewLifecycleOwner) { state ->
+            binding.expectedSalary.removeTextChangedListener(simpleTextWatcher)
             when (state) {
-                is FilterScreenState.Content -> showContent(state.filter)
-                FilterScreenState.Empty -> showEmptyState()
+                is FilterScreenState.Content -> {
+                    showContent(state.filter)
+                    updateButtonsVisibility()
+                }
+
+                FilterScreenState.Empty -> {
+                    showEmptyState()
+                    updateButtonsVisibility()
+                }
             }
+            binding.expectedSalary.addTextChangedListener(simpleTextWatcher)
+            isInitialLoad = false
         }
     }
 
@@ -133,11 +154,15 @@ class FilteringSettingsFragment : Fragment() {
             expectedSalary.setText("")
             materialCheckBox.isChecked = false
         }
-        updateButtonsVisibility(false)
     }
 
     private fun showContent(filter: FilterSettings) {
         with(binding) {
+            if (filter.areaName != null && filter.countryName != null) {
+                etWorkplace.setText(getString(R.string.area_string, filter.countryName, filter.areaName))
+            } else {
+                etWorkplace.setText(filter.countryName ?: "")
+            }
             etWorkplace.setText(filter.areaName ?: "")
             arrowForward.setImageResource(getArrowIcon(filter.areaName))
 
@@ -147,16 +172,16 @@ class FilteringSettingsFragment : Fragment() {
             expectedSalary.setText(filter.salary?.toString() ?: "")
             materialCheckBox.isChecked = filter.onlyWithSalary
         }
-        updateButtonsVisibility(true)
     }
 
     private fun getArrowIcon(text: String?): Int {
         return if (text != null) R.drawable.ic_close else R.drawable.ic_arrow_forward
     }
 
-    private fun updateButtonsVisibility(isFilterApplied: Boolean) {
-        binding.applyButton.isVisible = isFilterApplied
-        binding.resetButton.isVisible = isFilterApplied
+    private fun updateButtonsVisibility() {
+        val shouldShowButtons = hasUserInteracted
+        binding.applyButton.isVisible = shouldShowButtons
+        binding.resetButton.isVisible = shouldShowButtons
     }
 
     private fun clearButtonVisibility(s: CharSequence?): Int {
@@ -168,6 +193,10 @@ class FilteringSettingsFragment : Fragment() {
     }
 
     private fun updateSalary(salary: String) {
+        if (!isInitialLoad) {
+            hasUserInteracted = true
+            updateButtonsVisibility()
+        }
         viewModel.updateSalary(salary)
         hideKeyboard()
     }
