@@ -22,7 +22,7 @@ class FavoriteVacancyMapper {
             employment = vacancy.employment,
             contacts = vacancy.contacts?.let { gson.toJson(it) },
             employer = vacancy.employerName,
-            skills = vacancy.skills?.let { gson.toJson(it) },
+            skills = vacancy.skills,
             url = vacancy.url,
             isFavorite = vacancy.isFavorite,
             urlLink = vacancy.urlLink
@@ -41,9 +41,7 @@ class FavoriteVacancyMapper {
             employment = vacancy.employment,
             contacts = vacancy.contacts?.let { gson.fromJson(it, Contacts::class.java) },
             employerName = vacancy.employer,
-            skills = vacancy.skills?.let {
-                gson.fromJson(it, object : TypeToken<List<String>>() {}.type)
-            },
+            skills = vacancy.skills,
             url = vacancy.url,
             isFavorite = vacancy.isFavorite,
             urlLink = vacancy.urlLink

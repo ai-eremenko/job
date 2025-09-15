@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
@@ -17,13 +18,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
 import ru.practicum.android.diploma.domain.search.models.VacancyPreviewPresent
+import ru.practicum.android.diploma.presentation.filteringsettings.SharedViewModel
 import ru.practicum.android.diploma.presentation.search.SearchScreenState
 import ru.practicum.android.diploma.presentation.search.SearchViewModel
 import ru.practicum.android.diploma.ui.search.adapter.VacancyListAdapter
+import ru.practicum.android.diploma.util.ResponseStatus
 import ru.practicum.android.diploma.util.debounce
 
 class SearchFragment : Fragment() {
@@ -33,7 +37,7 @@ class SearchFragment : Fragment() {
     private var searchEditTextValue: String = SEARCH_TEXT_DEF
 
     private val viewModel: SearchViewModel by viewModel()
-
+    private val sharedViewModel: SharedViewModel by activityViewModel()
     private var isNextPageLoading = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -59,10 +63,10 @@ class SearchFragment : Fragment() {
                 if (dy > 0) {
                     val pos = (binding.recyclerView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
                     val itemsCount = vacancyAdapter.itemCount
-                    if (pos >= itemsCount - 1 && !isNextPageLoading) {
-                        viewModel.newPageRequest()
+                    if (pos >= itemsCount - 1 && !isNextPageLoading && viewModel.isMorePage()) {
                         binding.progressBar.isVisible = true
                         isNextPageLoading = true
+                        viewModel.newPageRequest()
                     }
                 }
             }
@@ -103,12 +107,9 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        searchEditTextCreate()
-        vacancyListViewCreate()
-
-        viewModel.observeState().observe(viewLifecycleOwner) {
-            render(it)
-        }
+        setupSearchViews()
+        setupObserves()
+        setupListeners()
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.vacancyChannel
@@ -120,6 +121,60 @@ class SearchFragment : Fragment() {
                     binding.progressBar.isVisible = false
                 }
         }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.toastChannel
+                .receiveAsFlow()
+                .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                .collect {
+                    if (it != ResponseStatus.SUCCESS) {
+                        isNextPageLoading = false
+                        binding.progressBar.isVisible = false
+                        Toast.makeText(
+                            requireContext(),
+                            requireContext().getString(R.string.error_list),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+        }
+    }
+
+    private fun setupObserves() {
+        viewModel.observeState().observe(viewLifecycleOwner) {
+            render(it)
+        }
+
+        sharedViewModel.filtersUpdated.observe(viewLifecycleOwner) { updated ->
+            if (updated && searchEditTextValue.isNotEmpty()) {
+                viewModel.searchDebounce(searchEditTextValue, true)
+                sharedViewModel.resetFiltersNotification()
+            }
+        }
+
+        viewModel.getFilterState().observe(viewLifecycleOwner) { hasActiveFilters ->
+            updateFilterIcon(hasActiveFilters)
+        }
+    }
+
+    private fun setupSearchViews() {
+        searchEditTextCreate()
+        vacancyListViewCreate()
+    }
+
+    private fun setupListeners() {
+        binding.icFilter.setOnClickListener {
+            findNavController().navigate(SearchFragmentDirections.actionMainFragmentToFilteringSettingsFragment())
+        }
+
+        binding.icFilter.setOnClickListener {
+            findNavController().navigate(R.id.action_mainFragment_to_filteringSettingsFragment)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.updateFilterState()
     }
 
     override fun onDestroyView() {
@@ -190,6 +245,15 @@ class SearchFragment : Fragment() {
         binding.searchStatus.isVisible = false
         binding.errorPlaceholder.isVisible = false
         binding.searchScreenCover.isVisible = false
+    }
+
+    private fun updateFilterIcon(hasActiveFilters: Boolean) {
+        val iconRes = if (hasActiveFilters) {
+            R.drawable.ic_filter_on
+        } else {
+            R.drawable.ic_filter_off
+        }
+        binding.icFilter.setImageResource(iconRes)
     }
 
     companion object {
