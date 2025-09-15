@@ -32,8 +32,8 @@ class IndustryChoiceFragment : Fragment() {
             // Обработка выбора отрасли
         }
 
-        binding.recyclerIndustries.layoutManager = LinearLayoutManager(requireContext())
-        binding.recyclerIndustries.adapter = adapter
+        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerView.adapter = adapter
 
         adapter.setItems(
             mutableListOf(
