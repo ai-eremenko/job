@@ -8,10 +8,12 @@ import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.areas.AreasInteractor
 import ru.practicum.android.diploma.domain.areas.models.Area
 import ru.practicum.android.diploma.presentation.countrychoice.models.CountryScreenState
+import ru.practicum.android.diploma.presentation.workplacechoice.WorkplaceViewModel
 import ru.practicum.android.diploma.util.Resource
 
 class CountryViewModel(
-    val interactor: AreasInteractor
+    val interactor: AreasInteractor,
+    val workplaceViewModel: WorkplaceViewModel
 ) : ViewModel() {
     private val screenState = MutableLiveData<CountryScreenState>()
     fun getScreenState(): LiveData<CountryScreenState> = screenState
@@ -38,7 +40,7 @@ class CountryViewModel(
     }
 
     fun saveCountry(area: Area) {
-
+        workplaceViewModel.setTempCountry(area.id, area.name)
     }
 
 }
