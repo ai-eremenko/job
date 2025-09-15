@@ -6,16 +6,23 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
+import ru.practicum.android.diploma.domain.filteringsettings.FilterInteractor
 import ru.practicum.android.diploma.domain.search.SearchInteractor
 import ru.practicum.android.diploma.domain.search.models.VacancyPreviewPresent
 import ru.practicum.android.diploma.util.Resource
 import ru.practicum.android.diploma.util.ResponseStatus
 import ru.practicum.android.diploma.util.debounce
 
-class SearchViewModel(private val searchInteractor: SearchInteractor) : ViewModel() {
+class SearchViewModel(
+    private val searchInteractor: SearchInteractor,
+    private val filterInteractor: FilterInteractor
+) : ViewModel() {
 
     private val stateLiveData = MutableLiveData<SearchScreenState>()
     fun observeState(): LiveData<SearchScreenState> = stateLiveData
+
+    private val filterState = MutableLiveData<Boolean>()
+    fun getFilterState(): LiveData<Boolean> = filterState
 
     private var latestSearchText: String? = null
 
@@ -27,7 +34,19 @@ class SearchViewModel(private val searchInteractor: SearchInteractor) : ViewMode
         searchRequest(changedText)
     }
 
-    fun searchDebounce(changedText: String) {
+    init {
+        checkFilterState()
+    }
+
+    private fun checkFilterState() {
+        filterState.value = filterInteractor.hasActiveFilters()
+    }
+
+    fun searchDebounce(changedText: String, force: Boolean = false) {
+        if (force) {
+            latestSearchText = null
+        }
+
         if (latestSearchText != changedText) {
             latestSearchText = changedText
             vacanciesSearchDebounce(changedText)
@@ -50,6 +69,7 @@ class SearchViewModel(private val searchInteractor: SearchInteractor) : ViewMode
                                 vacancyChannel.send(it.data.items)
                             }
                         }
+
                         is Resource.Error<*> -> it.message?.let { element -> toastChannel.send(element) }
                     }
                 }
@@ -75,6 +95,7 @@ class SearchViewModel(private val searchInteractor: SearchInteractor) : ViewMode
                                     totalPages = it.data.pages
                                 }
                             }
+
                             is Resource.Error<*> -> renderState(SearchScreenState.NetworkError)
                         }
                     }
@@ -88,6 +109,10 @@ class SearchViewModel(private val searchInteractor: SearchInteractor) : ViewMode
 
     private fun renderState(state: SearchScreenState) {
         stateLiveData.postValue(state)
+    }
+
+    fun updateFilterState() {
+        checkFilterState()
     }
 
     companion object {

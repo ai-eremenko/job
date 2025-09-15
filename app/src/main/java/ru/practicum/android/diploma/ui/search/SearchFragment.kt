@@ -18,10 +18,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
 import ru.practicum.android.diploma.domain.search.models.VacancyPreviewPresent
+import ru.practicum.android.diploma.presentation.filteringsettings.SharedViewModel
 import ru.practicum.android.diploma.presentation.search.SearchScreenState
 import ru.practicum.android.diploma.presentation.search.SearchViewModel
 import ru.practicum.android.diploma.ui.search.adapter.VacancyListAdapter
@@ -35,7 +37,7 @@ class SearchFragment : Fragment() {
     private var searchEditTextValue: String = SEARCH_TEXT_DEF
 
     private val viewModel: SearchViewModel by viewModel()
-
+    private val sharedViewModel: SharedViewModel by activityViewModel()
     private var isNextPageLoading = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -108,6 +110,23 @@ class SearchFragment : Fragment() {
         setupSearchViews()
         setupObserves()
         setupListeners()
+        searchEditTextCreate()
+        vacancyListViewCreate()
+
+        viewModel.observeState().observe(viewLifecycleOwner) {
+            render(it)
+        }
+
+        viewModel.getFilterState().observe(viewLifecycleOwner) { hasActiveFilters ->
+            updateFilterIcon(hasActiveFilters)
+        }
+
+        sharedViewModel.filtersUpdated.observe(viewLifecycleOwner) { updated ->
+            if (updated && searchEditTextValue.isNotEmpty()) {
+                viewModel.searchDebounce(searchEditTextValue, true)
+                sharedViewModel.resetFiltersNotification()
+            }
+        }
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.vacancyChannel
@@ -157,6 +176,9 @@ class SearchFragment : Fragment() {
         binding.icFilter.setOnClickListener {
             findNavController().navigate(R.id.action_mainFragment_to_filteringSettingsFragment)
         }
+    override fun onResume() {
+        super.onResume()
+        viewModel.updateFilterState()
     }
 
     override fun onDestroyView() {
@@ -227,6 +249,15 @@ class SearchFragment : Fragment() {
         binding.searchStatus.isVisible = false
         binding.errorPlaceholder.isVisible = false
         binding.searchScreenCover.isVisible = false
+    }
+
+    private fun updateFilterIcon(hasActiveFilters: Boolean) {
+        val iconRes = if (hasActiveFilters) {
+            R.drawable.ic_filter_on
+        } else {
+            R.drawable.ic_filter_off
+        }
+        binding.icFilter.setImageResource(iconRes)
     }
 
     companion object {
