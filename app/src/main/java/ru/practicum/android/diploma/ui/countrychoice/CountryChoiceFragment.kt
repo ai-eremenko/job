@@ -32,8 +32,8 @@ class CountryChoiceFragment : Fragment() {
             // обработка выбора страны/региона
         }
 
-        binding.recyclerAreas.layoutManager = LinearLayoutManager(requireContext())
-        binding.recyclerAreas.adapter = adapter
+        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerView.adapter = adapter
 
         adapter.setItems(
             mutableListOf(
