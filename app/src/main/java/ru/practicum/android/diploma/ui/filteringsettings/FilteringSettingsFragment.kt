@@ -80,13 +80,13 @@ class FilteringSettingsFragment : Fragment() {
             viewModel.updateOnlyWithSalary(isChecked)
         }
 
-        binding.tilWorkplace.setOnClickListener {
+        binding.etWorkplace.setOnClickListener {
             val direction = FilteringSettingsFragmentDirections
                 .actionFilteringSettingsFragmentToChoiceOfWorkplaceFragment()
             findNavController().navigate(direction)
         }
 
-        binding.tilIndustry.setOnClickListener {
+        binding.etIndustry.setOnClickListener {
             val direction = FilteringSettingsFragmentDirections
                 .actionFilteringSettingsFragmentToIndustryChoiceFragment()
             findNavController().navigate(direction)
