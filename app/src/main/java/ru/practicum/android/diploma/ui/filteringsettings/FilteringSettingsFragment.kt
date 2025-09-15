@@ -154,6 +154,11 @@ class FilteringSettingsFragment : Fragment() {
 
     private fun showContent(filter: FilterSettings) {
         with(binding) {
+            if (filter.areaName != null && filter.countryName != null) {
+                etWorkplace.setText(getString(R.string.area_string, filter.countryName, filter.areaName))
+            } else {
+                etWorkplace.setText(filter.countryName ?: "")
+            }
             etWorkplace.setText(filter.areaName ?: "")
             arrowForward.setImageResource(getArrowIcon(filter.areaName))
 
