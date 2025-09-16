@@ -62,6 +62,7 @@ class IndustryChoiceFragment : Fragment() {
     }
 
     private fun showError() {
+        binding.recyclerView.visibility = View.GONE
     }
 
     override fun onDestroyView() {

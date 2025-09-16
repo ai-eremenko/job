@@ -9,7 +9,7 @@ import ru.practicum.android.diploma.domain.industrychoice.IndustryInteractor
 import ru.practicum.android.diploma.util.Resource
 
 class IndustryChoiceViewModel(
-    private val interactor: IndustryInteractor
+    private val interactor : IndustryInteractor
 ): ViewModel() {
 
     private val screenState = MutableLiveData<IndustryChoiceScreenState>()
@@ -22,7 +22,7 @@ class IndustryChoiceViewModel(
     private fun loadIndustries() {
         viewModelScope.launch {
             val result = interactor.getIndustries()
-            when(result) {
+            when (result) {
                 is Resource.Success<*> -> {
                     result.data?.let { loadedIndustries ->
                         screenState.postValue(IndustryChoiceScreenState.Content(loadedIndustries))
