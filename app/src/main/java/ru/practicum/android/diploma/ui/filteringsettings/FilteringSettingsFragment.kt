@@ -65,10 +65,6 @@ class FilteringSettingsFragment : Fragment() {
         viewModel.updateContent()
     }
 
-    override fun onResume() {
-        super.onResume()
-        (activity as? NavigationVisibilityController)?.setNavigationVisibility(false)
-    }
     private fun setupListeners() {
         binding.toolbar.setNavigationOnClickListener {
             findNavController().navigateUp()
@@ -83,49 +79,9 @@ class FilteringSettingsFragment : Fragment() {
         binding.resetButton.setOnClickListener {
             viewModel.clearFilter()
         }
-
-        binding.materialCheckBox.setOnCheckedChangeListener { checkBox, isChecked ->
-            binding.expectedSalary.clearFocus()
-            if (!isInitialLoad) {
-                hasUserInteracted = true
-                updateButtonsVisibility()
-            }
-            viewModel.updateOnlyWithSalary(isChecked)
-        }
-
-        binding.etWorkplace.setOnClickListener {
-            val currentFilter = when (val state = viewModel.getFilterStateLiveData().value) {
-                is FilterScreenState.Content -> state.filter
-                else -> FilterSettings()
-            }
-            val hasWorkplace = currentFilter.countryName != null || currentFilter.areaName != null
-            if (hasWorkplace) {
-                viewModel.clearWorkplaceSelection()
-            } else {
-                findNavController()
-                    .navigate(
-                        FilteringSettingsFragmentDirections
-                            .actionFilteringSettingsFragmentToChoiceOfWorkplaceFragment()
-                    )
-            }
-        }
-
-        binding.etIndustry.setOnClickListener {
-            val currentFilter = when (val state = viewModel.getFilterStateLiveData().value) {
-                is FilterScreenState.Content -> state.filter
-                else -> FilterSettings()
-            }
-            if (currentFilter.industryName != null) {
-                viewModel.clearIndustrySelection()
-            } else {
-                findNavController()
-                    .navigate(
-                        FilteringSettingsFragmentDirections
-                            .actionFilteringSettingsFragmentToIndustryChoiceFragment()
-                    )
-            }
-        }
-
+        setupCheckboxListener()
+        setupWorkplaceListener()
+        setupIndustryListener()
         setupSalaryListener()
     }
 
@@ -171,6 +127,54 @@ class FilteringSettingsFragment : Fragment() {
         binding.clearIcon.setOnClickListener {
             binding.expectedSalary.setText("")
             updateSalary("")
+        }
+    }
+
+    private fun setupCheckboxListener() {
+        binding.materialCheckBox.setOnCheckedChangeListener { checkBox, isChecked ->
+            binding.expectedSalary.clearFocus()
+            if (!isInitialLoad) {
+                hasUserInteracted = true
+                updateButtonsVisibility()
+            }
+            viewModel.updateOnlyWithSalary(isChecked)
+        }
+    }
+
+    private fun setupWorkplaceListener() {
+        binding.etWorkplace.setOnClickListener {
+            val currentFilter = when (val state = viewModel.getFilterStateLiveData().value) {
+                is FilterScreenState.Content -> state.filter
+                else -> FilterSettings()
+            }
+            val hasWorkplace = currentFilter.countryName != null || currentFilter.areaName != null
+            if (hasWorkplace) {
+                viewModel.clearWorkplaceSelection()
+            } else {
+                findNavController()
+                    .navigate(
+                        FilteringSettingsFragmentDirections
+                            .actionFilteringSettingsFragmentToChoiceOfWorkplaceFragment()
+                    )
+            }
+        }
+    }
+
+    private fun setupIndustryListener() {
+        binding.etIndustry.setOnClickListener {
+            val currentFilter = when (val state = viewModel.getFilterStateLiveData().value) {
+                is FilterScreenState.Content -> state.filter
+                else -> FilterSettings()
+            }
+            if (currentFilter.industryName != null) {
+                viewModel.clearIndustrySelection()
+            } else {
+                findNavController()
+                    .navigate(
+                        FilteringSettingsFragmentDirections
+                            .actionFilteringSettingsFragmentToIndustryChoiceFragment()
+                    )
+            }
         }
     }
 
