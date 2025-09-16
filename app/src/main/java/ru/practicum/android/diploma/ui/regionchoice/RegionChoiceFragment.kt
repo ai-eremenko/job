@@ -16,13 +16,14 @@ import ru.practicum.android.diploma.domain.areas.models.Area
 import ru.practicum.android.diploma.presentation.regionchoice.RegionState
 import ru.practicum.android.diploma.presentation.regionchoice.RegionViewModel
 import ru.practicum.android.diploma.presentation.regionchoice.RegionViewModelFactory
+import ru.practicum.android.diploma.util.Resource
 
 class RegionChoiceFragment : Fragment(R.layout.fragment_select_region) {
 
     private val testInteractor = object : AreasInteractor {
         override suspend fun getAreas(): ru.practicum.android.diploma.util.Resource<List<Area>> {
             delay(500)
-            return ru.practicum.android.diploma.util.Resource.Success(
+            return Resource.Success(
                 listOf(
                     Area(MOSCOW_ID, "Москва"),
                     Area(SPB_ID, "Санкт-Петербург"),
@@ -42,8 +43,13 @@ class RegionChoiceFragment : Fragment(R.layout.fragment_select_region) {
     private val groupNotFound by lazy { requireView().findViewById<Group>(R.id.group_not_found) }
     private val groupError by lazy { requireView().findViewById<Group>(R.id.group_error) }
     private val inputRegion by lazy { requireView().findViewById<TextInputEditText>(R.id.input_region) }
-    private lateinit var adapter: RegionAdapter
-
+    private val adapter by lazy {
+        RegionAdapter(emptyList()) { area ->
+            viewModel.saveAndExit(area) {
+                requireActivity().onBackPressedDispatcher.onBackPressed()
+            }
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -54,11 +60,6 @@ class RegionChoiceFragment : Fragment(R.layout.fragment_select_region) {
     }
 
     private fun setupAdapter() {
-        adapter = RegionAdapter(emptyList()) { area ->
-            viewModel.saveAndExit(area) {
-                requireActivity().onBackPressedDispatcher.onBackPressed()
-            }
-        }
         recyclerView.adapter = adapter
     }
 
