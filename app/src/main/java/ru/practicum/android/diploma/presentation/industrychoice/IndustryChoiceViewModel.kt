@@ -9,8 +9,8 @@ import ru.practicum.android.diploma.domain.industrychoice.IndustryInteractor
 import ru.practicum.android.diploma.util.Resource
 
 class IndustryChoiceViewModel(
-    private val interactor : IndustryInteractor
-): ViewModel() {
+    private val interactor: IndustryInteractor
+) : ViewModel() {
 
     private val screenState = MutableLiveData<IndustryChoiceScreenState>()
     fun getScreenState(): LiveData<IndustryChoiceScreenState> = screenState
@@ -28,6 +28,7 @@ class IndustryChoiceViewModel(
                         screenState.postValue(IndustryChoiceScreenState.Content(loadedIndustries))
                     }
                 }
+
                 is Resource.Error<*> -> screenState.postValue(IndustryChoiceScreenState.Empty)
             }
         }
