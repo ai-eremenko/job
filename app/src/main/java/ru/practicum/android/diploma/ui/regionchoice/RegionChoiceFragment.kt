@@ -1,79 +1,101 @@
 package ru.practicum.android.diploma.ui.regionchoice
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import android.os.Bundle
+import android.view.View
+import android.widget.ProgressBar
+import androidx.constraintlayout.widget.Group
+import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.textfield.TextInputEditText
+import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.domain.areas.AreasInteractor
 import ru.practicum.android.diploma.domain.areas.models.Area
-import ru.practicum.android.diploma.util.Resource
+import ru.practicum.android.diploma.presentation.regionchoice.RegionState
+import ru.practicum.android.diploma.presentation.regionchoice.RegionViewModel
+import ru.practicum.android.diploma.presentation.regionchoice.RegionViewModelFactory
+import kotlinx.coroutines.*
 
-sealed class RegionState {
-    object Loading : RegionState()
-    object Empty : RegionState()
-    object Error : RegionState()
-    data class Content(val areasList: List<Area>) : RegionState()
-}
+class RegionChoiceFragment : Fragment(R.layout.fragment_select_region) {
 
-class RegionViewModel(
-    private val interactor: AreasInteractor
-) : ViewModel() {
 
-    private val _screenState = MutableLiveData<RegionState>()
-    val screenState: LiveData<RegionState> get() = _screenState
-
-    private val allRegions = mutableListOf<Area>()
-    private var searchJob: Job? = null
-
-    init {
-        loadRegions()
+    private val testInteractor = object : AreasInteractor {
+        override suspend fun getAreas(): ru.practicum.android.diploma.util.Resource<List<Area>> {
+            delay(500)
+            return ru.practicum.android.diploma.util.Resource.Success(
+                listOf(
+                    Area(1, "Москва"),
+                    Area(2, "Санкт-Петербург"),
+                    Area(3, "Новосибирск"),
+                    Area(4, "Екатеринбург")
+                )
+            )
+        }
     }
 
-    private fun loadRegions() {
-        viewModelScope.launch {
-            _screenState.value = RegionState.Loading
-            try {
-                val result = interactor.getAreas()
-                when (result) {
-                    is Resource.Success -> {
-                        val regions = result.data ?: emptyList()
-                        allRegions.clear()
-                        allRegions.addAll(regions)
-                        _screenState.value = if (regions.isEmpty()) {
-                            RegionState.Empty
-                        } else {
-                            RegionState.Content(regions)
-                        }
-                    }
-                    is Resource.Error -> {
-                        _screenState.value = RegionState.Error
-                    }
+    private val viewModel: RegionViewModel by viewModels {
+        RegionViewModelFactory(testInteractor)
+    }
+
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: RegionAdapter
+    private lateinit var progressBar: ProgressBar
+    private lateinit var groupNotFound: Group
+    private lateinit var groupError: Group
+    private lateinit var inputRegion: TextInputEditText
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        recyclerView = view.findViewById(R.id.recyclerView)
+        progressBar = view.findViewById(R.id.progressBar)
+        groupNotFound = view.findViewById(R.id.group_not_found)
+        groupError = view.findViewById(R.id.group_error)
+        inputRegion = view.findViewById(R.id.input_region)
+
+        adapter = RegionAdapter(emptyList()) { area ->
+            viewModel.saveAndExit(area) {
+                requireActivity().onBackPressedDispatcher.onBackPressed()
+            }
+        }
+
+        recyclerView.adapter = adapter
+
+        inputRegion.addTextChangedListener { text ->
+            viewModel.search(text.toString())
+        }
+
+        viewModel.screenState.observe(viewLifecycleOwner) { state ->
+            when (state) {
+                is RegionState.Loading -> {
+                    progressBar.visibility = View.VISIBLE
+                    recyclerView.visibility = View.GONE
+                    groupNotFound.visibility = View.GONE
+                    groupError.visibility = View.GONE
                 }
-            } catch (e: Exception) {
-                _screenState.value = RegionState.Error
+                is RegionState.Empty -> {
+                    progressBar.visibility = View.GONE
+                    recyclerView.visibility = View.GONE
+                    groupNotFound.visibility = View.VISIBLE
+                    groupError.visibility = View.GONE
+                }
+                is RegionState.Error -> {
+                    progressBar.visibility = View.GONE
+                    recyclerView.visibility = View.GONE
+                    groupNotFound.visibility = View.GONE
+                    groupError.visibility = View.VISIBLE
+                }
+                is RegionState.Content -> {
+                    progressBar.visibility = View.GONE
+                    recyclerView.visibility = View.VISIBLE
+                    groupNotFound.visibility = View.GONE
+                    groupError.visibility = View.GONE
+                    adapter.updateList(state.areasList)
+                }
             }
         }
-    }
 
-    fun search(query: String) {
-        searchJob?.cancel()
-        searchJob = viewModelScope.launch {
-            delay(200L)
-            val filtered = if (query.isBlank()) allRegions
-            else allRegions.filter { it.name.contains(query, ignoreCase = true) }
-
-            _screenState.value = if (filtered.isEmpty()) {
-                RegionState.Empty
-            } else {
-                RegionState.Content(filtered)
-            }
-        }
-    }
-
-    fun saveAndExit(selectedArea: Area, onExit: () -> Unit) {
-        onExit()
+        viewModel.search("")
     }
 }
