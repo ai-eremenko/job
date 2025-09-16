@@ -26,7 +26,9 @@ class SearchInteractorImpl(
             }
     }
 
-    private fun processSearchResult(resource: Resource<VacanciesSearchResult<VacancyPreview>>): Resource<VacanciesSearchResult<VacancyPreviewPresent>> {
+    private fun processSearchResult(
+        resource: Resource<VacanciesSearchResult<VacancyPreview>>
+    ): Resource<VacanciesSearchResult<VacancyPreviewPresent>> {
         return when (resource) {
             is Resource.Success -> {
                 val presentItems = resource.data?.items?.map { domainItem ->
