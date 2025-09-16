@@ -109,11 +109,10 @@ class WorkplaceChoiceFragment : Fragment() {
     }
 
     private fun navigateToRegionChoice() {
-        val countryId = viewModel.getTempCountry().first
-        val bundle = Bundle().apply {
-            putInt("country_id", countryId ?: 0)
-        }
-        findNavController().navigate(R.id.action_workplaceChoiceFragment_to_regionChoiceFragment, bundle)
+        val countryId = viewModel.getTempCountry().first ?: 0
+        val action = WorkplaceChoiceFragmentDirections
+            .actionWorkplaceChoiceFragmentToRegionChoiceFragment(countryId)
+        findNavController().navigate(action)
     }
 
     override fun onDestroyView() {

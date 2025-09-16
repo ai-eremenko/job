@@ -77,8 +77,12 @@
         android:id="@+id/regionChoiceFragment"
         android:name="ru.practicum.android.diploma.ui.regionchoice.RegionChoiceFragment"
         android:label="fragment_region_choice"
-        tools:layout="@layout/fragment_region_choice" />
-
+        tools:layout="@layout/fragment_region_choice" >
+        <argument
+            android:name="country_id"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </fragment>
 
     <fragment
         android:id="@+id/industryChoiceFragment"
