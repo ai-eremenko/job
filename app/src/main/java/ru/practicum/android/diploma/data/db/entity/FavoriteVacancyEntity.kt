@@ -3,7 +3,6 @@ package ru.practicum.android.diploma.data.db.entity
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Suppress("DataClassShouldBeImmutable")
 @Entity(
     tableName = "favorite_vacancies"
 )
@@ -21,24 +20,7 @@ data class FavoriteVacancyEntity(
     val employer: String,
     val skills: String?,
     val url: String?,
-    var isFavorite: Boolean = false,
+    val isFavorite: Boolean = false,
     val urlLink: String
 
-) {
-    constructor() : this(
-        id = "",
-        name = "",
-        description = "",
-        salary = "",
-        city = "",
-        experience = "",
-        schedule = "",
-        employment = "",
-        contacts = null,
-        employer = "",
-        skills = null,
-        url = "",
-        isFavorite = false,
-        urlLink = ""
-    )
-}
+)

@@ -20,7 +20,6 @@ class WorkplaceViewModel(
         tempFilter = savedFilter.copy()
         updateScreenState()
     }
-
     fun saveArea() {
         filterInteractor.saveFilterOptions(tempFilter)
         savedFilter = tempFilter.copy()

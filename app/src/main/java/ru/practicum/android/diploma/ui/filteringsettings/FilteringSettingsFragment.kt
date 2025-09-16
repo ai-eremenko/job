@@ -55,8 +55,14 @@ class FilteringSettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupObserves()
         setupListeners()
+        setupObserves()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as? NavigationVisibilityController)?.setNavigationVisibility(false)
+        viewModel.updateContent()
     }
 
     override fun onResume() {
@@ -88,16 +94,38 @@ class FilteringSettingsFragment : Fragment() {
         }
 
         binding.etWorkplace.setOnClickListener {
-            val direction = FilteringSettingsFragmentDirections
-                .actionFilteringSettingsFragmentToChoiceOfWorkplaceFragment()
-            findNavController().navigate(direction)
+            val currentFilter = when (val state = viewModel.getFilterStateLiveData().value) {
+                is FilterScreenState.Content -> state.filter
+                else -> FilterSettings()
+            }
+            val hasWorkplace = currentFilter.countryName != null || currentFilter.areaName != null
+            if (hasWorkplace) {
+                viewModel.clearWorkplaceSelection()
+            } else {
+                findNavController()
+                    .navigate(
+                        FilteringSettingsFragmentDirections
+                            .actionFilteringSettingsFragmentToChoiceOfWorkplaceFragment()
+                    )
+            }
         }
 
         binding.etIndustry.setOnClickListener {
-            val direction = FilteringSettingsFragmentDirections
-                .actionFilteringSettingsFragmentToIndustryChoiceFragment()
-            findNavController().navigate(direction)
+            val currentFilter = when (val state = viewModel.getFilterStateLiveData().value) {
+                is FilterScreenState.Content -> state.filter
+                else -> FilterSettings()
+            }
+            if (currentFilter.industryName != null) {
+                viewModel.clearIndustrySelection()
+            } else {
+                findNavController()
+                    .navigate(
+                        FilteringSettingsFragmentDirections
+                            .actionFilteringSettingsFragmentToIndustryChoiceFragment()
+                    )
+            }
         }
+
         setupSalaryListener()
     }
 
@@ -160,25 +188,34 @@ class FilteringSettingsFragment : Fragment() {
     }
 
     private fun showContent(filter: FilterSettings) {
+        setupWorkplace(filter)
+        setupIndustries(filter)
+
+        with(binding) {
+            expectedSalary.setText(filter.salary?.toString() ?: "")
+            materialCheckBox.isChecked = filter.onlyWithSalary
+        }
+    }
+
+    private fun setupWorkplace(filter: FilterSettings) {
         with(binding) {
             if (filter.areaName != null && filter.countryName != null) {
                 etWorkplace.setText(getString(R.string.area_string, filter.countryName, filter.areaName))
             } else {
                 etWorkplace.setText(filter.countryName ?: "")
             }
-            etWorkplace.setText(filter.areaName ?: "")
-            arrowForward.setImageResource(getArrowIcon(filter.areaName))
-
-            etIndustry.setText(filter.industryName ?: "")
-            arrowForward2.setImageResource(getArrowIcon(filter.industryName))
-
-            expectedSalary.setText(filter.salary?.toString() ?: "")
-            materialCheckBox.isChecked = filter.onlyWithSalary
+            val hasWorkplace = filter.countryName != null || filter.areaName != null
+            val workplaceIcon = if (hasWorkplace) R.drawable.ic_close else R.drawable.ic_arrow_forward
+            arrowForward.setImageResource(workplaceIcon)
         }
     }
 
-    private fun getArrowIcon(text: String?): Int {
-        return if (text != null) R.drawable.ic_close else R.drawable.ic_arrow_forward
+    private fun setupIndustries(filter: FilterSettings) {
+        with(binding) {
+            etIndustry.setText(filter.industryName ?: "")
+            val industryIcon = if (filter.industryName != null) R.drawable.ic_close else R.drawable.ic_arrow_forward
+            arrowForward2.setImageResource(industryIcon)
+        }
     }
 
     private fun updateButtonsVisibility() {

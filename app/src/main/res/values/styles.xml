@@ -134,4 +134,14 @@
         <item name="expandedHintEnabled">true</item>
         <item name="boxStrokeWidth">0dp</item>
     </style>
+
+    <style name="TextRegular.16.text_filter_empty">
+        <item name="textAllCaps">false</item>
+        <item name="android:paddingVertical">@dimen/_20dp</item>
+        <item name="android:paddingHorizontal">@dimen/_16dp</item>
+        <item name="layout_constraintHorizontal_bias">0</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
 </resources>
