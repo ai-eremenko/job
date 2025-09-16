@@ -8,9 +8,8 @@ import ru.practicum.android.diploma.util.Resource
 class AreasInteractorImpl(
     private val repository: AreasRepository
 ) : AreasInteractor {
-    private var cachedResult: Resource<List<Area>>? = null
 
     override suspend fun getAreas(): Resource<List<Area>> {
-        return cachedResult ?: repository.getAreas().also { cachedResult = it }
+        return repository.getAreas()
     }
 }
