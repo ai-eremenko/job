@@ -6,6 +6,7 @@ import ru.practicum.android.diploma.domain.search.SearchInteractor
 import ru.practicum.android.diploma.domain.search.SearchRepository
 import ru.practicum.android.diploma.domain.search.mapper.VacancyPreviewMapper
 import ru.practicum.android.diploma.domain.search.models.VacanciesSearchResult
+import ru.practicum.android.diploma.domain.search.models.VacancyPreview
 import ru.practicum.android.diploma.domain.search.models.VacancyPreviewPresent
 import ru.practicum.android.diploma.util.Resource
 import ru.practicum.android.diploma.util.ResponseStatus
@@ -21,26 +22,32 @@ class SearchInteractorImpl(
     ): Flow<Resource<VacanciesSearchResult<VacancyPreviewPresent>>> {
         return repository.searchVacancies(expression, page)
             .map { resource ->
-                when (resource) {
-                    is Resource.Success -> {
-                        val presentItems = resource.data?.items?.map { domainItem ->
-                            mapper.mapToPresentation(domainItem)
-                        } ?: emptyList()
-
-                        Resource.Success(
-                            VacanciesSearchResult(
-                                found = resource.data?.found ?: 0,
-                                pages = resource.data?.pages ?: 0,
-                                page = resource.data?.page ?: 0,
-                                items = presentItems
-                            )
-                        )
-                    }
-
-                    is Resource.Error -> {
-                        Resource.Error(resource.message ?: ResponseStatus.UNKNOWN_ERROR)
-                    }
-                }
+                processSearchResult(resource)
             }
+    }
+
+    private fun processSearchResult(
+        resource: Resource<VacanciesSearchResult<VacancyPreview>>
+    ): Resource<VacanciesSearchResult<VacancyPreviewPresent>> {
+        return when (resource) {
+            is Resource.Success -> {
+                val presentItems = resource.data?.items?.map { domainItem ->
+                    mapper.mapToPresentation(domainItem)
+                } ?: emptyList()
+
+                Resource.Success(
+                    VacanciesSearchResult(
+                        found = resource.data?.found ?: 0,
+                        pages = resource.data?.pages ?: 0,
+                        page = resource.data?.page ?: 0,
+                        items = presentItems
+                    )
+                )
+            }
+
+            is Resource.Error -> {
+                Resource.Error(resource.message ?: ResponseStatus.UNKNOWN_ERROR)
+            }
+        }
     }
 }

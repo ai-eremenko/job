@@ -1,7 +1,6 @@
 package ru.practicum.android.diploma.data.mappers
 
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import ru.practicum.android.diploma.data.db.entity.FavoriteVacancyEntity
 import ru.practicum.android.diploma.domain.search.models.VacancyPreviewPresent
 import ru.practicum.android.diploma.domain.vacancy.models.Contacts
