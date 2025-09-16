@@ -70,15 +70,7 @@ class FilteringSettingsFragment : Fragment() {
             findNavController().navigateUp()
         }
 
-        binding.applyButton.setOnClickListener {
-            sharedViewModel.notifyFiltersApplied()
-            hasUserInteracted = false
-            findNavController().navigateUp()
-        }
-
-        binding.resetButton.setOnClickListener {
-            viewModel.clearFilter()
-        }
+        setupActionButtons()
         setupCheckboxListener()
         setupWorkplaceListener()
         setupIndustryListener()
@@ -104,29 +96,44 @@ class FilteringSettingsFragment : Fragment() {
         }
     }
 
+    private fun setupActionButtons() {
+        with(binding) {
+            applyButton.setOnClickListener {
+                sharedViewModel.notifyFiltersApplied()
+                hasUserInteracted = false
+                findNavController().navigateUp()
+            }
+
+            resetButton.setOnClickListener {
+                viewModel.clearFilter()
+            }
+        }
+    }
+
     private fun setupSalaryListener() {
         simpleTextWatcher.let { binding.expectedSalary.addTextChangedListener(it) }
-
-        binding.expectedSalary.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                val text = binding.expectedSalary.text?.toString() ?: ""
-                updateSalary(text)
-                true
-            } else {
-                false
+        with(binding) {
+            expectedSalary.setOnEditorActionListener { _, actionId, _ ->
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    val text = binding.expectedSalary.text?.toString() ?: ""
+                    updateSalary(text)
+                    true
+                } else {
+                    false
+                }
             }
-        }
 
-        binding.expectedSalary.setOnFocusChangeListener { _, hasFocus ->
-            if (!hasFocus) {
-                val text = binding.expectedSalary.text?.toString() ?: ""
-                updateSalary(text)
+            expectedSalary.setOnFocusChangeListener { _, hasFocus ->
+                if (!hasFocus) {
+                    val text = binding.expectedSalary.text?.toString() ?: ""
+                    updateSalary(text)
+                }
             }
-        }
 
-        binding.clearIcon.setOnClickListener {
-            binding.expectedSalary.setText("")
-            updateSalary("")
+            clearIcon.setOnClickListener {
+                binding.expectedSalary.setText("")
+                updateSalary("")
+            }
         }
     }
 
@@ -143,10 +150,7 @@ class FilteringSettingsFragment : Fragment() {
 
     private fun setupWorkplaceListener() {
         binding.etWorkplace.setOnClickListener {
-            val currentFilter = when (val state = viewModel.getFilterStateLiveData().value) {
-                is FilterScreenState.Content -> state.filter
-                else -> FilterSettings()
-            }
+            val currentFilter = getCurrentFilter()
             val hasWorkplace = currentFilter.countryName != null || currentFilter.areaName != null
             if (hasWorkplace) {
                 if (!isInitialLoad) {
@@ -164,12 +168,16 @@ class FilteringSettingsFragment : Fragment() {
         }
     }
 
+    private fun getCurrentFilter(): FilterSettings {
+        return when (val state = viewModel.getFilterStateLiveData().value) {
+            is FilterScreenState.Content -> state.filter
+            else -> FilterSettings()
+        }
+    }
+
     private fun setupIndustryListener() {
         binding.etIndustry.setOnClickListener {
-            val currentFilter = when (val state = viewModel.getFilterStateLiveData().value) {
-                is FilterScreenState.Content -> state.filter
-                else -> FilterSettings()
-            }
+            val currentFilter = getCurrentFilter()
             if (currentFilter.industryName != null) {
                 if (!isInitialLoad) {
                     hasUserInteracted = true
