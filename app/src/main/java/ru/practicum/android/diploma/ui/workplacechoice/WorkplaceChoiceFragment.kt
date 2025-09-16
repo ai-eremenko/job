@@ -103,9 +103,17 @@ class WorkplaceChoiceFragment : Fragment() {
             if (hasText) {
                 viewModel.clearAreaSelection()
             } else {
-                findNavController().navigate(R.id.action_workplaceChoiceFragment_to_regionChoiceFragment)
+                navigateToRegionChoice()
             }
         }
+    }
+
+    private fun navigateToRegionChoice() {
+        val countryId = viewModel.getTempCountry().first
+        val bundle = Bundle().apply {
+            putInt("country_id", countryId ?: 0)
+        }
+        findNavController().navigate(R.id.action_workplaceChoiceFragment_to_regionChoiceFragment, bundle)
     }
 
     override fun onDestroyView() {
