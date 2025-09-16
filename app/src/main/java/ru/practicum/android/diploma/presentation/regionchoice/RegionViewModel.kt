@@ -68,15 +68,18 @@ class RegionViewModel(
     fun search(query: String) {
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
-            delay(SEARCH_DELAY )
+            delay(SEARCH_DELAY)
             val filtered = if (query.isBlank()) {
                 allRegions
             } else {
                 allRegions.filter { it.name.contains(query, ignoreCase = true) }
             }
             _screenState.value =
-                if (filtered.isEmpty()) RegionState.Empty
-                else RegionState.Content(filtered)
+                if (filtered.isEmpty()) {
+                    RegionState.Empty
+                } else {
+                    RegionState.Content(filtered)
+                }
         }
     }
 

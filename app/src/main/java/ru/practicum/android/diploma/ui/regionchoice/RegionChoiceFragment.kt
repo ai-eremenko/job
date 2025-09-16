@@ -19,16 +19,15 @@ import ru.practicum.android.diploma.presentation.regionchoice.RegionViewModelFac
 
 class RegionChoiceFragment : Fragment(R.layout.fragment_select_region) {
 
-
     private val testInteractor = object : AreasInteractor {
         override suspend fun getAreas(): ru.practicum.android.diploma.util.Resource<List<Area>> {
             delay(500)
             return ru.practicum.android.diploma.util.Resource.Success(
                 listOf(
-                    Area(1, "Москва"),
-                    Area(2, "Санкт-Петербург"),
-                    Area(3, "Новосибирск"),
-                    Area(4, "Екатеринбург")
+                    Area(MOSCOW_ID, "Москва"),
+                    Area(SPB_ID, "Санкт-Петербург"),
+                    Area(NOVOSIB_ID, "Новосибирск"),
+                    Area(EKB_ID, "Екатеринбург")
                 )
             )
         }
@@ -38,28 +37,20 @@ class RegionChoiceFragment : Fragment(R.layout.fragment_select_region) {
         RegionViewModelFactory(testInteractor)
     }
 
-    private lateinit var recyclerView: RecyclerView
+    private val recyclerView by lazy { requireView().findViewById<RecyclerView>(R.id.recyclerView) }
+    private val progressBar by lazy { requireView().findViewById<ProgressBar>(R.id.progressBar) }
+    private val groupNotFound by lazy { requireView().findViewById<Group>(R.id.group_not_found) }
+    private val groupError by lazy { requireView().findViewById<Group>(R.id.group_error) }
+    private val inputRegion by lazy { requireView().findViewById<TextInputEditText>(R.id.input_region) }
     private lateinit var adapter: RegionAdapter
-    private lateinit var progressBar: ProgressBar
-    private lateinit var groupNotFound: Group
-    private lateinit var groupError: Group
-    private lateinit var inputRegion: TextInputEditText
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        bindViews(view)
         setupAdapter()
         setupListeners()
         observeViewModel()
         viewModel.search("")
-    }
-
-    private fun bindViews(view: View) {
-        recyclerView = view.findViewById(R.id.recyclerView)
-        progressBar = view.findViewById(R.id.progressBar)
-        groupNotFound = view.findViewById(R.id.group_not_found)
-        groupError = view.findViewById(R.id.group_error)
-        inputRegion = view.findViewById(R.id.input_region)
     }
 
     private fun setupAdapter() {
@@ -115,5 +106,12 @@ class RegionChoiceFragment : Fragment(R.layout.fragment_select_region) {
         groupNotFound.visibility = View.GONE
         groupError.visibility = View.GONE
         adapter.updateList(list)
+    }
+
+    companion object {
+        private const val MOSCOW_ID = 1
+        private const val SPB_ID = 2
+        private const val NOVOSIB_ID = 3
+        private const val EKB_ID = 4
     }
 }
