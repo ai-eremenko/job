@@ -22,7 +22,7 @@ class RegionChoiceFragment : Fragment(R.layout.fragment_select_region) {
 
     private val testInteractor = object : AreasInteractor {
         override suspend fun getAreas(): ru.practicum.android.diploma.util.Resource<List<Area>> {
-            delay(500)
+            delay(DELAY_500_MS)
             return Resource.Success(
                 listOf(
                     Area(MOSCOW_ID, "Москва"),
@@ -114,5 +114,6 @@ class RegionChoiceFragment : Fragment(R.layout.fragment_select_region) {
         private const val SPB_ID = 2
         private const val NOVOSIB_ID = 3
         private const val EKB_ID = 4
+        private const val DELAY_500_MS = 500L
     }
 }
