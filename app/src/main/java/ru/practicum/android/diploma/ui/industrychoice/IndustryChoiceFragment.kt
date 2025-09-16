@@ -35,7 +35,7 @@ class IndustryChoiceFragment : Fragment() {
 
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = adapter
-
+        binding.recyclerView.visibility = View.VISIBLE
         adapter.setItems(
             mutableListOf(
                 IndustryItemUi("1", "IT", false),

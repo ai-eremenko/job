@@ -29,11 +29,14 @@ class IndustryAdapter(
     override fun getItemCount(): Int = items.size
 
     fun setItems(newItems: MutableList<IndustryItemUi>) {
-        items = newItems
+        items.clear()
+        items.addAll(newItems)
         notifyDataSetChanged()
+
         originalList.clear()
         originalList.addAll(newItems)
     }
+
 
     private fun updateDisplayList(updatedList: List<IndustryItemUi>) {
         items.clear()
