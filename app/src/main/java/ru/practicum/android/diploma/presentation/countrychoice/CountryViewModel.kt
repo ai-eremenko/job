@@ -26,7 +26,8 @@ class CountryViewModel(
                 is Resource.Success -> {
                     result.data?.let { loadedAreas ->
                         val countries = findRootAreas(loadedAreas)
-                        screenState.postValue(CountryScreenState.Content(countries))
+                        val sortedCountries = countries.sortedBy { it.name }
+                        screenState.postValue(CountryScreenState.Content(sortedCountries))
                     }
                 }
                 is Resource.Error -> {
