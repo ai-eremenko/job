@@ -50,4 +50,3 @@ class IndustryChoiceFragment : Fragment() {
         _binding = null
     }
 }
-

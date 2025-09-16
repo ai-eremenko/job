@@ -98,13 +98,22 @@ class WorkplaceChoiceFragment : Fragment() {
         val hasText = area != null && area.isNotEmpty()
         val iconRes = if (hasText) R.drawable.ic_close else R.drawable.ic_arrow_forward
         binding.arrowForward2.setImageResource(iconRes)
+
         binding.regionEditText.setOnClickListener {
             if (hasText) {
                 viewModel.clearAreaSelection()
             } else {
-                findNavController().navigate(R.id.action_workplaceChoiceFragment_to_regionChoiceFragment)
+                navigateToRegionChoice()
             }
         }
+    }
+
+    private fun navigateToRegionChoice() {
+        val countryId = viewModel.getTempCountry().first
+        val bundle = Bundle().apply {
+            putInt("country_id", countryId ?: 0)
+        }
+        findNavController().navigate(R.id.action_workplaceChoiceFragment_to_regionChoiceFragment, bundle)
     }
 
     override fun onDestroyView() {

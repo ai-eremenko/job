@@ -66,7 +66,7 @@ class WorkplaceViewModel(
     }
 
     private fun updateScreenState() {
-        screenState.postValue(tempFilter.countryName to tempFilter.areaName)
+        screenState.value = tempFilter.countryName to tempFilter.areaName
     }
 
     fun updateContent() {
