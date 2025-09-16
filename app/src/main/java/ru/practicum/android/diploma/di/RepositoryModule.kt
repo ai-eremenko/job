@@ -45,7 +45,7 @@ val repositoryModule = module {
         FilterRepositoryImpl(get())
     }
 
-    factory<AreasRepository> {
+    single<AreasRepository> {
         AreasRepositoryImpl(get())
     }
 

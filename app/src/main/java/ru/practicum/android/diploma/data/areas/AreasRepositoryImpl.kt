@@ -12,7 +12,14 @@ import ru.practicum.android.diploma.util.ResponseStatus
 class AreasRepositoryImpl(
     private val networkClient: NetworkClient
 ) : AreasRepository {
+
+    private var cachedAreas: Resource<List<Area>>? = null
+
     override suspend fun getAreas(): Resource<List<Area>> {
+        return cachedAreas ?: fetchAreas().also { cachedAreas = it }
+    }
+
+    private suspend fun fetchAreas(): Resource<List<Area>> {
         val response = networkClient.doRequest(RequestDto.AreasRequest)
         return when (response.status) {
             ResponseStatus.SUCCESS -> {
