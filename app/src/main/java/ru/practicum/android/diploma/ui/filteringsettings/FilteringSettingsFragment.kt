@@ -149,6 +149,10 @@ class FilteringSettingsFragment : Fragment() {
             }
             val hasWorkplace = currentFilter.countryName != null || currentFilter.areaName != null
             if (hasWorkplace) {
+                if (!isInitialLoad) {
+                    hasUserInteracted = true
+                    updateButtonsVisibility()
+                }
                 viewModel.clearWorkplaceSelection()
             } else {
                 findNavController()
@@ -167,6 +171,10 @@ class FilteringSettingsFragment : Fragment() {
                 else -> FilterSettings()
             }
             if (currentFilter.industryName != null) {
+                if (!isInitialLoad) {
+                    hasUserInteracted = true
+                    updateButtonsVisibility()
+                }
                 viewModel.clearIndustrySelection()
             } else {
                 findNavController()

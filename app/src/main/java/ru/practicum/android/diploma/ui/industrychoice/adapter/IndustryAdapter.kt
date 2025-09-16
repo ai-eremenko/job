@@ -37,7 +37,6 @@ class IndustryAdapter(
         originalList.addAll(newItems)
     }
 
-
     private fun updateDisplayList(updatedList: List<IndustryItemUi>) {
         items.clear()
         items.addAll(updatedList)
