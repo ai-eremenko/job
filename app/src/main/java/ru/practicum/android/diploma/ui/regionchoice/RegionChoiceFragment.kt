@@ -9,13 +9,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textfield.TextInputEditText
+import kotlinx.coroutines.delay
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.domain.areas.AreasInteractor
 import ru.practicum.android.diploma.domain.areas.models.Area
 import ru.practicum.android.diploma.presentation.regionchoice.RegionState
 import ru.practicum.android.diploma.presentation.regionchoice.RegionViewModel
 import ru.practicum.android.diploma.presentation.regionchoice.RegionViewModelFactory
-import kotlinx.coroutines.*
 
 class RegionChoiceFragment : Fragment(R.layout.fragment_select_region) {
 
@@ -47,55 +47,73 @@ class RegionChoiceFragment : Fragment(R.layout.fragment_select_region) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        bindViews(view)
+        setupAdapter()
+        setupListeners()
+        observeViewModel()
+        viewModel.search("")
+    }
 
+    private fun bindViews(view: View) {
         recyclerView = view.findViewById(R.id.recyclerView)
         progressBar = view.findViewById(R.id.progressBar)
         groupNotFound = view.findViewById(R.id.group_not_found)
         groupError = view.findViewById(R.id.group_error)
         inputRegion = view.findViewById(R.id.input_region)
+    }
 
+    private fun setupAdapter() {
         adapter = RegionAdapter(emptyList()) { area ->
             viewModel.saveAndExit(area) {
                 requireActivity().onBackPressedDispatcher.onBackPressed()
             }
         }
-
         recyclerView.adapter = adapter
+    }
 
+    private fun setupListeners() {
         inputRegion.addTextChangedListener { text ->
             viewModel.search(text.toString())
         }
+    }
 
+    private fun observeViewModel() {
         viewModel.screenState.observe(viewLifecycleOwner) { state ->
             when (state) {
-                is RegionState.Loading -> {
-                    progressBar.visibility = View.VISIBLE
-                    recyclerView.visibility = View.GONE
-                    groupNotFound.visibility = View.GONE
-                    groupError.visibility = View.GONE
-                }
-                is RegionState.Empty -> {
-                    progressBar.visibility = View.GONE
-                    recyclerView.visibility = View.GONE
-                    groupNotFound.visibility = View.VISIBLE
-                    groupError.visibility = View.GONE
-                }
-                is RegionState.Error -> {
-                    progressBar.visibility = View.GONE
-                    recyclerView.visibility = View.GONE
-                    groupNotFound.visibility = View.GONE
-                    groupError.visibility = View.VISIBLE
-                }
-                is RegionState.Content -> {
-                    progressBar.visibility = View.GONE
-                    recyclerView.visibility = View.VISIBLE
-                    groupNotFound.visibility = View.GONE
-                    groupError.visibility = View.GONE
-                    adapter.updateList(state.areasList)
-                }
+                is RegionState.Loading -> showLoading()
+                is RegionState.Empty -> showEmpty()
+                is RegionState.Error -> showError()
+                is RegionState.Content -> showContent(state.areasList)
             }
         }
+    }
 
-        viewModel.search("")
+    private fun showLoading() {
+        progressBar.visibility = View.VISIBLE
+        recyclerView.visibility = View.GONE
+        groupNotFound.visibility = View.GONE
+        groupError.visibility = View.GONE
+    }
+
+    private fun showEmpty() {
+        progressBar.visibility = View.GONE
+        recyclerView.visibility = View.GONE
+        groupNotFound.visibility = View.VISIBLE
+        groupError.visibility = View.GONE
+    }
+
+    private fun showError() {
+        progressBar.visibility = View.GONE
+        recyclerView.visibility = View.GONE
+        groupNotFound.visibility = View.GONE
+        groupError.visibility = View.VISIBLE
+    }
+
+    private fun showContent(list: List<Area>) {
+        progressBar.visibility = View.GONE
+        recyclerView.visibility = View.VISIBLE
+        groupNotFound.visibility = View.GONE
+        groupError.visibility = View.GONE
+        adapter.updateList(list)
     }
 }
