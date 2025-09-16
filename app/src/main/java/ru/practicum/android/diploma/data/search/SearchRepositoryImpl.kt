@@ -7,6 +7,7 @@ import ru.practicum.android.diploma.data.dto.RequestDto
 import ru.practicum.android.diploma.data.dto.responses.VacanciesResponse
 import ru.practicum.android.diploma.data.mappers.VacancyMapper
 import ru.practicum.android.diploma.domain.filteringsettings.FilterRepository
+import ru.practicum.android.diploma.domain.filteringsettings.models.FilterSettings
 import ru.practicum.android.diploma.domain.search.SearchRepository
 import ru.practicum.android.diploma.domain.search.models.VacanciesSearchResult
 import ru.practicum.android.diploma.domain.search.models.VacancyPreview
@@ -22,8 +23,23 @@ class SearchRepositoryImpl(
         expression: String,
         page: Int
     ): Flow<Resource<VacanciesSearchResult<VacancyPreview>>> = flow {
+        val filterOptions = filter.getFilterOptions()
+        val requestOptions = buildRequestOptions(filterOptions)
+
+        val response = networkClient.doRequest(
+            RequestDto.VacanciesRequest(
+                expression,
+                page,
+                requestOptions,
+                filterOptions.onlyWithSalary
+            )
+        )
+
+        emit(processResponse(response))
+    }
+
+    private fun buildRequestOptions(filter: FilterSettings): HashMap<String, Int> {
         val options: HashMap<String, Int> = HashMap()
-        val filter = filter.getFilterOptions()
         if (filter.areaId != null) {
             options["area"] = filter.areaId
         }
@@ -36,21 +52,20 @@ class SearchRepositoryImpl(
         if (filter.salary != null) {
             options["salary"] = filter.salary
         }
-        val onlyWithSalary = filter.onlyWithSalary
-        val response = networkClient.doRequest(RequestDto.VacanciesRequest(expression, page, options, onlyWithSalary))
+        return options
+    }
 
-        when (response.status) {
+    private fun processResponse(response: Any): Resource<VacanciesSearchResult<VacancyPreview>> {
+        return when (val status = (response as? ru.practicum.android.diploma.data.dto.responses.Response)?.status) {
             ResponseStatus.SUCCESS -> {
                 val vacanciesResponse = response as? VacanciesResponse
-                if (vacanciesResponse != null) {
-                    val data = VacancyMapper.mapToDomain(vacanciesResponse)
-                    emit(Resource.Success(data))
-                } else {
-                    emit(Resource.Error(ResponseStatus.UNKNOWN_ERROR))
-                }
+                vacanciesResponse?.let {
+                    Resource.Success(VacancyMapper.mapToDomain(it))
+                } ?: Resource.Error(ResponseStatus.UNKNOWN_ERROR)
             }
 
-            else -> emit(Resource.Error(response.status))
+            else -> Resource.Error(status ?: ResponseStatus.UNKNOWN_ERROR)
         }
     }
+
 }
