@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.ui.filteringsettings
 
-import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -8,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -21,23 +19,19 @@ import ru.practicum.android.diploma.presentation.filteringsettings.FilterViewMod
 import ru.practicum.android.diploma.presentation.filteringsettings.SharedViewModel
 import ru.practicum.android.diploma.presentation.filteringsettings.models.FilterScreenState
 import ru.practicum.android.diploma.ui.root.NavigationVisibilityController
+import ru.practicum.android.diploma.util.KeyboardUtils
 
 class FilteringSettingsFragment : Fragment() {
 
     private var _binding: FragmentFilteringSettingsBinding? = null
     private val binding get() = _binding!!
     private val viewModel by viewModel<FilterViewModel>()
-    private var hasUserInteracted = false
-    private var isInitialLoad = true
+
     private val sharedViewModel: SharedViewModel by activityViewModel()
     private val simpleTextWatcher = object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             binding.clearIcon.visibility = clearButtonVisibility(s)
-            if (!isInitialLoad) {
-                hasUserInteracted = true
-                updateButtonsVisibility()
-            }
         }
 
         override fun afterTextChanged(s: Editable?) = Unit
@@ -79,20 +73,14 @@ class FilteringSettingsFragment : Fragment() {
 
     private fun setupObserves() {
         viewModel.getFilterStateLiveData().observe(viewLifecycleOwner) { state ->
-            binding.expectedSalary.removeTextChangedListener(simpleTextWatcher)
             when (state) {
-                is FilterScreenState.Content -> {
-                    showContent(state.filter)
-                    updateButtonsVisibility()
-                }
-
-                FilterScreenState.Empty -> {
-                    showEmptyState()
-                    updateButtonsVisibility()
-                }
+                is FilterScreenState.Content -> showContent(state.filter)
+                FilterScreenState.Empty -> showEmptyState()
             }
-            binding.expectedSalary.addTextChangedListener(simpleTextWatcher)
-            isInitialLoad = false
+        }
+        viewModel.getHasChangesLiveData().observe(viewLifecycleOwner) { hasChanges ->
+            binding.applyButton.isVisible = hasChanges
+            binding.resetButton.isVisible = hasChanges
         }
     }
 
@@ -100,7 +88,7 @@ class FilteringSettingsFragment : Fragment() {
         with(binding) {
             applyButton.setOnClickListener {
                 sharedViewModel.notifyFiltersApplied()
-                hasUserInteracted = false
+                viewModel.resetChangesFlag()
                 findNavController().navigateUp()
             }
 
@@ -115,8 +103,7 @@ class FilteringSettingsFragment : Fragment() {
         with(binding) {
             expectedSalary.setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    val text = binding.expectedSalary.text?.toString() ?: ""
-                    updateSalary(text)
+                    updateSalary(expectedSalary.text?.toString() ?: "")
                     true
                 } else {
                     false
@@ -125,25 +112,20 @@ class FilteringSettingsFragment : Fragment() {
 
             expectedSalary.setOnFocusChangeListener { _, hasFocus ->
                 if (!hasFocus) {
-                    val text = binding.expectedSalary.text?.toString() ?: ""
-                    updateSalary(text)
+                    updateSalary(expectedSalary.text?.toString() ?: "")
                 }
             }
 
             clearIcon.setOnClickListener {
-                binding.expectedSalary.setText("")
+                expectedSalary.setText("")
                 updateSalary("")
             }
         }
     }
 
     private fun setupCheckboxListener() {
-        binding.materialCheckBox.setOnCheckedChangeListener { checkBox, isChecked ->
+        binding.materialCheckBox.setOnCheckedChangeListener { _, isChecked ->
             binding.expectedSalary.clearFocus()
-            if (!isInitialLoad) {
-                hasUserInteracted = true
-                updateButtonsVisibility()
-            }
             viewModel.updateOnlyWithSalary(isChecked)
         }
     }
@@ -153,17 +135,26 @@ class FilteringSettingsFragment : Fragment() {
             val currentFilter = getCurrentFilter()
             val hasWorkplace = currentFilter.countryName != null || currentFilter.areaName != null
             if (hasWorkplace) {
-                if (!isInitialLoad) {
-                    hasUserInteracted = true
-                    updateButtonsVisibility()
-                }
                 viewModel.clearWorkplaceSelection()
             } else {
-                findNavController()
-                    .navigate(
-                        FilteringSettingsFragmentDirections
-                            .actionFilteringSettingsFragmentToChoiceOfWorkplaceFragment()
-                    )
+                findNavController().navigate(
+                    FilteringSettingsFragmentDirections
+                        .actionFilteringSettingsFragmentToChoiceOfWorkplaceFragment()
+                )
+            }
+        }
+    }
+
+    private fun setupIndustryListener() {
+        binding.etIndustry.setOnClickListener {
+            val currentFilter = getCurrentFilter()
+            if (currentFilter.industryName != null) {
+                viewModel.clearIndustrySelection()
+            } else {
+                findNavController().navigate(
+                    FilteringSettingsFragmentDirections
+                        .actionFilteringSettingsFragmentToIndustryChoiceFragment()
+                )
             }
         }
     }
@@ -172,25 +163,6 @@ class FilteringSettingsFragment : Fragment() {
         return when (val state = viewModel.getFilterStateLiveData().value) {
             is FilterScreenState.Content -> state.filter
             else -> FilterSettings()
-        }
-    }
-
-    private fun setupIndustryListener() {
-        binding.etIndustry.setOnClickListener {
-            val currentFilter = getCurrentFilter()
-            if (currentFilter.industryName != null) {
-                if (!isInitialLoad) {
-                    hasUserInteracted = true
-                    updateButtonsVisibility()
-                }
-                viewModel.clearIndustrySelection()
-            } else {
-                findNavController()
-                    .navigate(
-                        FilteringSettingsFragmentDirections
-                            .actionFilteringSettingsFragmentToIndustryChoiceFragment()
-                    )
-            }
         }
     }
 
@@ -238,12 +210,6 @@ class FilteringSettingsFragment : Fragment() {
         }
     }
 
-    private fun updateButtonsVisibility() {
-        val shouldShowButtons = hasUserInteracted
-        binding.applyButton.isVisible = shouldShowButtons
-        binding.resetButton.isVisible = shouldShowButtons
-    }
-
     private fun clearButtonVisibility(s: CharSequence?): Int {
         return if (s.isNullOrEmpty()) {
             View.GONE
@@ -253,23 +219,13 @@ class FilteringSettingsFragment : Fragment() {
     }
 
     private fun updateSalary(salary: String) {
-        if (!isInitialLoad) {
-            hasUserInteracted = true
-            updateButtonsVisibility()
-        }
         viewModel.updateSalary(salary)
-        hideKeyboard()
-    }
-
-    private fun hideKeyboard() {
-        val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(binding.expectedSalary.windowToken, 0)
+        KeyboardUtils.hideKeyboard(binding.expectedSalary)
     }
 
     override fun onDestroyView() {
         (activity as? NavigationVisibilityController)?.setNavigationVisibility(true)
         super.onDestroyView()
-        simpleTextWatcher.let { binding.expectedSalary.removeTextChangedListener(it) }
         _binding = null
     }
 }

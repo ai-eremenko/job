@@ -11,7 +11,9 @@ class FilterViewModel(
     private val filterInteractor: FilterInteractor
 ) : ViewModel() {
     private val filterStateLiveData = MutableLiveData<FilterScreenState>()
+    private val hasChangesLiveData = MutableLiveData<Boolean>(false)
     fun getFilterStateLiveData(): LiveData<FilterScreenState> = filterStateLiveData
+    fun getHasChangesLiveData(): LiveData<Boolean> = hasChangesLiveData
 
     init {
         loadFilterSettings()
@@ -26,6 +28,7 @@ class FilterViewModel(
         val emptyFilter = FilterSettings()
         filterInteractor.saveFilterOptions(emptyFilter)
         updateScreenState(emptyFilter)
+        hasChangesLiveData.value = true
     }
 
     fun updateOnlyWithSalary(isChecked: Boolean) {
@@ -44,6 +47,7 @@ class FilterViewModel(
     private fun saveAndUpdate(filter: FilterSettings) {
         filterInteractor.saveFilterOptions(filter)
         updateScreenState(filter)
+        hasChangesLiveData.value = true
     }
 
     private fun updateScreenState(filter: FilterSettings) {
@@ -77,5 +81,9 @@ class FilterViewModel(
             industryName = null
         )
         saveAndUpdate(updatedFilter)
+    }
+
+    fun resetChangesFlag() {
+        hasChangesLiveData.value = false
     }
 }
