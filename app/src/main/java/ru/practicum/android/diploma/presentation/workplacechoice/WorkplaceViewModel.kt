@@ -47,7 +47,9 @@ class WorkplaceViewModel(
     fun setTempCountry(countryId: Int?, countryName: String?) {
         tempFilter = tempFilter.copy(
             countryId = countryId,
-            countryName = countryName
+            countryName = countryName,
+            areaId = null,
+            areaName = null
         )
         updateScreenState()
     }
@@ -62,15 +64,6 @@ class WorkplaceViewModel(
 
     fun getTempCountry(): Pair<Int?, String?> {
         return tempFilter.countryId to tempFilter.countryName
-    }
-
-    fun getTempArea(): Pair<Int?, String?> {
-        return tempFilter.areaId to tempFilter.areaName
-    }
-
-    fun resetToSavedSettings() {
-        tempFilter = savedFilter.copy()
-        updateScreenState()
     }
 
     private fun updateScreenState() {

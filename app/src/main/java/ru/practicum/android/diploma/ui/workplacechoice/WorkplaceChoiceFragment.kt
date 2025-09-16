@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -30,6 +28,24 @@ class WorkplaceChoiceFragment : Fragment() {
 
         setupListeners()
         setupObservers()
+
+        parentFragmentManager.setFragmentResultListener(
+            "country_selection",
+            viewLifecycleOwner
+        ) { requestKey, bundle ->
+            val countryId = bundle.getInt("country_id")
+            val countryName = bundle.getString("country_name")
+            viewModel.setTempCountry(countryId, countryName)
+        }
+
+        parentFragmentManager.setFragmentResultListener(
+            "area_selection",
+            viewLifecycleOwner
+        ) { requestKey, bundle ->
+            val areaId = bundle.getInt("area_id")
+            val areaName = bundle.getString("area_name")
+            viewModel.setTempArea(areaId, areaName)
+        }
     }
 
     override fun onResume() {
@@ -40,17 +56,9 @@ class WorkplaceChoiceFragment : Fragment() {
 
     private fun setupListeners() {
         binding.toolbar.setNavigationOnClickListener {
-            viewModel.resetToSavedSettings()
             findNavController().navigateUp()
         }
 
-        binding.countryEditText.setOnClickListener {
-            findNavController().navigate(R.id.action_workplaceChoiceFragment_to_countryChoiceFragment)
-        }
-
-        binding.regionEditText.setOnClickListener {
-            findNavController().navigate(R.id.action_workplaceChoiceFragment_to_regionChoiceFragment)
-        }
         binding.applyButton.setOnClickListener {
             viewModel.saveArea()
             findNavController().navigateUp()
@@ -65,32 +73,39 @@ class WorkplaceChoiceFragment : Fragment() {
 
     private fun showContent(country: String?, area: String?) {
         binding.apply {
-            setupTextField(regionEditText, arrowForward, area, ::onAreaClearClicked)
-            setupTextField(countryEditText, arrowForward2, country, ::onCountryClearClicked)
+            setupCountryField(country)
+            setupAreaField(area)
         }
     }
 
-    private fun setupTextField(
-        editText: EditText,
-        imageView: ImageView,
-        text: String?,
-        onClearClick: () -> Unit
-    ) {
-        editText.setText(text.orEmpty())
-        val iconRes = if (text != null) R.drawable.ic_close else R.drawable.ic_arrow_forward
-        imageView.setImageResource(iconRes)
+    private fun setupCountryField(country: String?) {
+        binding.countryEditText.setText(country.orEmpty())
+        val hasText = country != null && country.isNotEmpty()
+        val iconRes = if (hasText) R.drawable.ic_close else R.drawable.ic_arrow_forward
+        binding.arrowForward.setImageResource(iconRes)
 
-        imageView.setOnClickListener {
-            if (text != null) onClearClick()
+        binding.countryEditText.setOnClickListener {
+            if (hasText) {
+                viewModel.clearCountrySelection()
+            } else {
+                findNavController().navigate(R.id.action_workplaceChoiceFragment_to_countryChoiceFragment)
+            }
         }
     }
 
-    private fun onAreaClearClicked() {
-        viewModel.clearAreaSelection()
-    }
+    private fun setupAreaField(area: String?) {
+        binding.regionEditText.setText(area.orEmpty())
+        val hasText = area != null && area.isNotEmpty()
+        val iconRes = if (hasText) R.drawable.ic_close else R.drawable.ic_arrow_forward
+        binding.arrowForward2.setImageResource(iconRes)
 
-    private fun onCountryClearClicked() {
-        viewModel.clearCountrySelection()
+        binding.regionEditText.setOnClickListener {
+            if (hasText) {
+                viewModel.clearAreaSelection()
+            } else {
+                findNavController().navigate(R.id.action_workplaceChoiceFragment_to_regionChoiceFragment)
+            }
+        }
     }
 
     override fun onDestroyView() {
