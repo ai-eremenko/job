@@ -1,31 +1,33 @@
 [versions]
 
+constraintlayoutVersion = "2.2.1"
 java = "VERSION_1_8"
-agp = "8.12.2"
-kotlin = "2.2.10"
+agp = "8.13.0"
+kotlin = "2.2.20"
 androidGradlePlugin = "8.12.0"
 
 fragmentKtx = "1.8.9"
-navigationFragmentKtx = "2.9.3"
+materialVersion = "1.13.0"
+navigationFragmentKtx = "2.9.4"
 kspCompiler = "5.0.4"
 converterGson = "3.0.0"
-glide = "5.0.3"
+glide = "5.0.4"
 gson = "2.13.1"
 coreKtx = "1.17.0"
 appcompat = "1.7.1"
-material = "1.12.0"
-activity = "1.10.1"
+activity = "1.11.0"
 constraintlayout = "2.2.1"
 recyclerview = "1.4.0"
 retrofit = "3.0.0"
 lifecycleViewmodelKtx = "2.9.3"
-lifecycleLivedataKtx = "2.9.3"
-koinAndroid = "4.1.0"
-navigationUiKtx = "2.9.3"
+koinAndroid = "4.1.1"
 adapterdelegates4KotlinDsl = "4.3.2"
 kotlinxCoroutinesAndroid = "1.10.2"
-roomRuntime = "2.7.2"
-
+roomRuntime = "2.8.0"
+uimaterial = "1.13.0"
+junit = "4.13.2"
+junitExt = "1.3.0"
+espresso-core = "3.7.0"
 
 # Build constants
 minSdk = "26"
@@ -34,12 +36,14 @@ targetSdk = "36"
 
 # Detekt
 detekt = "1.23.8"
-detektTwitterComposeRules ="0.0.26"
+detektTwitterComposeRules = "0.0.26"
 
 [libraries]
 
 #Navigation
+androidx-constraintlayout-v214 = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayoutVersion" }
 fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
+material-v190 = { module = "com.google.android.material:material", version.ref = "materialVersion" }
 navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigationFragmentKtx" }
 navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigationFragmentKtx" }
 
@@ -57,15 +61,15 @@ androidX-core = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
 androidX-appCompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
 
 # UI layer libraries
-ui-material = "com.google.android.material:material:1.12.0"
-ui-constraintLayout = "androidx.constraintlayout:constraintlayout:2.2.1"
+ui-material = { module = "com.google.android.material:material", version.ref = "uimaterial" }
+ui-constraintLayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayout" }
 
 # Unit tests
-unitTests-junit = "junit:junit:4.13.2"
+unitTests-junit = { module = "junit:junit", version.ref = "junit" }
 
 # UI tests
-uiTests-junitExt = "androidx.test.ext:junit:1.3.0"
-uiTests-espressoCore = "androidx.test.espresso:espresso-core:3.7.0"
+uiTests-junitExt = { module = "androidx.test.ext:junit", version.ref = "junitExt" }
+uiTests-espressoCore = { module = "androidx.test.espresso:espresso-core", version.ref = "espresso-core" }
 
 # Room
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomRuntime" }
@@ -83,7 +87,7 @@ retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit
 retrofit2-converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
 
 androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }
-androidx-lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "lifecycleLivedataKtx" }
+androidx-lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "lifecycleViewmodelKtx" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koinAndroid" }
 adapterdelegates4-kotlin-dsl = { module = "com.hannesdorfmann:adapterdelegates4-kotlin-dsl", version.ref = "adapterdelegates4KotlinDsl" }
 adapterdelegates4-kotlin-dsl-viewbinding = { module = "com.hannesdorfmann:adapterdelegates4-kotlin-dsl-viewbinding", version.ref = "adapterdelegates4KotlinDsl" }
