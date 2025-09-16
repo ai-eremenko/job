@@ -8,12 +8,10 @@ import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.areas.AreasInteractor
 import ru.practicum.android.diploma.domain.areas.models.Area
 import ru.practicum.android.diploma.presentation.countrychoice.models.CountryScreenState
-import ru.practicum.android.diploma.presentation.workplacechoice.WorkplaceViewModel
 import ru.practicum.android.diploma.util.Resource
 
 class CountryViewModel(
-    val interactor: AreasInteractor,
-    val workplaceViewModel: WorkplaceViewModel
+    val interactor: AreasInteractor
 ) : ViewModel() {
     private val screenState = MutableLiveData<CountryScreenState>()
     fun getScreenState(): LiveData<CountryScreenState> = screenState
@@ -27,11 +25,10 @@ class CountryViewModel(
             when (val result = interactor.getAreas()) {
                 is Resource.Success -> {
                     result.data?.let { loadedAreas ->
-                        val countries = loadedAreas.filter { it.parentId == null }
+                        val countries = findRootAreas(loadedAreas)
                         screenState.postValue(CountryScreenState.Content(countries))
                     }
                 }
-
                 is Resource.Error -> {
                     screenState.postValue(CountryScreenState.Empty)
                 }
@@ -39,8 +36,29 @@ class CountryViewModel(
         }
     }
 
-    fun saveCountry(area: Area) {
-        workplaceViewModel.setTempCountry(area.id, area.name)
-    }
+    private fun findRootAreas(areas: List<Area>): List<Area> {
+        val countries = mutableListOf<Area>()
 
+        fun findCountriesRecursive(currentAreas: List<Area>) {
+            for (area in currentAreas) {
+                if (area.id == 1001) {
+                    area.areas?.let { childAreas ->
+                        countries.addAll(childAreas)
+                    }
+                    continue
+                }
+
+                if (area.parentId == null) {
+                    countries.add(area)
+                }
+
+                area.areas?.let { childAreas ->
+                    findCountriesRecursive(childAreas)
+                }
+            }
+        }
+
+        findCountriesRecursive(areas)
+        return countries
+    }
 }

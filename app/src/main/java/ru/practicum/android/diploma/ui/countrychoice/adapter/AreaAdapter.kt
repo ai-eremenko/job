@@ -15,7 +15,11 @@ class AreaAdapter(
     private val filteredList: MutableList<Area> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AreaViewHolder {
-        val binding = AreaItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = AreaItemBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
         return AreaViewHolder(binding)
     }
 

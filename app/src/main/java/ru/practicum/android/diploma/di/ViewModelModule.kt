@@ -3,6 +3,7 @@ package ru.practicum.android.diploma.di
 import org.koin.core.module.dsl.viewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
+import ru.practicum.android.diploma.presentation.countrychoice.CountryViewModel
 import ru.practicum.android.diploma.presentation.favorite.FavoriteViewModel
 import ru.practicum.android.diploma.presentation.filteringsettings.FilterViewModel
 import ru.practicum.android.diploma.presentation.filteringsettings.SharedViewModel
@@ -36,5 +37,9 @@ val viewModelModule = module {
 
     viewModel {
         WorkplaceViewModel(get())
+    }
+
+    viewModel {
+        CountryViewModel(get())
     }
 }

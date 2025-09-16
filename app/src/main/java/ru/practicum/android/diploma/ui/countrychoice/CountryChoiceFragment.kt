@@ -4,25 +4,34 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.databinding.FragmentCountryChoiceBinding
 import ru.practicum.android.diploma.domain.areas.models.Area
 import ru.practicum.android.diploma.presentation.countrychoice.CountryViewModel
 import ru.practicum.android.diploma.presentation.countrychoice.models.CountryScreenState
+import ru.practicum.android.diploma.ui.countrychoice.adapter.AreaAdapter
 import ru.practicum.android.diploma.ui.root.NavigationVisibilityController
-import ru.practicum.android.diploma.util.debounce
 import kotlin.getValue
 
 class CountryChoiceFragment : Fragment() {
     private var _binding: FragmentCountryChoiceBinding? = null
     private val binding get() = _binding!!
-
     private val viewModel: CountryViewModel by viewModel()
-    //private val countriesAdapter = CountriesAdapter()
+
+    private val countriesAdapter: AreaAdapter by lazy {
+        AreaAdapter { item ->
+            val result = bundleOf(
+                "country_id" to item.id,
+                "country_name" to item.name
+            )
+            parentFragmentManager.setFragmentResult("country_selection", result)
+            findNavController().navigateUp()
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentCountryChoiceBinding.inflate(inflater, container, false)
@@ -35,12 +44,7 @@ class CountryChoiceFragment : Fragment() {
         setupListeners()
         setupObservers()
 
-        //binding.recyclerView.adapter = countriesAdapter
-        val onCountryClickDebounce: (Area) -> Unit =
-            debounce<Area>(CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false) { area ->
-                viewModel.saveCountry(area)
-                findNavController().navigateUp()
-            }
+        binding.recyclerView.adapter = countriesAdapter
     }
 
     override fun onResume() {
@@ -63,9 +67,10 @@ class CountryChoiceFragment : Fragment() {
             findNavController().navigateUp()
         }
     }
+
     private fun showContent(list: List<Area>) {
         binding.errorPlaceholder.isVisible = false
-        //countriesAdapter.setList(list)
+        countriesAdapter.setItems(list.toMutableList())
     }
 
     private fun showError() {
@@ -76,9 +81,5 @@ class CountryChoiceFragment : Fragment() {
         (activity as? NavigationVisibilityController)?.setNavigationVisibility(true)
         super.onDestroyView()
         _binding = null
-    }
-
-    companion object {
-        private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 }
