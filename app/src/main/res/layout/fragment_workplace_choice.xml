@@ -19,22 +19,15 @@
         app:titleTextAppearance="@style/ToolbarTitle"
         app:titleTextColor="?attr/colorOnSurface" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/country_container"
-        android:layout_width="0dp"
-        android:layout_height="@dimen/_60dp"
-        android:layout_marginTop="@dimen/_16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar">
-
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/country_TextInputLayout"
             style = "@style/HintAppearance"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_60dp"
             android:hint="@string/country"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/country_EditText"
@@ -43,12 +36,10 @@
                 android:background="@android:color/transparent"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
-                android:clickable="false"
+                android:clickable="true"
                 android:inputType="none"
                 android:cursorVisible="false"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="parent" />
+                 />
         </com.google.android.material.textfield.TextInputLayout>
 
         <ImageView
@@ -58,29 +49,10 @@
             android:layout_marginEnd="@dimen/_16dp"
             android:src="@drawable/ic_arrow_forward"
             android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:tint="?attr/android:textColorPrimary"
+            app:layout_constraintBottom_toBottomOf="@id/country_TextInputLayout"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/clearIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_16dp"
-            android:src="@drawable/ic_clear_2"
-            android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/region_container"
-        android:layout_width="0dp"
-        android:layout_height="@dimen/_60dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/country_container">
+            app:layout_constraintTop_toTopOf="@id/country_TextInputLayout" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/region_TextInputLayout"
@@ -88,22 +60,20 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/_60dp"
             android:hint="@string/region"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/country_TextInputLayout">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/region_EditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
-                android:clickable="false"
+                android:clickable="true"
                 android:cursorVisible="false"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
-                android:inputType="none"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="parent" />
+                android:inputType="none"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <ImageView
@@ -113,21 +83,10 @@
             android:layout_marginEnd="@dimen/_16dp"
             android:src="@drawable/ic_arrow_forward"
             android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:tint="?attr/android:textColorPrimary"
+            app:layout_constraintBottom_toBottomOf="@id/region_TextInputLayout"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/clearIcon2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_16dp"
-            android:src="@drawable/ic_clear_2"
-            android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            app:layout_constraintTop_toTopOf="@id/region_TextInputLayout" />
 
     <Button
         android:id="@+id/apply_button"

@@ -3,12 +3,14 @@ package ru.practicum.android.diploma.di
 import org.koin.core.module.dsl.viewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
+import ru.practicum.android.diploma.presentation.countrychoice.CountryViewModel
 import ru.practicum.android.diploma.presentation.favorite.FavoriteViewModel
 import ru.practicum.android.diploma.presentation.filteringsettings.FilterViewModel
 import ru.practicum.android.diploma.presentation.filteringsettings.SharedViewModel
 import ru.practicum.android.diploma.presentation.root.RootViewModel
 import ru.practicum.android.diploma.presentation.search.SearchViewModel
 import ru.practicum.android.diploma.presentation.vacancy.VacancyViewModel
+import ru.practicum.android.diploma.presentation.workplacechoice.WorkplaceViewModel
 
 val viewModelModule = module {
 
@@ -31,5 +33,13 @@ val viewModelModule = module {
 
     viewModel {
         SharedViewModel()
+    }
+
+    viewModel {
+        WorkplaceViewModel(get())
+    }
+
+    viewModel {
+        CountryViewModel(get())
     }
 }

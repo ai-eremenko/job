@@ -54,4 +54,28 @@ class FilterViewModel(
         }
         filterStateLiveData.value = state
     }
+
+    fun updateContent() {
+        loadFilterSettings()
+    }
+
+    fun clearWorkplaceSelection() {
+        val currentFilter = filterInteractor.getFilterOptions()
+        val updatedFilter = currentFilter.copy(
+            countryId = null,
+            countryName = null,
+            areaId = null,
+            areaName = null
+        )
+        saveAndUpdate(updatedFilter)
+    }
+
+    fun clearIndustrySelection() {
+        val currentFilter = filterInteractor.getFilterOptions()
+        val updatedFilter = currentFilter.copy(
+            industryId = null,
+            industryName = null
+        )
+        saveAndUpdate(updatedFilter)
+    }
 }

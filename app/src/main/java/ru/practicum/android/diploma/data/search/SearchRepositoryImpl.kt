@@ -27,6 +27,9 @@ class SearchRepositoryImpl(
         if (filter.areaId != null) {
             options["area"] = filter.areaId
         }
+        if (filter.areaId == null && filter.countryId != null) {
+            options["area"] = filter.countryId
+        }
         if (filter.industryId != null) {
             options["industry"] = filter.industryId
         }
