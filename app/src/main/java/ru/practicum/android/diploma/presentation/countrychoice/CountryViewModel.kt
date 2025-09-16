@@ -42,7 +42,7 @@ class CountryViewModel(
 
         fun findCountriesRecursive(currentAreas: List<Area>) {
             for (area in currentAreas) {
-                if (area.id == 1001) {
+                if (area.id == OTHERCOUNTRIESID) {
                     area.areas?.let { childAreas ->
                         countries.addAll(childAreas)
                     }
@@ -61,5 +61,9 @@ class CountryViewModel(
 
         findCountriesRecursive(areas)
         return countries
+    }
+
+    companion object {
+        const val OTHERCOUNTRIESID = 1001
     }
 }

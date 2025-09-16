@@ -99,7 +99,11 @@ class FilteringSettingsFragment : Fragment() {
             if (hasWorkplace) {
                 viewModel.clearWorkplaceSelection()
             } else {
-                findNavController().navigate(FilteringSettingsFragmentDirections.actionFilteringSettingsFragmentToChoiceOfWorkplaceFragment())
+                findNavController()
+                    .navigate(
+                        FilteringSettingsFragmentDirections
+                            .actionFilteringSettingsFragmentToChoiceOfWorkplaceFragment()
+                    )
             }
         }
 
@@ -111,7 +115,11 @@ class FilteringSettingsFragment : Fragment() {
             if (currentFilter.industryName != null) {
                 viewModel.clearIndustrySelection()
             } else {
-                findNavController().navigate(FilteringSettingsFragmentDirections.actionFilteringSettingsFragmentToIndustryChoiceFragment())
+                findNavController()
+                    .navigate(
+                        FilteringSettingsFragmentDirections
+                            .actionFilteringSettingsFragmentToIndustryChoiceFragment()
+                    )
             }
         }
 
@@ -220,7 +228,6 @@ class FilteringSettingsFragment : Fragment() {
             View.VISIBLE
         }
     }
-
 
     private fun updateSalary(salary: String) {
         if (!isInitialLoad) {
