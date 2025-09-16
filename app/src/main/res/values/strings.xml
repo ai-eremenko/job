@@ -72,5 +72,7 @@
     <string name="chose">Выбрать</string>
 
     <string name="area_string">%s, %s</string>
+    <string name="not_found_region">Такого региона нет</string>
+    <string name="error_region">Не удалось получить\nсписок</string>
 
 </resources>
