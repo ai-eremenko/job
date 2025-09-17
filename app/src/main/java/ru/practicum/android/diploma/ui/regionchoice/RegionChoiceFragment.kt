@@ -15,28 +15,12 @@ import ru.practicum.android.diploma.domain.areas.AreasInteractor
 import ru.practicum.android.diploma.domain.areas.models.Area
 import ru.practicum.android.diploma.presentation.regionchoice.RegionState
 import ru.practicum.android.diploma.presentation.regionchoice.RegionViewModel
-import ru.practicum.android.diploma.presentation.regionchoice.RegionViewModelFactory
 import ru.practicum.android.diploma.util.Resource
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class RegionChoiceFragment : Fragment(R.layout.fragment_select_region) {
 
-    private val testInteractor = object : AreasInteractor {
-        override suspend fun getAreas(): ru.practicum.android.diploma.util.Resource<List<Area>> {
-            delay(DELAY_500_MS)
-            return Resource.Success(
-                listOf(
-                    Area(MOSCOW_ID, "Москва"),
-                    Area(SPB_ID, "Санкт-Петербург"),
-                    Area(NOVOSIB_ID, "Новосибирск"),
-                    Area(EKB_ID, "Екатеринбург")
-                )
-            )
-        }
-    }
-
-    private val viewModel: RegionViewModel by viewModels {
-        RegionViewModelFactory(testInteractor)
-    }
+    private val viewModel: RegionViewModel by viewModel()
 
     private val recyclerView by lazy { requireView().findViewById<RecyclerView>(R.id.recyclerView) }
     private val progressBar by lazy { requireView().findViewById<ProgressBar>(R.id.progressBar) }

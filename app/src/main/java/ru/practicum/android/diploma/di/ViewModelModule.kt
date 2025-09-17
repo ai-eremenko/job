@@ -12,6 +12,8 @@ import ru.practicum.android.diploma.presentation.root.RootViewModel
 import ru.practicum.android.diploma.presentation.search.SearchViewModel
 import ru.practicum.android.diploma.presentation.vacancy.VacancyViewModel
 import ru.practicum.android.diploma.presentation.workplacechoice.WorkplaceViewModel
+import ru.practicum.android.diploma.presentation.regionchoice.RegionViewModel
+
 
 val viewModelModule = module {
 
@@ -47,4 +49,7 @@ val viewModelModule = module {
     viewModel {
         IndustryChoiceViewModel(get())
     }
+
+    viewModel { RegionViewModel(get()) }
+
 }
