@@ -12,4 +12,40 @@ class AreasInteractorImpl(
     override suspend fun getAreas(): Resource<List<Area>> {
         return repository.getAreas()
     }
+
+    override suspend fun getAllRegions(): Resource<List<Area>> {
+        return when (val areasResult = repository.getAreas()) {
+            is Resource.Success -> {
+                val allRegions = mutableListOf<Area>()
+                collectAllRegions(areasResult.data!!, allRegions)
+                Resource.Success(allRegions)
+            }
+            is Resource.Error -> areasResult
+        }
+    }
+
+    override suspend fun getRegionsByCountryId(countryId: Int): Resource<List<Area>> {
+        return when (val areasResult = repository.getAreas()) {
+            is Resource.Success -> {
+                val regions = areasResult.data!!.filter { it.parentId == countryId }
+                Resource.Success(regions)
+            }
+            is Resource.Error -> areasResult
+        }
+    }
+
+    private fun collectAllRegions(areas: List<Area>, result: MutableList<Area>) {
+        areas.forEach { area ->
+            if (area.parentId != null && area.parentId != OTHERCOUNTRIESID) {
+                result.add(area)
+            }
+            if (area.areas.isNotEmpty()) {
+                collectAllRegions(area.areas, result)
+            }
+        }
+    }
+
+    companion object {
+        const val OTHERCOUNTRIESID = 1001
+    }
 }
