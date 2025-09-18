@@ -36,16 +36,12 @@ class AreasInteractorImpl(
 
     private fun collectAllRegions(areas: List<Area>, result: MutableList<Area>) {
         areas.forEach { area ->
-            if (area.parentId != null && area.parentId != OTHERCOUNTRIESID) {
+            if (area.parentId != null) {
                 result.add(area)
             }
             if (area.areas.isNotEmpty()) {
                 collectAllRegions(area.areas, result)
             }
         }
-    }
-
-    companion object {
-        const val OTHERCOUNTRIESID = 1001
     }
 }
