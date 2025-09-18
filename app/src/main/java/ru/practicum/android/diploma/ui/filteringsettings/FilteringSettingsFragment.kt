@@ -32,6 +32,7 @@ class FilteringSettingsFragment : Fragment() {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             binding.clearIcon.visibility = clearButtonVisibility(s)
+            checkSalaryChanges(s?.toString() ?: "")
         }
 
         override fun afterTextChanged(s: Editable?) = Unit
@@ -218,8 +219,13 @@ class FilteringSettingsFragment : Fragment() {
         }
     }
 
+    private fun checkSalaryChanges(newSalary: String) {
+        viewModel.setHasChanges(true)
+        viewModel.saveSalary(newSalary)
+    }
+
     private fun updateSalary(salary: String) {
-        viewModel.updateSalary(salary)
+        viewModel.saveSalary(salary)
         KeyboardUtils.hideKeyboard(binding.expectedSalary)
     }
 
