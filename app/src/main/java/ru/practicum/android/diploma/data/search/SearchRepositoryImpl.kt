@@ -38,21 +38,21 @@ class SearchRepositoryImpl(
         emit(processResponse(response))
     }
 
-    private fun buildRequestOptions(filter: FilterSettings): HashMap<String, Int> {
-        val options: HashMap<String, Int> = HashMap()
-        if (filter.areaId != null) {
-            options["area"] = filter.areaId
+    private fun buildRequestOptions(filter: FilterSettings): Map<String, Int> {
+        return buildMap {
+            if (filter.areaId != null) {
+                put("area", filter.areaId)
+            }
+            if (filter.areaId == null && filter.countryId != null) {
+                put("area", filter.countryId)
+            }
+            if (filter.industryId != null) {
+                put("industry", filter.industryId)
+            }
+            if (filter.salary != null) {
+                put("salary", filter.salary)
+            }
         }
-        if (filter.areaId == null && filter.countryId != null) {
-            options["area"] = filter.countryId
-        }
-        if (filter.industryId != null) {
-            options["industry"] = filter.industryId
-        }
-        if (filter.salary != null) {
-            options["salary"] = filter.salary
-        }
-        return options
     }
 
     private fun processResponse(response: Any): Resource<VacanciesSearchResult<VacancyPreview>> {

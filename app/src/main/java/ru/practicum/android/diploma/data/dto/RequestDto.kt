@@ -6,7 +6,7 @@ sealed interface RequestDto {
     data class VacanciesRequest(
         val expression: String,
         val page: Int,
-        val options: HashMap<String, Int>,
+        val options: Map<String, Int>,
         val onlyWithSalary: Boolean
     ) : RequestDto
     data class VacancyRequest(
