@@ -64,7 +64,9 @@ class RetrofitClient(
         val vacanciesDto = api.getVacancies(
             token,
             request.expression,
-            request.page
+            request.page,
+            request.options,
+            request.onlyWithSalary
         )
         return VacanciesResponse(
             found = vacanciesDto.found,

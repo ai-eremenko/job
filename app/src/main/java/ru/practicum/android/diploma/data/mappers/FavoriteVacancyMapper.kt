@@ -1,7 +1,6 @@
 package ru.practicum.android.diploma.data.mappers
 
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import ru.practicum.android.diploma.data.db.entity.FavoriteVacancyEntity
 import ru.practicum.android.diploma.domain.search.models.VacancyPreviewPresent
 import ru.practicum.android.diploma.domain.vacancy.models.Contacts
@@ -22,7 +21,7 @@ class FavoriteVacancyMapper {
             employment = vacancy.employment,
             contacts = vacancy.contacts?.let { gson.toJson(it) },
             employer = vacancy.employerName,
-            skills = vacancy.skills?.let { gson.toJson(it) },
+            skills = vacancy.skills,
             url = vacancy.url,
             isFavorite = vacancy.isFavorite,
             urlLink = vacancy.urlLink
@@ -41,9 +40,7 @@ class FavoriteVacancyMapper {
             employment = vacancy.employment,
             contacts = vacancy.contacts?.let { gson.fromJson(it, Contacts::class.java) },
             employerName = vacancy.employer,
-            skills = vacancy.skills?.let {
-                gson.fromJson(it, object : TypeToken<List<String>>() {}.type)
-            },
+            skills = vacancy.skills,
             url = vacancy.url,
             isFavorite = vacancy.isFavorite,
             urlLink = vacancy.urlLink

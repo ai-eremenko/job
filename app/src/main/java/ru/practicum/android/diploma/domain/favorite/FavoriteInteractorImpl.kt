@@ -16,7 +16,7 @@ class FavoriteInteractorImpl(
         if (existingVacancy != null) {
             repository.removeFromFavorite(vacancy.id)
         } else {
-            repository.addToFavorite(vacancy)
+            repository.addToFavorite(vacancy.copy(isFavorite = true))
         }
     }
 

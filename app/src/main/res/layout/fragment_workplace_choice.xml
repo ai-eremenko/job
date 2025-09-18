@@ -1,14 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/colorSurface"
     tools:context=".ui.workplacechoice.WorkplaceChoiceFragment">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:textSize="@dimen/title"
-        android:text="@string/workplace_choice" />
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        style="@style/ToolbarStyle"
+        android:background="?attr/colorSurface"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/ic_arrow_back"
+        app:title="@string/workplace_choice"
+        app:titleTextAppearance="@style/ToolbarTitle"
+        app:titleTextColor="?attr/colorOnSurface" />
 
-</FrameLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/country_TextInputLayout"
+            style = "@style/HintAppearance"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_60dp"
+            android:hint="@string/country"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/country_EditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:clickable="true"
+                android:inputType="none"
+                android:cursorVisible="false"
+                 />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <ImageView
+            android:id="@+id/arrow_forward"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/_16dp"
+            android:src="@drawable/ic_arrow_forward"
+            android:visibility="visible"
+            app:tint="?attr/android:textColorPrimary"
+            app:layout_constraintBottom_toBottomOf="@id/country_TextInputLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/country_TextInputLayout" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/region_TextInputLayout"
+            style="@style/HintAppearance"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_60dp"
+            android:hint="@string/region"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/country_TextInputLayout">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/region_EditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:clickable="true"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:inputType="none"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <ImageView
+            android:id="@+id/arrow_forward2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/_16dp"
+            android:src="@drawable/ic_arrow_forward"
+            android:visibility="visible"
+            app:tint="?attr/android:textColorPrimary"
+            app:layout_constraintBottom_toBottomOf="@id/region_TextInputLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/region_TextInputLayout" />
+
+    <Button
+        android:id="@+id/apply_button"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_60dp"
+        android:layout_marginHorizontal="@dimen/_17dp"
+        android:layout_marginBottom="@dimen/_24dp"
+        android:background="@drawable/bg_blue_button"
+        android:gravity="center"
+        android:text="@string/apply"
+        android:textAllCaps="false"
+        android:textAppearance="@style/TextMedium.16"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

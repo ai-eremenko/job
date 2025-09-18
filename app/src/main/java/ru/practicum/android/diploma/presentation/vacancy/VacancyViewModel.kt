@@ -9,7 +9,6 @@ import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.domain.favorite.FavoriteInteractor
 import ru.practicum.android.diploma.domain.sharing.SharingInteractor
-import ru.practicum.android.diploma.domain.sharing.models.SharingIntent
 import ru.practicum.android.diploma.domain.util.ResourcesProviderInteractor
 import ru.practicum.android.diploma.domain.vacancy.VacancyInteractor
 import ru.practicum.android.diploma.domain.vacancy.models.VacancyPresent
@@ -91,25 +90,27 @@ class VacancyViewModel(
 
     fun share() {
         val vacancy = currentVacancy ?: return
-        val intent = sharingInteractor.shareVacancy(vacancy.urlLink, vacancy.name)
-        navigate(intent)
+        val (intent, error) = sharingInteractor.shareVacancy(vacancy.urlLink, vacancy.name)
+        navigationEvents.value = NavigationEventState(
+            intent = intent,
+            errorMessage = error
+        )
     }
 
     fun sendEmail() {
         val vacancy = currentVacancy ?: return
-        val intent = sharingInteractor.sendOnEmail(vacancy.contacts!!.email)
-        navigate(intent)
+        val (intent, error) = sharingInteractor.sendOnEmail(vacancy.contacts!!.email)
+        navigationEvents.value = NavigationEventState(
+            intent = intent,
+            errorMessage = error
+        )
     }
 
     fun call(number: String) {
-        val intent = sharingInteractor.call(number)
-        navigate(intent)
-    }
-
-    private fun navigate(intent: SharingIntent) {
+        val (intent, error) = sharingInteractor.call(number)
         navigationEvents.value = NavigationEventState(
-            intent = intent.intent,
-            errorMessage = intent.error
+            intent = intent,
+            errorMessage = error
         )
     }
 }
