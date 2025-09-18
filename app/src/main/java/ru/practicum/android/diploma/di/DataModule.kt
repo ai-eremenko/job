@@ -53,4 +53,8 @@ val dataModule = module {
     single {
         Storage(get(), get())
     }
+
+    single {
+        get<AppDatabase>().favoriteVacancyDao()
+    }
 }
