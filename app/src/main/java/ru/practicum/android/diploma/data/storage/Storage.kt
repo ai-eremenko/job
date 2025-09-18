@@ -9,7 +9,7 @@ const val EXAMPLE_PREFERENCES = "example_preferences"
 const val FILTERS = "filters"
 
 class Storage(
-    val sharedPreferences: SharedPreferences,
+    private val sharedPreferences: SharedPreferences,
     private val gson: Gson,
 ) {
     fun getFilterOptions(): FilterSettings {
