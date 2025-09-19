@@ -16,7 +16,16 @@ class AreasRepositoryImpl(
     private var cachedAreas: Resource<List<Area>>? = null
 
     override suspend fun getAreas(): Resource<List<Area>> {
-        return cachedAreas ?: fetchAreas().also { cachedAreas = it }
+        cachedAreas?.let {
+            return it
+        }
+
+        val result = fetchAreas()
+
+        if (result is Resource.Success) {
+            cachedAreas = result
+        }
+        return result
     }
 
     private suspend fun fetchAreas(): Resource<List<Area>> {
