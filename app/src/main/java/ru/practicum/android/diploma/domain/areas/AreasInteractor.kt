@@ -5,5 +5,4 @@ import ru.practicum.android.diploma.util.Resource
 
 interface AreasInteractor {
     suspend fun getAreas(): Resource<List<Area>>
-    suspend fun getCountries(): Resource<List<Area>>
 }
