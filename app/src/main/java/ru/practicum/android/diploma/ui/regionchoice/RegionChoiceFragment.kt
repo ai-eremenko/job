@@ -114,9 +114,7 @@ class RegionChoiceFragment : Fragment(R.layout.fragment_region_choice) {
         errorPlaceholder.isVisible = false
     }
 
-    /**
-     * Добавляем padding справа, чтобы текст EditText не перекрывался иконкой поиска
-     */
+
     private fun adjustInputPadding() {
         val paddingRight = resources.getDimensionPixelSize(R.dimen._56dp)
         inputRegion.setPadding(
