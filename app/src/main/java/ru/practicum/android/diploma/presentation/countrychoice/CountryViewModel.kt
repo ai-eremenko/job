@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.areas.AreasInteractor
-import ru.practicum.android.diploma.domain.areas.models.Area
 import ru.practicum.android.diploma.presentation.countrychoice.models.CountryScreenState
 import ru.practicum.android.diploma.util.Resource
 
@@ -17,35 +16,25 @@ class CountryViewModel(
     fun getScreenState(): LiveData<CountryScreenState> = screenState
 
     init {
-        loadAreas()
+        loadCountries()
     }
 
-    private fun loadAreas() {
+    private fun loadCountries() {
         viewModelScope.launch {
-            when (val result = interactor.getAreas()) {
+            when (val result = interactor.getCountries()) {
                 is Resource.Success -> {
-                    result.data?.let { loadedAreas ->
-                        val countries = findRootAreas(loadedAreas)
+                    result.data?.let { countries ->
                         val sortedCountries = countries.sortedBy { it.name }
                         screenState.postValue(CountryScreenState.Content(sortedCountries))
+                    } ?: run {
+                        screenState.postValue(CountryScreenState.Empty)
                     }
                 }
+
                 is Resource.Error -> {
                     screenState.postValue(CountryScreenState.Empty)
                 }
             }
         }
-    }
-
-    private fun findRootAreas(areas: List<Area>): List<Area> {
-        val countries = mutableListOf<Area>()
-
-        for (area in areas) {
-            if (area.parentId == null) {
-                countries.add(area)
-            }
-        }
-
-        return countries
     }
 }
