@@ -40,30 +40,12 @@ class CountryViewModel(
     private fun findRootAreas(areas: List<Area>): List<Area> {
         val countries = mutableListOf<Area>()
 
-        fun findCountriesRecursive(currentAreas: List<Area>) {
-            for (area in currentAreas) {
-                if (area.id == OTHERCOUNTRIESID) {
-                    area.areas?.let { childAreas ->
-                        countries.addAll(childAreas)
-                    }
-                    continue
-                }
-
-                if (area.parentId == null) {
-                    countries.add(area)
-                }
-
-                area.areas?.let { childAreas ->
-                    findCountriesRecursive(childAreas)
-                }
+        for (area in areas) {
+            if (area.parentId == null) {
+                countries.add(area)
             }
         }
 
-        findCountriesRecursive(areas)
         return countries
-    }
-
-    companion object {
-        const val OTHERCOUNTRIESID = 1001
     }
 }
