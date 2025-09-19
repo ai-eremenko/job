@@ -12,6 +12,7 @@ import ru.practicum.android.diploma.domain.sharing.SharingInteractor
 import ru.practicum.android.diploma.domain.util.ResourcesProviderInteractor
 import ru.practicum.android.diploma.domain.vacancy.VacancyInteractor
 import ru.practicum.android.diploma.domain.vacancy.models.VacancyPresent
+import ru.practicum.android.diploma.presentation.util.IntentCreator
 import ru.practicum.android.diploma.presentation.vacancy.models.NavigationEventState
 import ru.practicum.android.diploma.presentation.vacancy.models.VacancyScreenState
 import ru.practicum.android.diploma.util.Resource
@@ -90,27 +91,27 @@ class VacancyViewModel(
 
     fun share() {
         val vacancy = currentVacancy ?: return
-        val (intent, error) = sharingInteractor.shareVacancy(vacancy.urlLink, vacancy.name)
+        val shareData = sharingInteractor.shareVacancy(vacancy.urlLink, vacancy.name)
         navigationEvents.value = NavigationEventState(
-            intent = intent,
-            errorMessage = error
+            intent = IntentCreator.createShareIntent(shareData.first),
+            errorMessage = shareData.second
         )
     }
 
     fun sendEmail() {
         val vacancy = currentVacancy ?: return
-        val (intent, error) = sharingInteractor.sendOnEmail(vacancy.contacts!!.email)
+        val emailData = sharingInteractor.sendOnEmail(vacancy.contacts!!.email)
         navigationEvents.value = NavigationEventState(
-            intent = intent,
-            errorMessage = error
+            intent = IntentCreator.createEmailIntent(emailData.first),
+            errorMessage = emailData.second
         )
     }
 
     fun call(number: String) {
-        val (intent, error) = sharingInteractor.call(number)
+        val phoneData = sharingInteractor.call(number)
         navigationEvents.value = NavigationEventState(
-            intent = intent,
-            errorMessage = error
+            intent = IntentCreator.createPhoneIntent(phoneData.first),
+            errorMessage = phoneData.second
         )
     }
 }
