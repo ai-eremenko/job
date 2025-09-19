@@ -3,6 +3,7 @@ package ru.practicum.android.diploma.data.areas
 import ru.practicum.android.diploma.data.NetworkClient
 import ru.practicum.android.diploma.data.dto.RequestDto
 import ru.practicum.android.diploma.data.dto.responses.AreasResponse
+import ru.practicum.android.diploma.data.dto.responses.areas.AreasListDTO
 import ru.practicum.android.diploma.data.mappers.AreasMapper.mapToDomain
 import ru.practicum.android.diploma.domain.areas.AreasRepository
 import ru.practicum.android.diploma.domain.areas.models.Area
@@ -34,5 +35,29 @@ class AreasRepositoryImpl(
                 Resource.Error(response.status)
             }
         }
+    }
+
+    override suspend fun downloadAreas(): Pair<AreasListDTO?, Int> {
+        val response = networkClient.doRequest(RequestDto.AreasRequest)
+        return if (response is AreasResponse && response.status == ResponseStatus.SUCCESS) {
+            val areasDTO = AreasListDTO(response.result.mapToDomain())
+            areasDTO to 200
+        } else {
+            val statusCode = when (response.status) {
+                ResponseStatus.SUCCESS -> 200
+                ResponseStatus.NOT_FOUND -> 404
+                ResponseStatus.SERVER_ERROR -> 500
+                else -> 0
+            }
+            null to statusCode
+        }
+    }
+
+
+
+    // Реализация insertAreas
+    override suspend fun insertAreas(areas: List<Area>) {
+        cachedAreas = Resource.Success(areas)
+
     }
 }

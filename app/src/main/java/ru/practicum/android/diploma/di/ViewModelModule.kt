@@ -50,6 +50,12 @@ val viewModelModule = module {
         IndustryChoiceViewModel(get())
     }
 
-    viewModel { RegionViewModel(get()) }
+    viewModel {
+        RegionViewModel(
+            interactor = get(),
+            sharedInteractor = get(),
+            sharedInteractorSave = get()
+        )
+    }
 
 }
