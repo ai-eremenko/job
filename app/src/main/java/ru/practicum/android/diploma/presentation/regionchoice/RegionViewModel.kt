@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.presentation.regionchoice
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -21,15 +20,14 @@ sealed class RegionState {
     data class Content(val areasList: List<Area>) : RegionState()
 }
 
-class RegionViewModel(
-    private val interactor: AreasInteractor
-) : ViewModel() {
+class RegionViewModel(private val interactor: AreasInteractor) : ViewModel() {
 
     private val _screenState = MutableLiveData<RegionState>()
     val screenState: LiveData<RegionState> = _screenState
 
-    private val allRegions = mutableListOf<Area>()
+    private var allAreas: List<Area> = emptyList()
     private var searchJob: Job? = null
+    private var isLoaded = false
 
     init {
         loadRegions()
@@ -41,53 +39,46 @@ class RegionViewModel(
             try {
                 when (val result = interactor.getAreas()) {
                     is Resource.Success -> {
-                        val regions = result.data ?: emptyList()
-                        allRegions.clear()
-                        allRegions.addAll(regions)
-                        _screenState.value =
-                            if (regions.isEmpty()) {
-                                RegionState.Empty
-                            } else {
-                                RegionState.Content(regions)
-                            }
+                        allAreas = result.data ?: emptyList()
+                        isLoaded = true
+                        val regions = filterRegions(null)
+                        _screenState.value = if (regions.isEmpty()) RegionState.Empty
+                        else RegionState.Content(regions)
                     }
-                    is Resource.Error -> {
-                        _screenState.value = RegionState.Error
-                    }
+                    is Resource.Error -> _screenState.value = RegionState.Error
                 }
             } catch (e: SocketTimeoutException) {
-                Log.e("RegionViewModel", "Таймаут при загрузке регионов", e)
-                _screenState.postValue(RegionState.Error)
+                _screenState.value = RegionState.Error
             } catch (e: IOException) {
-                Log.e("RegionViewModel", "Ошибка загрузки регионов", e)
-                _screenState.postValue(RegionState.Error)
+                _screenState.value = RegionState.Error
             }
         }
     }
 
-    fun search(query: String) {
+    fun search(query: String, countryId: Int?) {
+        if (!isLoaded) return
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
-            delay(SEARCH_DELAY)
-            val filtered = if (query.isBlank()) {
-                allRegions
-            } else {
-                allRegions.filter { it.name.contains(query, ignoreCase = true) }
-            }
-            _screenState.value =
-                if (filtered.isEmpty()) {
-                    RegionState.Empty
-                } else {
-                    RegionState.Content(filtered)
-                }
+            delay(150L)
+            val regions = filterRegions(countryId)
+            val filtered = if (query.isBlank()) regions
+            else regions.filter { it.name.contains(query, ignoreCase = true) }
+            _screenState.value = if (filtered.isEmpty()) RegionState.Empty
+            else RegionState.Content(filtered)
         }
     }
 
-    fun saveAndExit(selectedArea: Area, onExit: () -> Unit) {
-        onExit()
+    private fun filterRegions(countryId: Int?): List<Area> {
+        return if (countryId == null) {
+            // Все регионы без фильтрации по стране, исключаем страны
+            allAreas.filter { it.parentId != null }.sortedBy { it.name }
+        } else {
+            // Регионы для конкретной страны
+            allAreas.firstOrNull { it.id == countryId }?.areas?.filter { it.parentId != null }?.sortedBy { it.name } ?: emptyList()
+        }
     }
 
-    companion object {
-        private const val SEARCH_DELAY = 200L
+    fun selectArea(area: Area, onSelected: (Area) -> Unit) {
+        onSelected(area)
     }
 }
