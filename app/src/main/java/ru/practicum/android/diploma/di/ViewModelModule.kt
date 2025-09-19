@@ -52,7 +52,7 @@ val viewModelModule = module {
 
     viewModel {
         RegionViewModel(
-            interactor = get(),
+            areasInteractor = get(),
             sharedInteractor = get(),
             sharedInteractorSave = get()
         )

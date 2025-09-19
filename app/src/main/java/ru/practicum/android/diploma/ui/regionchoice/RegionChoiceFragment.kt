@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.domain.areas.models.Area
-import ru.practicum.android.diploma.presentation.regionchoice.AreasState
+import ru.practicum.android.diploma.domain.areas.models.AreasState
 import ru.practicum.android.diploma.presentation.regionchoice.RegionViewModel
 
 class RegionChoiceFragment : Fragment(R.layout.fragment_region_choice) {
@@ -32,7 +32,9 @@ class RegionChoiceFragment : Fragment(R.layout.fragment_region_choice) {
 
     private val adapter by lazy {
         RegionAdapter(emptyList()) { area ->
-            viewModel.saveAndExit(area, findNavController())
+            viewModel.saveAndExit(area) {
+                findNavController().navigateUp()
+            }
         }
     }
 
@@ -50,11 +52,11 @@ class RegionChoiceFragment : Fragment(R.layout.fragment_region_choice) {
     }
 
     private fun setupListeners() {
-        inputRegion.addTextChangedListener { text ->
-            // Показ крестика и скрытие поиска при вводе
-            clearIcon.isVisible = !text.isNullOrEmpty()
-            searchIcon.isVisible = text.isNullOrEmpty()
-            viewModel.search(text.toString())
+        inputRegion.addTextChangedListener { editable ->
+            val query = editable?.toString() ?: ""
+            clearIcon.isVisible = query.isNotEmpty()
+            searchIcon.isVisible = query.isEmpty()
+            viewModel.search(query)
         }
 
         inputRegion.setOnEditorActionListener { _, actionId, _ ->
@@ -108,12 +110,11 @@ class RegionChoiceFragment : Fragment(R.layout.fragment_region_choice) {
     }
 
     private fun showContent(list: List<Area>) {
-        recyclerView.isVisible = true
+        recyclerView.isVisible = list.isNotEmpty()
         adapter.updateList(list)
-        noRegionPlaceholder.isVisible = false
+        noRegionPlaceholder.isVisible = list.isEmpty()
         errorPlaceholder.isVisible = false
     }
-
 
     private fun adjustInputPadding() {
         val paddingRight = resources.getDimensionPixelSize(R.dimen._56dp)

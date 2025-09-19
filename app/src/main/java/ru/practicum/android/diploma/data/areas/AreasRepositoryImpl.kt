@@ -55,7 +55,7 @@ class AreasRepositoryImpl(
 
 
 
-    // Реализация insertAreas
+
     override suspend fun insertAreas(areas: List<Area>) {
         cachedAreas = Resource.Success(areas)
 

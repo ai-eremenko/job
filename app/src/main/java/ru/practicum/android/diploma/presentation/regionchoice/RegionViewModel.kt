@@ -4,23 +4,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavController
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import ru.practicum.android.diploma.domain.areas.AreasInteractor
 import ru.practicum.android.diploma.domain.areas.models.Area
-import ru.practicum.android.diploma.domain.filters.FiltersInteractor
+import ru.practicum.android.diploma.domain.areas.models.AreasState
 import ru.practicum.android.diploma.domain.filters.FiltersSharedInteractor
 import ru.practicum.android.diploma.domain.filters.FiltersSharedInteractorSave
-
-sealed class AreasState {
-    object Loading : AreasState()
-    object Empty : AreasState()
-    object Error : AreasState()
-    data class Content(val areas: List<Area>) : AreasState()
-}
+import ru.practicum.android.diploma.util.Resource
 
 class RegionViewModel(
-    private val interactor: FiltersInteractor,
+    private val areasInteractor: AreasInteractor,
     private val sharedInteractor: FiltersSharedInteractor,
     private val sharedInteractorSave: FiltersSharedInteractorSave
 ) : ViewModel() {
@@ -28,99 +21,61 @@ class RegionViewModel(
     private val _screenState = MutableLiveData<AreasState>()
     val screenState: LiveData<AreasState> = _screenState
 
+    private var allAreas: List<Area> = emptyList()
+    private var currentCountryId: Int? = null
+    private var currentRegions: List<Area> = emptyList()
+
     init {
-        loadRegions()
+        viewModelScope.launch { loadAreas() }
     }
 
-    fun loadRegions() {
+
+    suspend fun loadAreas() {
         _screenState.value = AreasState.Loading
-
-        val country = sharedInteractor.getCountry(isCurrent = true)
-
-        viewModelScope.launch {
-            if (country == null) {
-                interactor.getAllRegions().collect { regions ->
-                    if (regions.isNotEmpty()) {
-                        _screenState.value = AreasState.Content(
-                            regions.filter { it.parentId != null && it.parentId != 1001 }
-                        )
-                    } else {
-                        downloadAreasToBase()
-                    }
-                }
-            } else {
-                interactor.getRegionsByParent(country.id).collect { regions ->
-                    if (regions.isNotEmpty()) {
-                        _screenState.value = AreasState.Content(regions)
-                    } else {
-                        downloadAreasToBase()
-                    }
-                }
+        when (val result = areasInteractor.getAreas()) {
+            is Resource.Success<*> -> {
+                allAreas = result.data as? List<Area> ?: emptyList()
+                val savedCountry = sharedInteractor.getCountry(true)
+                savedCountry?.let { setCountry(it.id) }
+                _screenState.value = AreasState.Content(currentRegions.sortedBy { it.name })
+            }
+            is Resource.Error<*> -> {
+                _screenState.value = AreasState.Error
             }
         }
     }
 
-    private suspend fun downloadAreasToBase() {
-        interactor.downloadAreas().collect { result ->
-            val dtoList = result.first
-            val status = result.second
+    fun getCountries(): List<Area> = allAreas.filter { it.parentId == null }.sortedBy { it.name }
 
-            if (dtoList == null) {
-                _screenState.value = if (status == STATUS_OK) AreasState.Empty else AreasState.Error
-            } else {
-                // Преобразуем DTO в доменные модели
-                val areas = dtoList.areas.map { dto ->
-                    Area(
-                        id = dto.id,
-                        name = dto.name,
-                        parentId = dto.parentId, // здесь уже Int?, преобразование не нужно
-                        areas = emptyList() // или dto.areas.map { ... }, если нужно
-                    )
-                }
-
-                interactor.insertAreas(areas)
-
-                val cisRegions = areas.filter { it.parentId != null && it.parentId != 1001 }
-                _screenState.value = AreasState.Content(cisRegions)
-            }
-        }
+    fun setCountry(countryId: Int) {
+        currentCountryId = countryId
+        currentRegions = allAreas.firstOrNull { it.id == countryId }?.areas ?: emptyList()
+        _screenState.value = AreasState.Content(currentRegions.sortedBy { it.name })
     }
 
     fun search(query: String) {
-        val country = sharedInteractor.getCountry(isCurrent = true)
-
-        viewModelScope.launch {
-            if (country == null) {
-                interactor.getRegionsByName(query).collect { areas ->
-                    val filtered = areas.filter { it.parentId != null && it.parentId != 1001 }
-                    _screenState.value = if (filtered.isEmpty()) AreasState.Empty else AreasState.Content(filtered)
-                }
-            } else {
-                interactor.getRegionsByNameAndParent(query, country.id).collect { areas ->
-                    _screenState.value = if (areas.isEmpty()) AreasState.Empty else AreasState.Content(areas)
-                }
-            }
+        if (query.isBlank()) {
+            _screenState.value = AreasState.Content(currentRegions.sortedBy { it.name })
+            return
         }
+        val filtered = currentRegions.filter { it.name.contains(query, ignoreCase = true) }
+        _screenState.value = if (filtered.isEmpty()) AreasState.Empty else AreasState.Content(filtered.sortedBy { it.name })
     }
 
-    fun saveAndExit(selectedRegion: Area, navController: NavController) {
+    fun saveAndExit(selectedRegion: Area, onFinish: () -> Unit) {
         viewModelScope.launch {
+            // Сохраняем регион
             sharedInteractorSave.saveRegion(selectedRegion, isCurrent = true)
 
-            val country = sharedInteractor.getCountry(isCurrent = true)
-            if (country == null && selectedRegion.parentId != null) {
-                val parentId = selectedRegion.parentId
-                interactor.getCountryById(parentId).collect { parentCountry ->
-                    sharedInteractorSave.saveCountry(parentCountry, isCurrent = true)
-                    navController.navigateUp()
+            if (currentCountryId == null && selectedRegion.parentId != null) {
+                val parentCountry = allAreas.firstOrNull { it.id == selectedRegion.parentId }
+                parentCountry?.let {
+                    sharedInteractorSave.saveCountry(it, isCurrent = true)
+                    currentCountryId = it.id
                 }
-            } else {
-                navController.navigateUp()
             }
-        }
-    }
 
-    companion object {
-        const val STATUS_OK = 200
+            onFinish()
+        }
     }
 }
