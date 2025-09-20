@@ -1,10 +1,10 @@
 package ru.practicum.android.diploma.ui.industrychoice
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -25,7 +25,7 @@ class IndustryChoiceFragment : Fragment() {
 
     private val adapter: IndustryAdapter by lazy {
         IndustryAdapter { item: IndustryItemUi ->
-            Log.i("IndustryAdapter",mutableListOfIndustryItemUi.indexOf(item).toString())
+            binding.applyButton.isVisible = true
             mutableListOfIndustryItemUi.indexOf(item)
             mutableListOfIndustryItemUi.forEach {
                 it.isSelected = false
