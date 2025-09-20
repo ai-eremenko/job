@@ -35,7 +35,6 @@ class RegionChoiceFragment : Fragment(R.layout.fragment_region_choice) {
     private val adapter by lazy {
         RegionAdapter(emptyList()) { area ->
             viewModel.selectArea(area) { selectedArea ->
-                // Передаем выбранный регион через FragmentResult
                 parentFragmentManager.setFragmentResult(
                     "area_selection",
                     bundleOf(
@@ -68,9 +67,16 @@ class RegionChoiceFragment : Fragment(R.layout.fragment_region_choice) {
         searchInput.addTextChangedListener { text ->
             val query = text.toString()
             viewModel.search(query, selectedCountryId)
-            clearIcon.visibility = if (query.isEmpty()) View.INVISIBLE else View.VISIBLE
+            if (query.isEmpty()) {
+                clearIcon.visibility = View.INVISIBLE
+            } else {
+                clearIcon.visibility = View.VISIBLE
+            }
         }
-        clearIcon.setOnClickListener { searchInput.setText("") }
+
+        clearIcon.setOnClickListener {
+            searchInput.setText("")
+        }
     }
 
     private fun observeViewModel() {

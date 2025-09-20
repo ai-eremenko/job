@@ -41,9 +41,16 @@ class RegionViewModel(private val interactor: AreasInteractor) : ViewModel() {
                     is Resource.Success -> {
                         allAreas = result.data ?: emptyList()
                         isLoaded = true
-                        _screenState.value = RegionState.Empty
+                        val regions = filterRegions(null)
+                        if (regions.isEmpty()) {
+                            _screenState.value = RegionState.Empty
+                        } else {
+                            _screenState.value = RegionState.Content(regions)
+                        }
                     }
-                    is Resource.Error -> _screenState.value = RegionState.Error
+                    is Resource.Error -> {
+                        _screenState.value = RegionState.Error
+                    }
                 }
             } catch (e: SocketTimeoutException) {
                 _screenState.value = RegionState.Error
@@ -58,15 +65,29 @@ class RegionViewModel(private val interactor: AreasInteractor) : ViewModel() {
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
             delay(150L)
-            val filteredRegions = allAreas
-                .firstOrNull { it.id == countryId }
-                ?.areas
-                ?.filter { it.name.contains(query, ignoreCase = true) }
-                ?.sortedBy { it.name }
-                ?: emptyList()
+            val regions = filterRegions(countryId)
+            val filtered = if (query.isBlank()) {
+                regions
+            } else {
+                regions.filter { it.name.contains(query, ignoreCase = true) }
+            }
 
-            _screenState.value = if (filteredRegions.isEmpty()) RegionState.Empty
-            else RegionState.Content(filteredRegions)
+            if (filtered.isEmpty()) {
+                _screenState.value = RegionState.Empty
+            } else {
+                _screenState.value = RegionState.Content(filtered)
+            }
+        }
+    }
+
+    private fun filterRegions(countryId: Int?): List<Area> {
+        return if (countryId == null) {
+            allAreas.filter { it.parentId != null }
+                .sortedBy { it.name }
+        } else {
+            allAreas.firstOrNull { it.id == countryId }?.areas
+                ?.filter { it.parentId != null }
+                ?.sortedBy { it.name } ?: emptyList()
         }
     }
 
