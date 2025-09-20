@@ -1,39 +1,34 @@
 package ru.practicum.android.diploma.ui.regionchoice
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.appcompat.widget.Toolbar
+import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.RecyclerView
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import ru.practicum.android.diploma.R
-import ru.practicum.android.diploma.domain.areas.models.Area
-import ru.practicum.android.diploma.presentation.regionchoice.RegionState
+import org.koin.core.parameter.parametersOf
+import ru.practicum.android.diploma.databinding.FragmentRegionChoiceBinding
 import ru.practicum.android.diploma.presentation.regionchoice.RegionViewModel
+import ru.practicum.android.diploma.presentation.regionchoice.models.RegionState
+import ru.practicum.android.diploma.ui.countrychoice.adapter.AreaAdapter
+import ru.practicum.android.diploma.ui.root.NavigationVisibilityController
+import kotlin.getValue
 
-class RegionChoiceFragment : Fragment(R.layout.fragment_region_choice) {
+class RegionChoiceFragment : Fragment() {
 
     private val args by navArgs<RegionChoiceFragmentArgs>()
-    private val viewModel: RegionViewModel by viewModel()
-
-    private val recyclerView by lazy { requireView().findViewById<RecyclerView>(R.id.recyclerView) }
-    private val searchInput by lazy { requireView().findViewById<EditText>(R.id.searchRegion) }
-    private val clearIcon by lazy { requireView().findViewById<ImageView>(R.id.clearIcon) }
-    private val placeholder by lazy { requireView().findViewById<TextView>(R.id.noSuchRegionPlaceholder) }
-    private val errorPlaceholder by lazy { requireView().findViewById<TextView>(R.id.errorPlaceholder) }
-    private val toolbar by lazy { requireView().findViewById<Toolbar>(R.id.toolbar) }
-
-    private var selectedCountryId: Int? = null
-
+    private var _binding: FragmentRegionChoiceBinding? = null
+    private val binding get() = _binding!!
+    private val viewModel by viewModel<RegionViewModel> {
+        parametersOf(args.countryId)
+    }
     private val adapter by lazy {
-        RegionAdapter(emptyList()) { area ->
+        AreaAdapter { area ->
             viewModel.selectArea(area) { selectedArea ->
                 parentFragmentManager.setFragmentResult(
                     "area_selection",
@@ -47,71 +42,95 @@ class RegionChoiceFragment : Fragment(R.layout.fragment_region_choice) {
         }
     }
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View? {
+        _binding = FragmentRegionChoiceBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        selectedCountryId = args.countryId.takeIf { it != 0 }
-
-        recyclerView.adapter = adapter
+        binding.recyclerView.adapter = adapter
         setupListeners()
         observeViewModel()
 
-        viewModel.search("", selectedCountryId)
 
-        toolbar.setNavigationOnClickListener {
-            findNavController().popBackStack()
-        }
+    }
+
+    override fun onResume() {
+        (activity as? NavigationVisibilityController)?.setNavigationVisibility(false)
+        super.onResume()
     }
 
     private fun setupListeners() {
-        searchInput.addTextChangedListener { text ->
+        binding.searchRegion.addTextChangedListener { text ->
             val query = text.toString()
-            viewModel.search(query, selectedCountryId)
+            adapter.filter(query)
+            checkFilterResults(query)
             if (query.isEmpty()) {
-                clearIcon.visibility = View.INVISIBLE
+                binding.clearIcon.visibility = View.INVISIBLE
+                binding.searchFieldIcon.isVisible = true
             } else {
-                clearIcon.visibility = View.VISIBLE
+                binding.clearIcon.visibility = View.VISIBLE
+                binding.searchFieldIcon.isVisible = false
             }
         }
 
-        clearIcon.setOnClickListener {
-            searchInput.setText("")
+        binding.clearIcon.setOnClickListener {
+            binding.searchRegion.setText("")
+        }
+
+        binding.toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
         }
     }
 
     private fun observeViewModel() {
         viewModel.screenState.observe(viewLifecycleOwner) { state ->
             when (state) {
-                is RegionState.Loading -> showLoading()
                 is RegionState.Empty -> showEmpty()
                 is RegionState.Error -> showError()
-                is RegionState.Content -> showContent(state.areasList)
+                is RegionState.Content -> {
+                    adapter.setItems(state.areasList.toMutableList())
+                }
             }
         }
     }
 
-    private fun showLoading() {
-        recyclerView.visibility = View.GONE
-        placeholder.visibility = View.GONE
-        errorPlaceholder.visibility = View.GONE
+    private fun showError() {
+        binding.noSuchRegionPlaceholder.visibility = View.VISIBLE
+        binding.errorPlaceholder.visibility = View.GONE
     }
 
     private fun showEmpty() {
-        recyclerView.visibility = View.GONE
-        placeholder.visibility = View.VISIBLE
-        errorPlaceholder.visibility = View.GONE
+        binding.noSuchRegionPlaceholder.visibility = View.GONE
+        binding.errorPlaceholder.visibility = View.VISIBLE
     }
 
-    private fun showError() {
-        recyclerView.visibility = View.GONE
-        placeholder.visibility = View.GONE
-        errorPlaceholder.visibility = View.VISIBLE
+    private fun showContent() {
+        binding.noSuchRegionPlaceholder.visibility = View.GONE
+        binding.errorPlaceholder.visibility = View.GONE
     }
 
-    private fun showContent(list: List<Area>) {
-        recyclerView.visibility = View.VISIBLE
-        placeholder.visibility = View.GONE
-        errorPlaceholder.visibility = View.GONE
-        adapter.updateList(list)
+    private fun checkFilterResults(query: String) {
+        if (query.isNotEmpty()) {
+            if (adapter.itemCount == 0) {
+                showError()
+            } else {
+                showContent()
+            }
+        } else {
+            showContent()
+        }
+    }
+
+    override fun onDestroyView() {
+        (activity as? NavigationVisibilityController)?.setNavigationVisibility(true)
+        super.onDestroyView()
+        _binding = null
     }
 }

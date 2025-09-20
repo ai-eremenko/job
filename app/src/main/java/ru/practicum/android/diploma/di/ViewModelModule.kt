@@ -49,7 +49,7 @@ val viewModelModule = module {
         IndustryChoiceViewModel(get())
     }
 
-    viewModel {
-        RegionViewModel(get())
+    viewModel { parameters ->
+        RegionViewModel(parameters.get(), get())
     }
 }

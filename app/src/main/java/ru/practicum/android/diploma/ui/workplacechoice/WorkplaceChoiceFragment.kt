@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -72,10 +73,10 @@ class WorkplaceChoiceFragment : Fragment() {
     }
 
     private fun showContent(country: String?, area: String?) {
-        binding.apply {
-            setupCountryField(country)
-            setupAreaField(area)
-        }
+        val isVisible = !country.isNullOrEmpty() || !area.isNullOrEmpty()
+        binding.applyButton.visibility = if (isVisible) View.VISIBLE else View.GONE
+        setupCountryField(country)
+        setupAreaField(area)
     }
 
     private fun setupCountryField(country: String?) {

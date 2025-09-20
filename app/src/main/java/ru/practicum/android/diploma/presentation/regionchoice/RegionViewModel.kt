@@ -4,30 +4,21 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.areas.AreasInteractor
 import ru.practicum.android.diploma.domain.areas.models.Area
+import ru.practicum.android.diploma.presentation.regionchoice.models.RegionState
 import ru.practicum.android.diploma.util.Resource
-import java.io.IOException
-import java.net.SocketTimeoutException
 
-sealed class RegionState {
-    object Loading : RegionState()
-    object Empty : RegionState()
-    object Error : RegionState()
-    data class Content(val areasList: List<Area>) : RegionState()
-}
-
-class RegionViewModel(private val interactor: AreasInteractor) : ViewModel() {
+class RegionViewModel(
+    private val countryId: Int,
+    private val interactor: AreasInteractor
+) : ViewModel() {
 
     private val _screenState = MutableLiveData<RegionState>()
     val screenState: LiveData<RegionState> = _screenState
 
     private var allAreas: List<Area> = emptyList()
-    private var searchJob: Job? = null
-    private var isLoaded = false
 
     init {
         loadRegions()
@@ -35,66 +26,43 @@ class RegionViewModel(private val interactor: AreasInteractor) : ViewModel() {
 
     private fun loadRegions() {
         viewModelScope.launch {
-            _screenState.value = RegionState.Loading
-            try {
-                when (val result = interactor.getAreas()) {
-                    is Resource.Success -> {
-                        allAreas = result.data ?: emptyList()
-                        isLoaded = true
-                        val regions = filterRegions(null)
-                        if (regions.isEmpty()) {
-                            _screenState.value = RegionState.Empty
-                        } else {
-                            _screenState.value = RegionState.Content(regions)
-                        }
-                    }
-                    is Resource.Error -> {
-                        _screenState.value = RegionState.Error
+            when (val result = interactor.getAreas()) {
+                is Resource.Success -> {
+                    allAreas = result.data ?: emptyList()
+                    val regions = filterRegions()
+                    if (regions.isEmpty()) {
+                        _screenState.value = RegionState.Empty
+                    } else {
+                        _screenState.value = RegionState.Content(regions)
                     }
                 }
-            } catch (e: SocketTimeoutException) {
-                _screenState.value = RegionState.Error
-            } catch (e: IOException) {
-                _screenState.value = RegionState.Error
+
+                is Resource.Error -> {
+                    _screenState.value = RegionState.Empty
+                }
             }
         }
     }
 
-    fun search(query: String, countryId: Int?) {
-        if (!isLoaded) return
-        searchJob?.cancel()
-        searchJob = viewModelScope.launch {
-            delay(SEARCH_DELAY_MS)
-            val regions = filterRegions(countryId)
-            val filtered = if (query.isBlank()) {
-                regions
-            } else {
-                regions.filter { it.name.contains(query, ignoreCase = true) }
-            }
+    private fun filterRegions(): List<Area> {
+        val allRegions = flattenAreasRecursive(allAreas)
 
-            if (filtered.isEmpty()) {
-                _screenState.value = RegionState.Empty
-            } else {
-                _screenState.value = RegionState.Content(filtered)
-            }
-        }
-    }
-
-    private fun filterRegions(countryId: Int?): List<Area> {
-        return if (countryId == null) {
-            allAreas.filter { it.parentId != null }
+        return if (countryId == 0) {
+            allRegions.filter { it.parentId != null }
                 .sortedBy { it.name }
         } else {
-            allAreas.firstOrNull { it.id == countryId }?.areas
-                ?.filter { it.parentId != null }
-                ?.sortedBy { it.name } ?: emptyList()
+            allRegions.filter { it.parentId == countryId }
+                .sortedBy { it.name }
+        }
+    }
+
+    private fun flattenAreasRecursive(areas: List<Area>): List<Area> {
+        return areas.flatMap { area ->
+            listOf(area) + flattenAreasRecursive(area.areas)
         }
     }
 
     fun selectArea(area: Area, onSelected: (Area) -> Unit) {
         onSelected(area)
-    }
-    companion object {
-        private const val SEARCH_DELAY_MS = 150L
     }
 }
