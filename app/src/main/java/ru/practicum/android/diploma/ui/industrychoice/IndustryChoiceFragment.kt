@@ -55,6 +55,7 @@ class IndustryChoiceFragment : Fragment() {
             when (state) {
                 is IndustryChoiceScreenState.Content -> showContent(state.list)
                 IndustryChoiceScreenState.Empty -> showError()
+                IndustryChoiceScreenState.Error -> showError()
             }
 
         }
@@ -62,6 +63,8 @@ class IndustryChoiceFragment : Fragment() {
 
     private val mutableListOfIndustryItemUi = mutableListOf<IndustryItemUi>()
     private fun showContent(list: List<Industry>) {
+        binding.errorPlaceholder.isVisible = false
+        binding.recyclerView.isVisible = true
         list.forEach { industry ->
             mutableListOfIndustryItemUi.add(IndustryItemUi(industry.id.toString(), industry.name, false))
         }
@@ -70,6 +73,7 @@ class IndustryChoiceFragment : Fragment() {
 
     private fun showError() {
         binding.recyclerView.visibility = View.GONE
+        binding.errorPlaceholder.isVisible = true
     }
 
     override fun onDestroyView() {
