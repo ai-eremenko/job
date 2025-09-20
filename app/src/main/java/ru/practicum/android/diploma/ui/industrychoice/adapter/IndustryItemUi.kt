@@ -1,7 +1,7 @@
 package ru.practicum.android.diploma.ui.industrychoice.adapter
 
-data class IndustryItemUi(
+class IndustryItemUi(
     val id: String,
     val title: String,
-    val isSelected: Boolean
+    var isSelected: Boolean
 )

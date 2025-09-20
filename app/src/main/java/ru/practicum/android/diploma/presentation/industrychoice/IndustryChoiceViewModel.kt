@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.industrychoice.IndustryInteractor
+import ru.practicum.android.diploma.domain.industrychoice.models.Industry
 import ru.practicum.android.diploma.util.Resource
 
 class IndustryChoiceViewModel(
@@ -19,12 +20,22 @@ class IndustryChoiceViewModel(
         loadIndustries()
     }
 
+    fun saveIndustry(industryId: Int) {
+        industries.forEach {
+            if (it.id == industryId) {
+                interactor.saveIndustry(it)
+            }
+        }
+    }
+
+    private var industries = listOf<Industry>()
     private fun loadIndustries() {
         viewModelScope.launch {
             val result = interactor.getIndustries()
             when (result) {
                 is Resource.Success<*> -> {
                     result.data?.let { loadedIndustries ->
+                        industries = loadedIndustries
                         screenState.postValue(IndustryChoiceScreenState.Content(loadedIndustries))
                     }
                 }
