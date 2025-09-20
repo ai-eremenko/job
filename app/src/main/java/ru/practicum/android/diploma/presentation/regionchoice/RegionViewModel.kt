@@ -64,7 +64,7 @@ class RegionViewModel(private val interactor: AreasInteractor) : ViewModel() {
         if (!isLoaded) return
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
-            delay(150L)
+            delay(SEARCH_DELAY_MS)
             val regions = filterRegions(countryId)
             val filtered = if (query.isBlank()) {
                 regions
@@ -93,5 +93,8 @@ class RegionViewModel(private val interactor: AreasInteractor) : ViewModel() {
 
     fun selectArea(area: Area, onSelected: (Area) -> Unit) {
         onSelected(area)
+    }
+    companion object {
+        private const val SEARCH_DELAY_MS = 150L
     }
 }
