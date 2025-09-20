@@ -41,9 +41,7 @@ class RegionViewModel(private val interactor: AreasInteractor) : ViewModel() {
                     is Resource.Success -> {
                         allAreas = result.data ?: emptyList()
                         isLoaded = true
-                        val regions = filterRegions(null)
-                        _screenState.value = if (regions.isEmpty()) RegionState.Empty
-                        else RegionState.Content(regions)
+                        _screenState.value = RegionState.Empty
                     }
                     is Resource.Error -> _screenState.value = RegionState.Error
                 }
@@ -60,21 +58,15 @@ class RegionViewModel(private val interactor: AreasInteractor) : ViewModel() {
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
             delay(150L)
-            val regions = filterRegions(countryId)
-            val filtered = if (query.isBlank()) regions
-            else regions.filter { it.name.contains(query, ignoreCase = true) }
-            _screenState.value = if (filtered.isEmpty()) RegionState.Empty
-            else RegionState.Content(filtered)
-        }
-    }
+            val filteredRegions = allAreas
+                .firstOrNull { it.id == countryId }
+                ?.areas
+                ?.filter { it.name.contains(query, ignoreCase = true) }
+                ?.sortedBy { it.name }
+                ?: emptyList()
 
-    private fun filterRegions(countryId: Int?): List<Area> {
-        return if (countryId == null) {
-            // Все регионы без фильтрации по стране, исключаем страны
-            allAreas.filter { it.parentId != null }.sortedBy { it.name }
-        } else {
-            // Регионы для конкретной страны
-            allAreas.firstOrNull { it.id == countryId }?.areas?.filter { it.parentId != null }?.sortedBy { it.name } ?: emptyList()
+            _screenState.value = if (filteredRegions.isEmpty()) RegionState.Empty
+            else RegionState.Content(filteredRegions)
         }
     }
 

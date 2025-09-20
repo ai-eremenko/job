@@ -5,6 +5,8 @@ import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
+import androidx.core.os.bundleOf
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -19,8 +21,6 @@ import ru.practicum.android.diploma.presentation.regionchoice.RegionViewModel
 class RegionChoiceFragment : Fragment(R.layout.fragment_region_choice) {
 
     private val args by navArgs<RegionChoiceFragmentArgs>()
-
-
     private val viewModel: RegionViewModel by viewModel()
 
     private val recyclerView by lazy { requireView().findViewById<RecyclerView>(R.id.recyclerView) }
@@ -28,14 +28,22 @@ class RegionChoiceFragment : Fragment(R.layout.fragment_region_choice) {
     private val clearIcon by lazy { requireView().findViewById<ImageView>(R.id.clearIcon) }
     private val placeholder by lazy { requireView().findViewById<TextView>(R.id.noSuchRegionPlaceholder) }
     private val errorPlaceholder by lazy { requireView().findViewById<TextView>(R.id.errorPlaceholder) }
+    private val toolbar by lazy { requireView().findViewById<Toolbar>(R.id.toolbar) }
 
     private var selectedCountryId: Int? = null
 
     private val adapter by lazy {
         RegionAdapter(emptyList()) { area ->
             viewModel.selectArea(area) { selectedArea ->
-                findNavController().previousBackStackEntry?.savedStateHandle?.set("selected_area", selectedArea)
-                requireActivity().onBackPressedDispatcher.onBackPressed()
+                // Передаем выбранный регион через FragmentResult
+                parentFragmentManager.setFragmentResult(
+                    "area_selection",
+                    bundleOf(
+                        "area_id" to selectedArea.id,
+                        "area_name" to selectedArea.name
+                    )
+                )
+                findNavController().popBackStack()
             }
         }
     }
@@ -43,11 +51,17 @@ class RegionChoiceFragment : Fragment(R.layout.fragment_region_choice) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        selectedCountryId = args.countryId
+        selectedCountryId = args.countryId.takeIf { it != 0 }
 
         recyclerView.adapter = adapter
         setupListeners()
         observeViewModel()
+
+        viewModel.search("", selectedCountryId)
+
+        toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
     private fun setupListeners() {
