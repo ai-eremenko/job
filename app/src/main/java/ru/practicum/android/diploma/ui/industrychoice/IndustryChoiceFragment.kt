@@ -1,6 +1,7 @@
 package ru.practicum.android.diploma.ui.industrychoice
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,7 +25,13 @@ class IndustryChoiceFragment : Fragment() {
 
     private val adapter: IndustryAdapter by lazy {
         IndustryAdapter { item: IndustryItemUi ->
-            // обработка выбора отрасли
+            Log.i("IndustryAdapter",mutableListOfIndustryItemUi.indexOf(item).toString())
+            mutableListOfIndustryItemUi.indexOf(item)
+            mutableListOfIndustryItemUi.forEach {
+                it.isSelected = false
+            }
+            mutableListOfIndustryItemUi[mutableListOfIndustryItemUi.indexOf(item)].isSelected = true
+            adapter.setItems(mutableListOfIndustryItemUi)
         }
     }
 
@@ -53,8 +60,8 @@ class IndustryChoiceFragment : Fragment() {
         }
     }
 
+    private val mutableListOfIndustryItemUi = mutableListOf<IndustryItemUi>()
     private fun showContent(list: List<Industry>) {
-        val mutableListOfIndustryItemUi = mutableListOf<IndustryItemUi>()
         list.forEach { industry ->
             mutableListOfIndustryItemUi.add(IndustryItemUi(industry.id.toString(), industry.name, false))
         }
