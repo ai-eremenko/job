@@ -25,6 +25,8 @@ class IndustryChoiceFragment : Fragment() {
 
     private val viewModel: IndustryChoiceViewModel by viewModel()
 
+    private var currentIndustryId: Int? = null
+
     private val adapter: IndustryAdapter by lazy {
         IndustryAdapter { item: IndustryItemUi ->
             binding.applyButton.isVisible = true
@@ -32,6 +34,7 @@ class IndustryChoiceFragment : Fragment() {
             mutableListOfIndustryItemUi.forEach {
                 it.isSelected = false
             }
+            currentIndustryId = item.id.toInt()
             mutableListOfIndustryItemUi[mutableListOfIndustryItemUi.indexOf(item)].isSelected = true
             adapter.setItems(mutableListOfIndustryItemUi)
         }
@@ -63,6 +66,7 @@ class IndustryChoiceFragment : Fragment() {
         }
 
         binding.applyButton.setOnClickListener {
+            currentIndustryId?.let { viewModel.saveIndustry(it) }
             findNavController().navigateUp()
         }
 
