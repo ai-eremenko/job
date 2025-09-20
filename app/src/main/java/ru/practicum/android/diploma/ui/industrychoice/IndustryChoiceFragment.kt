@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.databinding.FragmentIndustryChoiceBinding
@@ -14,6 +15,7 @@ import ru.practicum.android.diploma.presentation.industrychoice.IndustryChoiceSc
 import ru.practicum.android.diploma.presentation.industrychoice.IndustryChoiceViewModel
 import ru.practicum.android.diploma.ui.industrychoice.adapter.IndustryAdapter
 import ru.practicum.android.diploma.ui.industrychoice.adapter.IndustryItemUi
+import ru.practicum.android.diploma.ui.root.NavigationVisibilityController
 import kotlin.getValue
 
 class IndustryChoiceFragment : Fragment() {
@@ -44,12 +46,25 @@ class IndustryChoiceFragment : Fragment() {
         return binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        (activity as? NavigationVisibilityController)?.setNavigationVisibility(false)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = adapter
         binding.recyclerView.visibility = View.VISIBLE
+
+        binding.toolbar.setNavigationOnClickListener {
+            findNavController().navigateUp()
+        }
+
+        binding.applyButton.setOnClickListener {
+            findNavController().navigateUp()
+        }
 
         viewModel.getScreenState().observe(viewLifecycleOwner) { state ->
             when (state) {
