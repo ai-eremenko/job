@@ -66,8 +66,8 @@ class WorkplaceViewModel(
             tempFilter = tempFilter.copy(
                 areaId = areaId,
                 areaName = areaName,
-                countryId = parentArea?.id,
-                countryName = parentArea?.name
+                countryId = tempFilter.countryId ?: parentArea?.id,
+                countryName = tempFilter.countryName ?: parentArea?.name
             )
 
             updateScreenState()
