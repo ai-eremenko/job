@@ -3,11 +3,17 @@ package ru.practicum.android.diploma.presentation.workplacechoice
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
+import ru.practicum.android.diploma.domain.areas.AreasInteractor
+import ru.practicum.android.diploma.domain.areas.models.Area
 import ru.practicum.android.diploma.domain.filteringsettings.FilterInteractor
 import ru.practicum.android.diploma.domain.filteringsettings.models.FilterSettings
+import ru.practicum.android.diploma.util.Resource
 
 class WorkplaceViewModel(
-    val filterInteractor: FilterInteractor
+    val filterInteractor: FilterInteractor,
+    val areasInteractor: AreasInteractor
 ) : ViewModel() {
     private var savedFilter: FilterSettings = FilterSettings()
     private var tempFilter: FilterSettings = FilterSettings()
@@ -54,11 +60,25 @@ class WorkplaceViewModel(
     }
 
     fun setTempArea(areaId: Int?, areaName: String?) {
-        tempFilter = tempFilter.copy(
-            areaId = areaId,
-            areaName = areaName
-        )
-        updateScreenState()
+        viewModelScope.launch {
+            val parentArea = areaId?.let { findParentAreaSafely(it) }
+
+            tempFilter = tempFilter.copy(
+                areaId = areaId,
+                areaName = areaName,
+                countryId = parentArea?.id,
+                countryName = parentArea?.name
+            )
+
+            updateScreenState()
+        }
+    }
+
+    private suspend fun findParentAreaSafely(areaId: Int): Area? {
+        return when (val result = areasInteractor.getParentArea(areaId)) {
+            is Resource.Success -> result.data
+            is Resource.Error -> null
+        }
     }
 
     fun getTempCountry(): Pair<Int?, String?> {
