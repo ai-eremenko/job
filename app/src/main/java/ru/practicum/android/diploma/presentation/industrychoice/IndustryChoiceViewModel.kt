@@ -22,8 +22,9 @@ class IndustryChoiceViewModel(
 
     fun saveIndustry(industryId: Int) {
         industries.forEach {
-            if (it.id == industryId)
+            if (it.id == industryId) {
                 interactor.saveIndustry(it)
+            }
         }
     }
 
