@@ -2,7 +2,7 @@
 
 constraintlayoutVersion = "2.2.1"
 java = "VERSION_1_8"
-agp = "8.13.0"
+agp = "8.12.2"
 kotlin = "2.2.20"
 androidGradlePlugin = "8.12.0"
 

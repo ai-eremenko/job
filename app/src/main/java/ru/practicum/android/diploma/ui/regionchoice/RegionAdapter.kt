@@ -7,16 +7,13 @@ import ru.practicum.android.diploma.databinding.AreaItemBinding
 import ru.practicum.android.diploma.domain.areas.models.Area
 
 class RegionAdapter(
-    private var items: List<Area>,
+    private var areas: List<Area>,
     private val onClick: (Area) -> Unit
 ) : RecyclerView.Adapter<RegionAdapter.RegionViewHolder>() {
 
-    inner class RegionViewHolder(private val binding: AreaItemBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-        fun bind(area: Area) {
-            binding.areaText.text = area.name
-            binding.root.setOnClickListener { onClick(area) }
-        }
+    fun updateList(newList: List<Area>) {
+        areas = newList
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RegionViewHolder {
@@ -25,13 +22,16 @@ class RegionAdapter(
     }
 
     override fun onBindViewHolder(holder: RegionViewHolder, position: Int) {
-        holder.bind(items[position])
+        holder.bind(areas[position])
     }
 
-    override fun getItemCount(): Int = items.size
+    override fun getItemCount(): Int = areas.size
 
-    fun updateList(newItems: List<Area>) {
-        items = newItems
-        notifyDataSetChanged()
+    inner class RegionViewHolder(private val binding: AreaItemBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(area: Area) {
+            binding.areaText.text = area.name
+            binding.root.setOnClickListener { onClick(area) }
+            binding.areaBtn.setOnClickListener { onClick(area) }
+        }
     }
 }
