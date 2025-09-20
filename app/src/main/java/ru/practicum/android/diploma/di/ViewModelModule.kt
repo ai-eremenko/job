@@ -50,6 +50,6 @@ val viewModelModule = module {
     }
 
     viewModel { parameters ->
-        RegionViewModel(parameters.get(),get())
+        RegionViewModel(parameters.get(), get())
     }
 }

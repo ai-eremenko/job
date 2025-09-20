@@ -37,15 +37,9 @@ class AreasInteractorImpl(
     }
 
     private fun findAreaById(areas: List<Area>, targetId: Int?): Area? {
-        for (area in areas) {
-            if (area.id == targetId) {
-                return area
-            }
-            val foundInChildren = findAreaById(area.areas, targetId)
-            if (foundInChildren != null) {
-                return foundInChildren
-            }
-        }
-        return null
+        return areas.firstOrNull { it.id == targetId }
+            ?: areas.asSequence()
+                .mapNotNull { findAreaById(it.areas, targetId) }
+                .firstOrNull()
     }
 }
